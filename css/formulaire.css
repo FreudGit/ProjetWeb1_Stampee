@@ -1,0 +1,125 @@
+/* formulaire.css --- */
+
+button {
+	appearance: none;
+	border: none;
+	padding: 10px;
+	background-color: lightgrey;
+	border-radius: 3px;
+}
+
+button[type="submit"] {
+	background-color: lightblue;
+}
+
+form button {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+fieldset {
+	border: none;
+	display: flex;
+	gap: calc(var(--gouttiere) / 2);
+}
+
+input:invalid {
+	border-color: red;
+}
+
+label {
+	line-height: 1.4;
+}
+
+input,
+select {
+	border-radius: 3px;
+	display: block;
+	padding: 5px;
+	border: 1px solid var(--couleur_tertiaire);
+	width: 100%;
+	box-sizing: border-box;
+}
+
+:is(input, select):placeholder-shown {
+	border-color: black;
+}
+
+form header {
+	display: block;
+	padding-bottom: 1rem;
+}
+
+
+form header button {
+	margin: 20px 0px;
+}
+
+
+/* Style des tabs */
+.tab {
+	display: flex;
+	/* Effet d'ombre en haut et à droite */
+}
+
+.tab button {
+	background-color:  var(--couleur_tertiaire);;
+	/* Couleur de fond des boutons non actifs */
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 10px 20px;
+	transition: 0.3s;
+	font-size: 16px;
+	flex: 1;
+	position: relative;
+	box-shadow: 2px 0 4px rgba(0, 0, 0, 0.3);
+	/* Shadow à droite des boutons non actifs */
+}
+
+.tab button.active {
+	background-image: linear-gradient(to bottom, var(--couleur_primaire), var(--couleur_bouton));
+	/* Fond dégradé pour le bouton actif */
+	box-shadow: 2px -2px 4px rgba(0, 0, 0, 0.3);
+	/* Shadow en haut et à droite pour le bouton actif */
+	color: white;
+	border-top-right-radius: 10px;
+	/* Rend le coin supérieur droit du bouton actif arrondi */
+	z-index: 3;
+	/* Le bouton actif apparaît au-dessus des autres boutons */
+}
+
+.tab button:nth-child(2) {
+	z-index: 2;
+	/* Le bouton 2 apparaît au-dessus du bouton 3 */
+	margin-right: -0px;
+	/* Le bouton 2 chevauche le bouton 3 */
+}
+
+.tab button:nth-child(3) {
+	z-index: 1;
+	/* Le bouton 3 apparaît sous le bouton 2 */
+}
+
+
+/* Style du contenu des tabs */
+.tabcontent {
+	display: none;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-top: none;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Style des lignes de contenu */
+.content-line {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.content-line select {
+	flex: 1;
+	margin-right: 10px;
+}

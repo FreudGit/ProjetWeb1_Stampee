@@ -1,0 +1,38 @@
+@import url("menu-deroulant.css");
+@import url("navigation.css");
+@import url("entete-hero.css");
+@import url("bouton.css");
+@import url("section-titre.css");
+@import url("general.css");
+@import url("typographie.css");
+@import url("prototype.css");
+@import url("composition.css");
+@import url("footer.css");
+@import url("carte.css");
+@import url("formulaire.css");
+@import url("utilitaires.css");
+@import url("_dev.css");
+@import url("header.css");
+@import url("section-titre.css");
+@import url("carteIndex.css");
+@import url("section-lord-mission.css");
+
+
+:root {
+  --gouttiere: 30px;
+  --colonne: 220px;
+  --arriere-plan: rgba(225, 225, 225, 0.7);
+  --espace-tres-petit: 5px;
+  --espace-petit: 10px;
+  --espace-moyen: 20px;
+  --espace-grand: 30px;
+  --couleur_primaire: rgb(61, 183, 224);
+  --couleur_secondaire: rgba(0, 0, 0, 1);
+  --couleur_tertiaire: #01407530;
+  --couleur_bouton: #0045b6;
+  --couleur_bouton_hover: var(--couleur_tertiaire);
+  --gouttiere: var(--espace-moyen);
+  --colonne: 30ch;
+  --master_ColorText2: white;
+  --couleur_alerte: rgb(131, 16, 16);
+}

@@ -1,0 +1,46 @@
+/* -- footer */
+
+.footer {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.82)),
+    url(./../assets/images/header.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 0rem 2rem 1rem;
+  /*     gap: 20px;*/
+  color: var(--master_ColorText2);
+  background-color: var(--master_ColorDom);
+}
+
+.footer {
+  min-height: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--espace-grand);
+  color: white;
+  padding-right: 6vw;
+  padding-left: 6vw;
+}
+
+.footer h1 {
+  font-family: "Cherry Swash", cursive;
+  font-size: 60px;
+  color: var(--couleur_primaire);
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.footer ul {
+  font-size: 18px;
+  list-style-type: none;
+  padding-top: 5px;
+  color: var(--arriere-plan);
+}
+
+.footer li {
+  font-size: 14px;
+  list-style-type: none;
+  padding-top: 5px;
+  color: var(--arriere-plan);
+}

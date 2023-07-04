@@ -1,0 +1,58 @@
+/* typographie.css */
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+h1,
+.h1 {
+  font-size: 40px;
+  font-weight: 600;
+}
+
+h3,
+.h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+h4,
+.h4 {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+h5,
+.h5 {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+h6,
+.h6 {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+h7,
+.h7 {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+h8,
+.h8 {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.gradient {
+  background: linear-gradient(
+    to bottom,
+    var(--couleur_primaire),
+    var(--couleur_bouton)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}

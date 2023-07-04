@@ -1,0 +1,29 @@
+/* composition.css ---------- */
+
+body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gouttiere);
+}
+
+body>div {
+  padding: var(--gouttiere);
+  flex-wrap: wrap;
+  display: flex;
+  gap: var(--gouttiere);
+}
+
+body>div>aside {
+  flex-grow: 1;
+  flex-basis: 35ch;
+  /* max-width: 100ch; */
+}
+
+body>div>main {
+  flex-grow: 100;
+  flex-basis: 50ch;
+}
+
+body>div>main>*+* {
+  margin-top: var(--gouttiere);
+}

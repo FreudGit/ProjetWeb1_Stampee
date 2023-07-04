@@ -1,0 +1,28 @@
+/* utilitaires.css --- */
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--colonne), 1fr));
+  gap: var(--gouttiere);
+}
+
+.grille.en-pile {
+  display: flex;
+  flex-direction: column;
+}
+
+.grille.carteIndex_Contenant .carte {
+  max-width: 400px;
+}
+
+.rythme-moyen > * + * {
+  margin-top: calc(var(--gouttiere) / 2);
+}
+
+.voirBackgroundImage {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.82)),
+  url(./../assets/images/header.webp);
+  background-position: center;
+  background-attachment: fixed;
+  color: white;
+}

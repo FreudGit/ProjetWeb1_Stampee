@@ -1,0 +1,88 @@
+/*
+ 	(composante/région unique) */
+
+/* -- série de liens avec rythme */
+[id="navigation"] {
+  display: flex;
+  gap: var(--espace-grand);
+  align-items: center;
+  z-index: 1;
+  flex-wrap: wrap;
+  /* permettre les menus déroulants */
+}
+
+/* -- liens */
+[id="navigation"] a {
+  display: block;
+  /* permettre les paddings */
+  padding: var(--espace-tres-petit) var(--espace-petit);
+  /* agrandir la zone interactive */
+  font-size: clamp(16px, 2vw, 18px);;
+  font-weight: 300;
+}
+
+[id="navigation"] a:hover,
+[id="navigation"] a.active {
+  color: var(--couleur_primaire);
+}
+
+[id="navigation"] h1,
+[id="navigation"] .h1 {
+  text-align: center;
+  text-align: center;
+  font-size: 60px;
+  color: var(--couleur_primaire);
+  text-shadow: 2px 2px 4px #000000;
+  font-family: "Cherry Swash", cursive;
+  padding-right: var(--espace-grand);
+}
+
+/* -- adaptation -------------------------------- 
+ 		(media queries toujours à la fin d'un fichier) */
+
+/* -- fenêtre large ------- */
+@media (min-width: 600px) {
+
+  /* série horizontale */
+  [id="navigation"] {
+    flex-direction: row;
+  }
+
+  [id="navigation"] .secondaire {
+    margin-left: auto;
+  }
+}
+
+/* -- fenêtre étroite ------- */
+@media (max-width: 600px) {
+
+  /* -- panneau plein écran avec série verticale de liens */
+  [id="navigation"] {
+    flex-direction: column;
+    inset: 0;
+    background-color: white;
+    align-items: center;
+    text-align: center;
+    padding: var(--espace-grand);
+    background-color: white;
+    overflow: auto;
+  }
+
+  [id="navigation"] a {
+    color: black;
+  }
+
+  /* -- série de liens seulement (pas de structure) */
+  [id="navigation"] div {
+    display: contents;
+  }
+
+  [id="navigation"] a {
+    pointer-events: all;
+  }
+
+  /* -- rythme */
+  [id="navigation"]>*+* {
+    margin-top: var(--espace-petit);
+  }
+}

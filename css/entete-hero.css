@@ -1,0 +1,60 @@
+/*
+	(composante de contenu) */
+
+/* -- contexte de positionnement du contenu */
+.entete-hero {
+  position: relative;
+  /* permet aux descendants en position absolue de se placer en référence à cet élément */
+
+  /* permet l'alignement au centre */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 5vh;
+  /* évite les formats d'image inadéquats */
+  padding-top: 5vw;
+  padding-bottom: 5vw;
+}
+
+.entete-hero h1 {
+  font-size: clamp(14px, 4vw, 40px);
+  /* taille de police relative à la fenêtre  */
+  font-weight: 600;
+}
+
+.entete-hero h4, .entete-hero .h4{
+  font-size: clamp(12px, 1vw, 18px);
+  /* taille de police relative à la fenêtre  */
+  font-weight: 400;
+}
+
+.entete-hero>img {
+  background-color: transparent;
+
+  /* étendre l'image au complet (dans son parent) */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* empêcher que les règles ci-dessus ne déforment l'image */
+  object-fit: cover;
+}
+
+/* -- grouper le contenu pour l'aligner facilement */
+.entete-hero div {
+  position: relative;
+  padding: var(--espace-moyen);
+  text-align: center;
+  max-width: 90ch;
+}
+
+.entete-hero a {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+/* -- rythme */
+.entete-hero div>*+* {
+  margin-top: var(--espace-moyen);
+}

@@ -1,0 +1,56 @@
+/* * * HEADER.css */
+
+.header{
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.82)),
+    url(./../assets/images/header.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 0rem 2rem 1rem;
+  color: var(--master_ColorText2);
+  background-color: var(--master_ColorDom);
+}
+
+
+.recherche-form {
+  display: flex;
+  align-items: center;
+
+}
+
+.recherche-form > *{
+  height: 41px;
+  font-size: 14px;
+  height: 40px;
+  box-shadow: 2px 2px 4px 1px rgba(0, 0, 0, 0.733);
+  border: none;
+
+}
+
+.recherche-input {
+  width: 250px;
+  padding: 5px;
+  font-weight: 100;
+  outline: none;
+  background-color: #f1eeee;
+  border-radius: 3px 0 0 3px;
+}
+
+.recherche-boutton {
+  padding: 5px 10px;
+  color: white;
+  width: 80px;
+  margin: -1px;
+  background-image: linear-gradient(
+    to bottom,
+    var(--couleur_primaire),
+    var(--couleur_bouton)
+  );
+  border-radius: 3px 3px 3px 3px;
+  cursor: pointer;
+}
+
+.recherche-input::placeholder {
+  color: #07242d43;
+}

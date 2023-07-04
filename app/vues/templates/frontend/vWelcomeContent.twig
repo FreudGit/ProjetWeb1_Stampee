@@ -1,0 +1,348 @@
+<div class="section-titre">
+	<h1>Offres de services</h1>
+	<div class="carteIndex_Contenant">
+		<article class="carteIndex dotted-line surligne contour">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-shopping-cart icone-achat"></i>
+			</div>
+			<h2 class="h1">Acheter</h2>
+			<p>Achetez un item ou un lot complet</p>
+			<button class="bouton">En savoir plus...</button>
+		</article>
+
+		<article class="carteIndex dotted-line surligne contour">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-money-bill-wave icone-achat"></i>
+			</div>
+			<h2 class="h1">Vendre</h2>
+			<p>Vendre un item ou un lot complet</p>
+			<button class="bouton">En savoir plus...</button>
+		</article>
+
+		<article class="carteIndex dotted-line surligne contour">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-lightbulb icone-achat"></i>
+			</div>
+			<h2 class="h1">Conseils d'experts!</h2>
+			<p>Obtener de l'aide pour évaluer vos items</p>
+			<button class="bouton">En savoir plus...</button>
+		</article>
+	</div>
+</div>
+
+<div class="section-titre">
+	<h1>Comment ca fonctionne</h1>
+	<div class="h3">Simple comme 1-2-3:</div>
+
+	<div class="carteIndex_Contenant">
+		<article class="carteIndex">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-1"></i>
+			</div>
+			<h2 class="h1">Créez votre compte</h2>
+
+			<div class="h8">
+				Créez votre compte en à peine quelques click. Vous aurez accès a
+												          votre historique, vos préférences de recherches et même quelques
+												          surprises!
+			</div>
+		</article>
+
+		<article class="carteIndex">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-2"></i>
+			</div>
+			<h2 class="h1">Parcourez</h2>
+			<div class="h8">
+				Parcourez les items qui vous interesse, faites des recherches
+												          précises au moyens de nos filtre évolués. Noubliez pas de
+												          sauvegarder vos items favoris!
+			</div>
+		</article>
+		<article class="carteIndex">
+			<div class="rond-bleu gradient">
+				<i class="fas fa-3"></i>
+			</div>
+			<h2 class="h1">Achetez</h2>
+			<div class="h8">
+				Achetez simplement et rapidement chez nous. Notre processus sécurisé
+												          accepte divers paiements et vous guide jusqu'à la réception.
+			</div>
+		</article>
+	</div>
+</div>
+
+<div class="voirBackgroundImage section-titre">
+	<h1>Nous garantissons une expérience hors normes</h1>
+	<p>
+		<span class="h4">Notre plateforme d'enchères de timbres garantit une expérience hors
+									        normes, transparente, sécurisée et facile à utiliser. Nous sommes là
+									        pour vous aider à trouver les timbres que vous cherchez et à vous
+									        offrir une expérience d'enchères en ligne exceptionnelle.</span>
+	</p>
+
+	<div class="carteIndex_Contenant">
+		<div class="carteIndex">
+			<div class="rating">
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+			</div>
+			<div class="h1">4.9/5 étoiles</div>
+			<p>google reviews</p>
+		</div>
+
+		<div class="carteIndex">
+			<div class="rating">
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star active"></span>
+				<span class="fa fa-star-half active"></span>
+			</div>
+			<div class="h1">4.6/5 étoiles</div>
+			<p>Sondage après vente</p>
+		</div>
+	</div>
+	<div class="statistiques carteIndex_Contenant">
+		<div class="carteIndex">
+			<div class="h4">5000</div>
+			<p>Timbres vendus</p>
+		</div>
+		<div class="carteIndex">
+			<div class="h4">10000</div>
+			<p>Annonces</p>
+		</div>
+		<div class="carteIndex">
+			<div class="h4">140</div>
+			<p>En cours</p>
+		</div>
+		<div class="carteIndex">
+			<div class="h4">200</div>
+			<p>Reviews positifs</p>
+		</div>
+	</div>
+</div>
+
+<div class="section-titre">
+	<div class="h3">
+		Parcourir les items >
+		<a href="#">Timbres rares</a>
+		>
+		<a href="#">Toutes conditions</a>
+		>
+		<a href="#">Se termine bientôt</a>
+		>
+	</div>
+	<div class="h4">
+		13229 items trouvés(filtrés). Voici les résultats 1 à 3.
+	</div>
+</div>
+<div>
+	<main>
+		<div class="grille carteIndex_Contenant">
+
+			{% for oEnchere in aEncheres %}
+
+				<div class="carte">
+					<a href="#">
+						<picture>
+							<img src="assets/img/stamp44.webp" alt="Timbre 1">
+						</picture>
+					</a>
+					<div>
+						<aside>
+							<div>
+								<div class="h5">$70.70</div>
+							</div>
+							<div>
+								<div class="alerteAction h7">
+									20m (<a href="#">2 mises</a>)
+								</div>
+							</div>
+						</aside>
+						<div>
+							<a href="#">
+								<div class="h6">
+									{{ oEnchere.nom }}
+								</div>
+							</a>
+						</div>
+						<div class="h7">
+							<a href="#">Détails...</a>
+						</div>
+					</div>
+					<footer>
+						<button class="bouton alerteBackground-Color" aria-label="Enchérir">Enchérir</button>
+						<!--  <button class="bouton">Acheter</button> -->
+					</footer>
+				</div>
+
+
+				<div>
+					<a href="film?film_id={{ film.film_id }}"><img src="{{ film.film_affiche }}" alt=""></a>
+					<p class="legende">{{ film.genre_nom }}
+						-
+						{{ film.film_annee_sortie }}
+						-
+						{{ film.film_duree }}
+						min</p>
+				</div>
+			{% else %}
+				<div>Aucun film.</div>
+			{% endfor %}
+
+
+			<div class="carte">
+				<a href="#">
+					<picture>
+						<img src="assets/img/stamp44.webp" alt="Timbre 1">
+					</picture>
+				</a>
+				<div>
+					<aside>
+						<div>
+							<div class="h5">$70.70</div>
+						</div>
+						<div>
+							<div class="alerteAction h7">
+								20m (<a href="#">2 mises</a>)
+							</div>
+						</div>
+					</aside>
+					<div>
+						<a href="#">
+							<div class="h6">
+								Cook Is O27 Pair MNH 1978 overprint (an5387)
+							</div>
+						</a>
+					</div>
+					<div class="h7">
+						<a href="#">Détails...</a>
+					</div>
+				</div>
+				<footer>
+					<button class="bouton alerteBackground-Color" aria-label="Enchérir">Enchérir</button>
+					<!--  <button class="bouton">Acheter</button> -->
+				</footer>
+			</div>
+
+			<article class="carte">
+				<a href="#">
+					<picture>
+						<img src="assets/img/timbre-2.webp" alt="Timbre -2">
+
+					</picture>
+				</a>
+				<div>
+					<aside>
+						<div>
+							<div class="h5">$60.00</div>
+						</div>
+						<div>
+							<div class="alerteAction h7">
+								42m (<a href="#">22 mises</a>)
+							</div>
+						</div>
+					</aside>
+					<div>
+						<a href="#">
+							<div class="h6">
+								GAMBIA COVER (P3004B) 1942 KGVI ELEPHANT 1/-+2/6 FF COVER TO
+																								                  PURTO RICO TO US
+							</div>
+						</a>
+					</div>
+					<div class="h7">
+						<a href="#">Détails...</a>
+					</div>
+				</div>
+				<footer>
+					<button class="bouton alerteBackground-Color" aria-label="Enchérir">Enchérir</button>
+				</footer>
+			</article>
+
+			<article class="carte">
+
+				<a href="#">
+					<picture>
+						<img src="assets/img/stamp6.webp" alt="Timbre 6">
+
+					</picture>
+				</a>
+
+				<div>
+					<aside>
+						<div>
+							<div class="h5">$55.00</div>
+						</div>
+						<div>
+							<div class="h7">1h 12m (<a href="#">2 mises</a>)</div>
+						</div>
+					</aside>
+					<div>
+						<a href="#">
+							<div class="h6">
+								Rep. of CHINA -TAIWAN SC#1204 Pres. Chiang Kai-Shek (1958)
+																								                  MLH
+							</div>
+						</a>
+					</div>
+					<div class="h7">
+						<a href="#">Détails...</a>
+					</div>
+				</div>
+				<footer>
+					<button class="bouton alerteBackground-Color" aria-label="Enchérir">Enchérir</button>
+				</footer>
+			</article>
+
+		</div>
+	</main>
+</div>
+
+<div class="section-lord-mission voirBackgroundImage">
+	<div class="left-section">
+		<div class="h4">À propos de Lord Stampee</div>
+		<p>
+			Lord Stampee, le fondateur de notre plateforme d'enchères de timbres,
+																					        est un philatéliste passionné avec une admiration débordante pour
+																					        l'art et l'histoire encapsulés dans chaque timbre. Sa passion pour les
+																					        timbres est née lors de ses voyages mondiaux où il a commencé à
+																					        collectionner des timbres de chaque pays qu'il visitait. Il est connu
+																					        pour son œil aguerri pour les détails et son amour pour le partage de
+																					        sa passion avec d'autres. Aujourd'hui, il met cette passion au service
+																					        de la communauté philatéliste en fournissant une plateforme où les
+																					        collectionneurs peuvent acheter et vendre des timbres rares et
+																					        précieux.
+		</p>
+		<div class="h4">Notre mission</div>
+		<p>
+			Chez Lord Stampee, notre mission est de créer une communauté globale
+																					        de passionnés de timbres, où chacun peut découvrir, acheter et vendre
+																					        des timbres de collection. Nous nous engageons à fournir une
+																					        plateforme fiable et transparente pour les enchères de timbres,
+																					        soutenue par une technologie de pointe pour assurer la sécurité et
+																					        l'équité de chaque transaction. Nous croyons que chaque timbre a une
+																					        histoire à raconter et nous nous efforçons de donner à ces histoires
+																					        la plateforme qu'elles méritent.
+		</p>
+	</div>
+	<div class="right-section">
+		<video controls>
+			<source src="./assets/vid/Lord.mp4" type="video/mp4">
+			<track src="captions_en.vtt" kind="captions" srclang="en" label="english_captions">
+
+				Votre navigateur ne supporte pas les vidéos.
+			</video>
+		</div>
+	</div>
+
+	<div class="entete-hero" role="banner">
+		<a class="bouton gros" href="catalogue.html#nouveauxitems" aria-label="Découvrez les nouveaux items">
+			<span class="h4">Découvrez les nouveaux items et améliorez votre collections</span>
+		</a>
+	</div>
+</div>

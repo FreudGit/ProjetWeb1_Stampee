@@ -1,0 +1,37 @@
+.section-lord-mission {
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 2vw 2vw 0 2vw;
+  padding: 2rem;
+
+  box-shadow: 5px 5px 15px 5px grey;
+}
+
+.section-lord-mission .left-section {
+  flex: 2;
+  min-width: 300px;
+  margin: 2rem;
+}
+
+.section-lord-mission .left-section > * {
+  margin: 1rem;
+}
+
+.section-lord-mission .left-section p {
+  color: var(--arriere-plan);
+}
+
+.section-lord-mission .right-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-lord-mission .right-section video {
+  width: 100%;
+  height: auto;
+  z-index: 0;
+}

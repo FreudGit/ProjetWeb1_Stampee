@@ -1,0 +1,135 @@
+.carteIndex {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 300px;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 1rem;
+  text-align: center;
+  border-radius: 20px;
+}
+
+.cartesIndex:hover {
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.carteIndex.contour {
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+.carteIndex .fas {
+  font-size: 3rem;
+}
+
+.carteIndex h1,
+.carteIndex h2,
+.carteIndex h3,
+.carteIndex h4,
+.carteIndex p,
+.carteIndex .h1,
+.carteIndex .h2,
+.carteIndex .h3,
+.carteIndex .h4 {
+  color: rgba(0, 0, 0, 0.76);
+}
+
+
+.voirBackgroundImage .carteIndex *
+{
+  color: white;
+}
+
+.carteIndex.surligne::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  background-color: var(--couleur_primaire);
+}
+
+.carteIndex > * + * {
+  margin: 1rem;
+}
+
+.rond-bleu {
+  display: inline-block;
+  border-radius: 50%;
+  padding: 15px;
+  background-color: blue;
+}
+
+.carteIndex > div:last-child {
+  padding: 10px;
+  text-align: center;
+}
+
+.carteIndex h1,
+.carteIndex .h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.carteIndex p {
+  font-size: 16px;
+  font-weight: 300;
+  flex: 1;
+}
+
+.carteIndex button {
+  border-radius: 20px;
+  align-self: center;
+}
+
+.carteIndex_Contenant {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 2vw;
+  width: 100%;
+}
+
+
+
+.stastistiques {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 20px 0;
+}
+
+.statistiques div .h4,
+.statistiques div h4 {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+  opacity: 0;
+  transform: translateY(50%);
+  animation: incrementer 1s ease-in-out forwards infinite;
+}
+
+@keyframes incrementer {
+  from {
+    opacity: 0;
+    transform: translateY(30%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rating {
+  font-size: 2em;
+}
+
+.fa {
+  color: #ccc;
+}
+
+.fa.active {
+  color: gold;
+}

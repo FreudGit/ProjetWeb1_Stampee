@@ -1,0 +1,37 @@
+/*
+	(composante) ----------------- */
+
+.menu-deroulant {
+  position: relative; /* permet les enfants en position absolue */
+}
+
+.menu-deroulant:hover {
+  /* rien pour le moment */
+}
+
+/* conteneur déroulant */
+.menu-deroulant > div {
+  position: absolute; /* évite d'agrandir la navigation */
+  top: 100%; /* assure le positionnement en-dessous du lien */
+  width: max-content; /* permet d'aller au-delà des dimensions du lien */
+  max-width: 20ch; /* limite les mots trop longs */
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.82
+  ); /* l'arrière-plan opaque est nécessaire à cause du chevauchement */
+  z-index: 1;
+}
+
+/* -- comportement d'affichage */
+.menu-deroulant:not(:hover) > div {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* -- variante alignée à droite */
+.menu-deroulant.cote-droit div {
+  left: auto;
+  right: 0;
+}

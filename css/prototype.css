@@ -1,0 +1,6 @@
+/* prototype.css ------------ */
+
+:is(body, body > div) > :is(aside) {
+  min-height: 400px;
+  padding: var(--gouttiere);
+}

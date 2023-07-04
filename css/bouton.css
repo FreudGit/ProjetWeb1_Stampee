@@ -1,0 +1,45 @@
+/* (composante) */
+/* bugscss */
+
+.bouton {
+	display: inline-block;
+	background-image: linear-gradient(to bottom, var(--couleur_primaire), var(--couleur_bouton));
+	color: white;
+	padding: var(--espace-tres-petit);
+	border-radius: 10px;
+	text-decoration: none;
+	cursor: pointer;
+	padding: var(--espace-tres-petit) 1rem;
+}
+
+.bouton.gros {
+	padding: var(--espace-petit);
+}
+
+.bouton:hover,
+button:hover,
+.recherche-boutton:hover,
+.tablinks:hover,
+.tablinks.active:hover {
+	background-color: gray;
+	background-image: none;  /* TODO: Demander au prof pourquoi je dois absument laisser ce 'patch' pour que le hover fonctionne */
+	background-image:
+		linear-gradient(to bottom, gray, var(--couleur_bouton_hover));
+}
+
+.boutonCar {
+	color: white;
+	height: 100%;
+	font-size: 26px;
+	width: 56px;
+	background-color: var(--couleur_tertiaire);
+	box-shadow: 2px 2px 0px 1px rgba(0, 0, 0, 0.33);
+	border: none;
+	cursor: pointer;
+	min-width: fit-content;
+	;
+}
+
+.boutonCar.active {
+	color: white;
+}
