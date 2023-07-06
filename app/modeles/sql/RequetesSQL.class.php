@@ -236,15 +236,11 @@ class RequetesSQL extends RequetesPDO
 
     $this->sql = "SELECT
     e.ID,
-    e.TimbreID,
-    e.UtilisateurID,
     e.DateDebut,
     e.DateFin,
     e.PrixPlancher,
-    e.UtilisateurActuelID,
     e.Visible,
     e.Status,
-    e.Rating,
     t.Nom AS TimbreNom,
     t.DateCreation AS TimbreDateCreation,
     t.Couleur AS TimbreCouleur,
@@ -281,6 +277,50 @@ FROM
             Ordre = 1
     ) i ON t.ID = i.TimbreID;";
 
+$this->sql = "SELECT
+e.ID AS EnchereID,
+e.DateDebut,
+e.DateFin,
+e.PrixPlancher,
+e.Visible,
+e.Status,
+t.ID AS TimbreID,
+t.Nom AS TimbreNom,
+t.DateCreation AS TimbreDateCreation,
+t.Couleur AS TimbreCouleur,
+t.PaysOrigine AS TimbrePaysOrigine,
+t.EtatCondition AS TimbreEtatCondition,
+t.Tirage AS TimbreTirage,
+t.Longueur AS TimbreLongueur,
+t.Largeur AS TimbreLargeur,
+t.Certifie AS TimbreCertifie,
+t.CategorieID,
+COALESCE(mises.NombreMises, 0) AS NombreMises,
+COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
+i.CheminImage AS PremiereImage
+FROM
+enchere e
+LEFT JOIN timbre t ON e.ID = t.EnchereID
+LEFT JOIN (
+    SELECT
+        EnchereID,
+        COUNT(*) AS NombreMises,
+        MAX(Prix) AS PrixActuel
+    FROM
+        offre
+    GROUP BY
+        EnchereID
+) mises ON e.ID = mises.EnchereID
+LEFT JOIN (
+    SELECT
+        TimbreID,
+        CheminImage
+    FROM
+        image
+    WHERE
+        Ordre = 1
+) i ON t.ID = i.TimbreID;";
+
     return $this->getLignes();
   }
 
@@ -296,6 +336,22 @@ FROM
   public function getRoles()
   {
     $this->sql = "SELECT * from Role ORDER BY ID desc";
+    return $this->getLignes();
+  }
+
+
+
+  /* GESTION DES TIMBRES 
+   ================= */
+
+  /**
+   * Récupération des roles
+   * @param  string $critere
+   * @return array tableau des lignes produites par la select   
+   */
+  public function getTimbres()
+  {
+    $this->sql = "SELECT * from Timbre ORDER BY ID desc";
     return $this->getLignes();
   }
 

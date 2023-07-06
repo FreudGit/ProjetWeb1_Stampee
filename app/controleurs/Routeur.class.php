@@ -14,10 +14,6 @@ class Routeur {
     ["",    "Frontend", "afficherWelcome"],
     ["index",    "Frontend", "afficherWelcome"],
     ["catalogue",    "Frontend", "afficherCatalogue"],
-
-    ["alaffiche",    "Frontend", "listerAlaffiche"],
-    ["prochainement", "Frontend", "listerProchainement"],
-    ["film",          "Frontend", "voirFilm"],
     ["connecter",     "Frontend", "connecter"],
     ["creerCompte",   "Frontend", "creerCompte"],
     ["deconnecter",   "Frontend", "deconnecter"]

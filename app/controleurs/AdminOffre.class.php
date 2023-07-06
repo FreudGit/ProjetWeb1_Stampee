@@ -6,9 +6,10 @@
 
 class AdminOffre extends Admin {
 
+ // protected $entite = "genre";
   protected $methodes = [
-    'l' => ['nom' => 'listerGenres',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    'a' => ['nom' => 'ajouterGenre',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
+    'l' => ['nom' => 'listerOffres',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
+    'a' => ['nom' => 'ajouterOffre',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
     'm' => ['nom' => 'modifierGenre',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
     's' => ['nom' => 'supprimerGenre', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]]
   ];
@@ -26,13 +27,14 @@ class AdminOffre extends Admin {
   /**
    * Lister les genres
    */
-  public function listerGenres() {
-    $genres = $this->oRequetesSQL->getGenres();
+  public function listerOffres() {
+    $genres = $this->oRequetesSQL->getTimbres();
     (new Vue)->generer(
-      'vAdminGenres',
+      'vAdminOffres',
       [
         'oUtilConn'           => self::$oUtilConn,
         'titre'               => 'Gestion des genres',
+        'entite'              => 'offre',
         'genres'              => $genres,
         'classRetour'         => $this->classRetour,  
         'messageRetourAction' => $this->messageRetourAction

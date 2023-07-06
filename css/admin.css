@@ -135,12 +135,10 @@ main {
   .g.films        { grid-template-columns: repeat(10, max-content); }
   .g.encheres { grid-template-columns: repeat(8, max-content);  }
 
-  .g.genres       { grid-template-columns: repeat(4, max-content);  }
-  .g.realisateurs { grid-template-columns: repeat(4, max-content);  }
-  .g.acteurs      { grid-template-columns: repeat(4, max-content);  }
-  .g.pays         { grid-template-columns: repeat(4, max-content);  }
-  .g.seances      { grid-template-columns: repeat(5, max-content);  }
-  .g.salles       { grid-template-columns: repeat(4, max-content);  }
+  .g.timbre       { grid-template-columns: repeat(9, max-content);  }
+  .g.offre { grid-template-columns: repeat(4, max-content);  }
+  .g.role     { grid-template-columns: repeat(4, max-content);  }
+
   .l {
     display: contents;
   }
