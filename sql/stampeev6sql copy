@@ -125,7 +125,7 @@ CREATE TABLE `utilisateur` (
   `utilisateur_mdp` varchar(255) DEFAULT NULL,
   `utilisateur_DateInscription` date DEFAULT NULL,
   `utilisateur_valide` varchar(255) DEFAULT NULL,
-  `utilisateur_renouveler_mdp` varchar(255) DEFAULT '0',
+  `utilisateur_renouveler_mdp` varchar(255) DEFAULT '0', 
   `utilisateur_rating` decimal(2,1) DEFAULT NULL,
   `utilisateur_roleID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
