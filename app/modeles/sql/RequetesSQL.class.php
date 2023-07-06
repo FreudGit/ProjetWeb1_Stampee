@@ -4,7 +4,8 @@
  * Classe des requêtes SQL
  *
  */
-class RequetesSQL extends RequetesPDO {
+class RequetesSQL extends RequetesPDO
+{
 
   /* GESTION DES UTILISATEURS 
      ======================== */
@@ -12,26 +13,47 @@ class RequetesSQL extends RequetesPDO {
   /**
    * Récupération des utilisateurs
    * @return array tableau d'objets Utilisateur
-   */ 
-  public function getUtilisateurs() {
+   */
+  public function getUtilisateurs()
+  {
     $this->sql = "
-      SELECT utilisateur_id, utilisateur_nom, utilisateur_prenom, utilisateur_courriel,
-             utilisateur_renouveler_mdp, utilisateur_profil
-      FROM utilisateur ORDER BY utilisateur_id DESC";
-     return $this->getLignes();
+    SELECT 
+    utilisateur.utilisateur_id,
+    utilisateur.utilisateur_nom,
+    utilisateur.utilisateur_prenom,
+    utilisateur.utilisateur_adresse,
+    utilisateur.utilisateur_courriel,
+    utilisateur.utilisateur_mdp,
+    utilisateur.utilisateur_DateInscription,
+    utilisateur.utilisateur_valide,
+    utilisateur.utilisateur_renouveler_mdp,
+    utilisateur.utilisateur_rating,
+    utilisateur.utilisateur_roleID,
+    role.Nom AS utilisateur_profil
+  FROM utilisateur
+  JOIN role ON utilisateur.utilisateur_roleID = role.ID
+   ORDER BY utilisateur_id DESC";
+    return $this->getLignes();
   }
 
   /**
    * Récupération d'un utilisateur
    * @param int $utilisateur_id, clé du utilisateur  
    * @return array|false tableau associatif de la ligne produite par la select, false si aucune ligne
-   */ 
-  public function getUtilisateur($utilisateur_id) {
+   */
+  public function getUtilisateur($utilisateur_id)
+  {
     $this->sql = "
-      SELECT utilisateur_id, utilisateur_nom, utilisateur_prenom, utilisateur_courriel,
-             utilisateur_renouveler_mdp, utilisateur_profil
-      FROM utilisateur
-      WHERE utilisateur_id = :utilisateur_id";
+    SELECT
+    utilisateur.utilisateur_id,
+    utilisateur.utilisateur_nom,
+    utilisateur.utilisateur_prenom,
+    utilisateur.utilisateur_courriel,
+    utilisateur.utilisateur_renouveler_mdp,
+    role.Nom AS utilisateur_profil
+  FROM utilisateur
+  LEFT JOIN role ON utilisateur.utilisateur_roleID = role.ID
+  WHERE utilisateur.utilisateur_id = :utilisateur_id;";
     return $this->getLignes(['utilisateur_id' => $utilisateur_id], RequetesPDO::UNE_SEULE_LIGNE);
   }
 
@@ -39,8 +61,9 @@ class RequetesSQL extends RequetesPDO {
    * Contrôler si adresse courriel non déjà utilisée par un autre utilisateur que utilisateur_id
    * @param array $champs tableau utilisateur_courriel et utilisateur_id (0 si dans toute la table)
    * @return array|false utilisateur avec ce courriel, false si courriel disponible
-   */ 
-  public function controlerCourriel($champs) {
+   */
+  public function controlerCourriel($champs)
+  {
     $this->sql = 'SELECT utilisateur_id FROM utilisateur
                   WHERE utilisateur_courriel = :utilisateur_courriel AND utilisateur_id != :utilisateur_id';
     return $this->getLignes($champs, RequetesPDO::UNE_SEULE_LIGNE);
@@ -50,12 +73,19 @@ class RequetesSQL extends RequetesPDO {
    * Connecter un utilisateur
    * @param array $champs, tableau avec les champs utilisateur_courriel et utilisateur_mdp  
    * @return array|false tableau associatif de la ligne produite par la select, false si aucune ligne
-   */ 
-  public function connecter($champs) {
+   */
+  public function connecter($champs)
+  {
     $this->sql = "
-      SELECT utilisateur_id, utilisateur_nom, utilisateur_prenom,
-             utilisateur_courriel, utilisateur_renouveler_mdp, utilisateur_profil
-      FROM utilisateur
+    SELECT
+    utilisateur.utilisateur_id,
+    utilisateur.utilisateur_nom,
+    utilisateur.utilisateur_prenom,
+    utilisateur.utilisateur_courriel,
+    utilisateur.utilisateur_renouveler_mdp,
+    role.Nom AS utilisateur_profil
+  FROM utilisateur
+  LEFT JOIN role ON utilisateur.utilisateur_roleID = role.ID
       WHERE utilisateur_courriel = :utilisateur_courriel AND utilisateur_mdp = SHA2(:utilisateur_mdp, 512)";
     return $this->getLignes($champs, RequetesPDO::UNE_SEULE_LIGNE);
   }
@@ -64,20 +94,25 @@ class RequetesSQL extends RequetesPDO {
    * Ajouter un utilisateur
    * @param array $champs tableau des champs de l'utilisateur 
    * @return int|string clé primaire de la ligne ajoutée, message d'erreur sinon
-   */ 
-  public function ajouterUtilisateur($champs) {
+   */
+  public function ajouterUtilisateur($champs)
+  {
     $utilisateur = $this->controlerCourriel(
-      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => 0]);
+      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => 0]
+    );
     if ($utilisateur !== false)
       return Utilisateur::ERR_COURRIEL_EXISTANT;
     $this->sql = '
-      INSERT INTO utilisateur SET
-      utilisateur_nom            = :utilisateur_nom,
-      utilisateur_prenom         = :utilisateur_prenom,
-      utilisateur_courriel       = :utilisateur_courriel,
-      utilisateur_mdp            = SHA2(:utilisateur_mdp, 512),
-      utilisateur_renouveler_mdp = "oui",
-      utilisateur_profil         = :utilisateur_profil';
+    INSERT INTO utilisateur (utilisateur_nom, utilisateur_prenom, utilisateur_courriel, utilisateur_mdp, utilisateur_renouveler_mdp, utilisateur_roleID)
+    SELECT
+      :utilisateur_nom,
+      :utilisateur_prenom,
+      :utilisateur_courriel,
+      SHA2(:utilisateur_mdp, 512),
+      "oui",
+      role.ID
+    FROM role
+    WHERE role.Nom = :utilisateur_profil';
     return $this->CUDLigne($champs);
   }
 
@@ -85,13 +120,15 @@ class RequetesSQL extends RequetesPDO {
    * Créer un compte utilisateur dans le frontend
    * @param array $champs tableau des champs de l'utilisateur 
    * @return int|string clé primaire de la ligne ajoutée, message d'erreur sinon
-   */ 
-  public function creerCompteClient($champs) {
+   */
+  public function creerCompteClient($champs)
+  {
     $utilisateur = $this->controlerCourriel(
-      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => 0]);
+      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => 0]
+    );
     if ($utilisateur !== false)
       return ['utilisateur_courriel' => Utilisateur::ERR_COURRIEL_EXISTANT];
-    unset($champs['nouveau_mdp_bis']);  
+    unset($champs['nouveau_mdp_bis']);
     $this->sql = '
       INSERT INTO utilisateur SET
       utilisateur_nom            = :utilisateur_nom,
@@ -99,7 +136,7 @@ class RequetesSQL extends RequetesPDO {
       utilisateur_courriel       = :utilisateur_courriel,
       utilisateur_mdp            = SHA2(:nouveau_mdp, 512),
       utilisateur_renouveler_mdp = "non",
-      utilisateur_profil         = "'.Utilisateur::PROFIL_CLIENT.'"';
+      utilisateur_profil         = "' . Utilisateur::PROFIL_CLIENT . '"';
     return $this->CUDLigne($champs);
   }
 
@@ -108,10 +145,12 @@ class RequetesSQL extends RequetesPDO {
    * Modifier un utilisateur
    * @param array $champs tableau des champs de l'utilisateur 
    * @return boolean|string true si modifié, message d'erreur sinon
-   */ 
-  public function modifierUtilisateur($champs) {
+   */
+  public function modifierUtilisateur($champs)
+  {
     $utilisateur = $this->controlerCourriel(
-      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => $champs['utilisateur_id']]);
+      ['utilisateur_courriel' => $champs['utilisateur_courriel'], 'utilisateur_id' => $champs['utilisateur_id']]
+    );
     if ($utilisateur !== false)
       return Utilisateur::ERR_COURRIEL_EXISTANT;
     $this->sql = '
@@ -119,7 +158,11 @@ class RequetesSQL extends RequetesPDO {
       utilisateur_nom      = :utilisateur_nom,
       utilisateur_prenom   = :utilisateur_prenom,
       utilisateur_courriel = :utilisateur_courriel,
-      utilisateur_profil   = :utilisateur_profil
+      utilisateur.utilisateur_roleID = (
+        SELECT role.ID
+        FROM role
+        WHERE role.Nom = :utilisateur_profil
+      )
       WHERE utilisateur_id = :utilisateur_id
       AND utilisateur_id > 4'; // ne pas modifier les 4 premiers utilisateurs du jeu d'essai
     return $this->CUDLigne($champs);
@@ -129,8 +172,9 @@ class RequetesSQL extends RequetesPDO {
    * Modifier le mot de passe d'un utilisateur
    * @param array $champs tableau des champs de l'utilisateur 
    * @return boolean true si modifié, false sinon
-   */ 
-  public function modifierUtilisateurMdpGenere($champs) {
+   */
+  public function modifierUtilisateurMdpGenere($champs)
+  {
     $this->sql = '
       UPDATE utilisateur SET
       utilisateur_mdp            = SHA2(:utilisateur_mdp, 512),
@@ -144,8 +188,9 @@ class RequetesSQL extends RequetesPDO {
    * Modifier le mot de passe saisi d'un utilisateur
    * @param array $champs tableau des champs de l'utilisateur 
    * @return boolean true si modifié, false sinon
-   */ 
-  public function modifierUtilisateurMdpSaisi($champs) {
+   */
+  public function modifierUtilisateurMdpSaisi($champs)
+  {
     $this->sql = '
       UPDATE utilisateur SET
       utilisateur_mdp            = SHA2(:utilisateur_mdp, 512), 
@@ -159,20 +204,20 @@ class RequetesSQL extends RequetesPDO {
    * Supprimer un utilisateur
    * @param int $utilisateur_id clé primaire
    * @return boolean|string true si suppression effectuée, message d'erreur sinon
-   */ 
-  public function supprimerUtilisateur($utilisateur_id) {
+   */
+  public function supprimerUtilisateur($utilisateur_id)
+  {
     $this->sql = '
-      DELETE FROM utilisateur WHERE utilisateur_id = :utilisateur_id
-      AND utilisateur_id NOT IN (SELECT DISTINCT f_r_film_id FROM film_realisateur)
-      AND utilisateur_id NOT IN (SELECT DISTINCT f_a_film_id FROM film_acteur)
-      AND utilisateur_id NOT IN (SELECT DISTINCT f_p_film_id FROM film_pays)
-      AND utilisateur_id NOT IN (SELECT DISTINCT seance_film_id FROM seance)
-      AND utilisateur_id > 4'; // ne pas supprimer les 4 premiers utilisateurs du jeu d'essai
+    DELETE FROM utilisateur
+    WHERE utilisateur_id = :utilisateur_id
+      AND NOT EXISTS (
+        SELECT 1
+        FROM enchere
+        WHERE UtilisateurID = :utilisateur_id
+        LIMIT 1
+      ) AND utilisateur_id > 4';
     return $this->CUDLigne(['utilisateur_id' => $utilisateur_id]);
   }
-
-
-
 
 
 
@@ -183,8 +228,9 @@ class RequetesSQL extends RequetesPDO {
    * Récupération des encheres à l'affiche ou prochainement ou pour l'interface admin
    * @param  string $critere
    * @return array tableau des lignes produites par la select   
-   */ 
-  public function getEncheres() {
+   */
+  public function getEncheres()
+  {
     //$this->sql = "SELECT E.*, T.* FROM Enchere E INNER JOIN Timbre T ON E.TimbreID = T.ID ORDER BY E.DateFin DESC";
 
 
@@ -235,7 +281,22 @@ FROM
             Ordre = 1
     ) i ON t.ID = i.TimbreID;";
 
-     return $this->getLignes();
-    }
+    return $this->getLignes();
+  }
+
+
+  /* GESTION DES ROLES 
+   ================= */
+
+  /**
+   * Récupération des roles
+   * @param  string $critere
+   * @return array tableau des lignes produites par la select   
+   */
+  public function getRoles()
+  {
+    $this->sql = "SELECT * from Role ORDER BY ID desc";
+    return $this->getLignes();
+  }
 
 }

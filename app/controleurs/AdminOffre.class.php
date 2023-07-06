@@ -4,7 +4,7 @@
  * Classe Contrôleur des requêtes sur l'entité Genre de l'application admin
  */
 
-class AdminGenre extends Admin {
+class AdminOffre extends Admin {
 
   protected $methodes = [
     'l' => ['nom' => 'listerGenres',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],

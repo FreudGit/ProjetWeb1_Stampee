@@ -116,6 +116,7 @@ class AdminUtilisateur extends Admin {
    * Ajouter un utilisateur
    */
   public function ajouterUtilisateur() {
+    
     if (count($_POST) !== 0) {
       $utilisateur = $_POST;
       $oUtilisateur = new Utilisateur($utilisateur);
@@ -154,13 +155,15 @@ class AdminUtilisateur extends Admin {
       $utilisateur = [];
       $erreurs     = [];
     }
-    
+    $roles       = $this->oRequetesSQL->getRoles();
+
     (new Vue)->generer(
       'vAdminUtilisateurAjouter',
       [
         'oUtilConn'   => self::$oUtilConn,
         'titre'       => 'Ajouter un utilisateur',
         'utilisateur' => $utilisateur,
+        'roles' => $roles,
         'erreurs'     => $erreurs
       ],
       'gabarit-admin');

@@ -7,6 +7,11 @@ VALUES
   ('Michael Brown', '654 Rue des Collectionneurs', '32109', 'Villecollection', 'Payscollection', 'michael.brown@example.com', 'motdepasse5', '2022-05-01', TRUE, 4.9);
 
 
+
+
+  
+
+
 INSERT INTO Categorie (Nom)
 VALUES
   ('Animaux'),

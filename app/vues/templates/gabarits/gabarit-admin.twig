@@ -20,26 +20,19 @@
         <ul>
           <li>
             <hr>
-            <a href="admin">Films</a>
+            <a href="admin">Profil</a>
           </li>
           <li>
-            <a href="admin?entite=genre">Genres</a>
+            <a href="admin?entite=enchere">Encheres</a>
           </li>
           <li>
-            <a href="admin?entite=realisateur">Réalisateurs</a>
+            <a href="admin?entite=timbre">Timbres</a>
           </li>
+
           <li>
-            <a href="admin?entite=acteur">Acteurs</a>
+            <a href="admin?entite=offres">Offres</a>
           </li>
-          <li>
-            <a href="admin?entite=pays">Pays</a>
-          </li>
-          <li>
-            <a href="admin?entite=seance">Séances</a>
-          </li>
-          <li>
-            <a href="admin?entite=salle">Salles</a>
-          </li>
+          
           {% if oUtilConn.utilisateur_profil == constant('Utilisateur::PROFIL_ADMINISTRATEUR') %}
           <li>
             <hr>

@@ -29,7 +29,7 @@ class Admin extends Routeur {
    * 
    */
   public function __construct() {
-    self::$entite = $_GET['entite'] ?? 'film';
+    self::$entite = $_GET['entite'] ?? 'utilisateur';
     self::$action = $_GET['action'] ?? 'l';
   }
 

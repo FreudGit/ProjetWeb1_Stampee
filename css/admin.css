@@ -133,6 +133,8 @@ main {
   }
   .g.utilisateurs { grid-template-columns: repeat(6, max-content);  }
   .g.films        { grid-template-columns: repeat(10, max-content); }
+  .g.encheres { grid-template-columns: repeat(8, max-content);  }
+
   .g.genres       { grid-template-columns: repeat(4, max-content);  }
   .g.realisateurs { grid-template-columns: repeat(4, max-content);  }
   .g.acteurs      { grid-template-columns: repeat(4, max-content);  }

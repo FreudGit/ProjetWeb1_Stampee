@@ -20,6 +20,7 @@ class Utilisateur extends Entite
   const PROFIL_EDITEUR        = "editeur";
   const PROFIL_CORRECTEUR     = "correcteur";
   const PROFIL_CLIENT         = "client";
+  const PROFIL_VISITEUR        = "visiteur";
 
   const ERR_COURRIEL_EXISTANT = "Courriel déjà utilisé.";
 
@@ -124,7 +125,8 @@ class Utilisateur extends Entite
     if ($utilisateur_profil !== self::PROFIL_ADMINISTRATEUR &&
         $utilisateur_profil !== self::PROFIL_EDITEUR        &&
         $utilisateur_profil !== self::PROFIL_CORRECTEUR     &&
-        $utilisateur_profil !== self::PROFIL_CLIENT) {
+        $utilisateur_profil !== self::PROFIL_CLIENT &&
+        $utilisateur_profil !== self::PROFIL_VISITEUR)  {
       $this->erreurs['utilisateur_profil'] = 'Profil incorrect.';
     }
     $this->utilisateur_profil = $utilisateur_profil;
