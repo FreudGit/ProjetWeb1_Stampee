@@ -389,6 +389,30 @@ WHERE e.ID = :ID;";
   }
 
 
+  public function modifierEnchereOLD2($plChamps)
+  {
+    $champs = array(
+      'DateDebut' => '2023-07-01',
+      'DateFin' => '2023-07-10',
+      'PrixPlancher' => 50.00,
+      'UtilisateurID' => 1,
+      'Visible' => true,
+      'Status' => 'En cours'
+    );
+
+
+
+
+    $whereClause = array(
+      'ID' => $plChamps['ID']
+    );
+    return $this->modifierTable('enchere', $plChamps, $whereClause);
+
+
+
+
+  }
+
   public function modifierTable($table, $champs, $plWhereClause)
   {
     $this->sql = 'UPDATE ' . $table . ' SET ';
@@ -421,6 +445,32 @@ WHERE e.ID = :ID;";
 
 
 
+
+  public function modifierDBOLD($plChamps, $plWhereClause)
+  {
+    $this->sql = '
+      UPDATE timbre SET
+      Nom            = :Nom, 
+      DateCreation            = :DateCreation, 
+      Couleur            = :Couleur, 
+      PaysOrigine            = :PaysOrigine, 
+      EtatCondition            = :EtatCondition, 
+      Tirage            = :Tirage, 
+      Longueur            = :Longueur, 
+      Largeur            = :Largeur, 
+      Certifie            = :Certifie, 
+      CategorieID            = :CategorieID
+      WHERE ID = :ID';
+    return $this->CUDLigne($plChamps);
+  }
+
+
+
+
+
+
+
+
   /* GESTION DES ROLES 
    ================= */
 
@@ -448,24 +498,6 @@ WHERE e.ID = :ID;";
   public function getTimbres()
   {
     $this->sql = "SELECT * from Timbre ORDER BY ID desc";
-    return $this->getLignes();
-  }
-
-
-
-
-
-  /* GESTION DES CATEGORIES 
-   ================= */
-
-  /**
-   * Récupération des categories
-   * @param  string $critere
-   * @return array tableau des lignes produites par la select   
-   */
-  public function getCategories()
-  {
-    $this->sql = "SELECT * from categorie ORDER BY ID desc";
     return $this->getLignes();
   }
 

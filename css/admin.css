@@ -131,9 +131,9 @@ main {
     display: grid;
     grid-gap: 3px;
   }
-  .g.utilisateurs { grid-template-columns: repeat(6, max-content);  }
+  .g.utilisateur { grid-template-columns: repeat(6, max-content);  }
   .g.films        { grid-template-columns: repeat(10, max-content); }
-  .g.encheres { grid-template-columns: repeat(8, max-content);  }
+  .g.enchere { grid-template-columns: repeat(8, max-content);  }
 
   .g.timbre       { grid-template-columns: repeat(9, max-content);  }
   .g.offre { grid-template-columns: repeat(4, max-content);  }
@@ -207,6 +207,27 @@ main {
     margin-top: 40px;
     margin-bottom: 80px;
   }
+  
+  .conteneur-flex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .conteneur-flex .champs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .conteneur-flex .champ {
+    flex: 0 0 calc(50% - 20px); /* Largeur de 50% avec un espace de 20px entre les éléments */
+    display: flex;
+    flex-direction: column;
+    align-items: flex
+  
+
 
   /* fenêtres modales 
      ============== */

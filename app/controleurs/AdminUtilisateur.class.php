@@ -105,6 +105,7 @@ class AdminUtilisateur extends Admin {
       [
         'oUtilConn'           => self::$oUtilConn,
         'titre'               => 'Gestion des utilisateurs',
+        'entite'               => 'utilisateur',
         'utilisateurs'        => $utilisateurs,
         'classRetour'         => $this->classRetour,  
         'messageRetourAction' => $this->messageRetourAction
@@ -163,6 +164,7 @@ class AdminUtilisateur extends Admin {
         'oUtilConn'   => self::$oUtilConn,
         'titre'       => 'Ajouter un utilisateur',
         'utilisateur' => $utilisateur,
+        'entite'               => 'utilisateur',
         'roles' => $roles,
         'erreurs'     => $erreurs
       ],
@@ -211,6 +213,7 @@ class AdminUtilisateur extends Admin {
     'vAdminUtilisateurModifier',
     [
       'oUtilConn'   => self::$oUtilConn,
+      'entite'               => 'utilisateur',
       'titre'       => "Modifier l'utilisateur numéro $this->utilisateur_id",
       'utilisateur' => $utilisateur,
       'erreurs'     => $erreurs

@@ -10,6 +10,7 @@ class Admin extends Routeur {
   protected $film_id;
   protected $acteur_id;
   protected $genre_id;
+  protected $id;
   protected $pays_id;
   protected $realisateur_id;
   protected $salle_numero;

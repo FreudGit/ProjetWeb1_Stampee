@@ -1,7 +1,7 @@
 <section>
   <h1>{{ titre|upper }}</h1>
   
-  <form method="POST" action="admin?entite=utilisateur&action=m&utilisateur_id={{  utilisateur.utilisateur_id }}">
+  <form method="POST" action="admin?entite={{ entite }}&action=m&utilisateur_id={{  utilisateur.utilisateur_id }}">
 
     <label>Nom</label>
     <input name="utilisateur_nom" value="{{ utilisateur.utilisateur_nom }}">

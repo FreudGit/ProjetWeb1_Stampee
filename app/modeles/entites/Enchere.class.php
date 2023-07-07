@@ -13,7 +13,7 @@ class Enchere extends Entite
   protected $DateFin;
   protected $PrixPlancher;
   protected $UtilisateurActuelID;
-  protected $Visible;
+  protected $Visible = 0;
   protected $Status;
   protected $Rating;
 
@@ -25,8 +25,8 @@ class Enchere extends Entite
   protected $TimbreTirage;
   protected $TimbreLongueur;
   protected $TimbreLargeur;
-  protected $TimbreCertifie;
-  protected $CategorieID;
+  protected $TimbreCertifie  = 0;
+  protected $TimbreCategorieID;
 
   /**
    * Mutateur de la propriété ID
@@ -137,8 +137,10 @@ class Enchere extends Entite
    */
   public function setVisible($Visible) {
     unset($this->erreurs['Visible']);
-    if (!is_bool($Visible)) {
-      $this->erreurs['Visible'] = 'La visibilité doit être un booléen.';
+    $Visible = filter_var($Visible, FILTER_VALIDATE_INT);
+
+    if ($Visible === null) {
+      $this->erreurs['Visible'] = 'La visibilité doit être un int(boolean).';
     }
     $this->Visible = $Visible;
     return $this;
@@ -300,7 +302,9 @@ class Enchere extends Entite
    */
   public function setTimbreCertifie($TimbreCertifie) {
     unset($this->erreurs['TimbreCertifie']);
-    if (!is_bool($TimbreCertifie)) {
+    $TimbreCertifie = filter_var($TimbreCertifie, FILTER_VALIDATE_INT);
+
+    if ($TimbreCertifie === null) {
       $this->erreurs['TimbreCertifie'] = 'La certification doit être un booléen.';
     }
     $this->TimbreCertifie = $TimbreCertifie;
@@ -312,13 +316,14 @@ class Enchere extends Entite
    * @param int $CategorieID
    * @return $this
    */
-  public function setCategorieID($CategorieID) {
-    unset($this->erreurs['CategorieID']);
+  public function setTimbreCategorieID($TimbreCategorieID) {
+    unset($this->erreurs['TimbreCategorieID']);
+    //$TimbreCategorieID= is_numeric($TimbreCategorieID) ? (int)$TimbreCategorieID : 0;
     $regExp = '/^[1-9]\d*$/';
-    if (!preg_match($regExp, $CategorieID)) {
-      $this->erreurs['CategorieID'] = 'Numéro de catégorie incorrect.';
+    if (!preg_match($regExp, $TimbreCategorieID)) {
+      $this->erreurs['TimbreCategorieID'] = 'Numéro de catégorie incorrect.';
     }
-    $this->CategorieID = $CategorieID;
+    $this->TimbreCategorieID = $TimbreCategorieID;
     return $this;
   }
 }

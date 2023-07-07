@@ -4,13 +4,13 @@
 <script type="module" src="js/filtrer.js"></script>
 <section>
 	<h1>{{ titre|upper }}</h1>
-	<input id="filtrer" data-filtre="filtreGenres" value="" placeholder="Filtrage des lignes contenant cette chaîne">
+	<input id="filtrer" data-filtre="filtre{{ entite }}" value="" placeholder="Filtrage des lignes contenant cette chaîne">
 	{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
                                          constant('Utilisateur::PROFIL_EDITEUR')] %}
 		<a href="admin?entite={{ entite }}&action=a">Ajouter une enchere</a>
 	{% endif %}
 	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction }}&nbsp;</p>
-	<div class="g encheres">
+	<div class="g {{ entite }}">
 		<div class="t">Id
 			<img src="assets/images/i-asc.svg"><img src="assets/images/i-desc-a.svg"></div>
 		<div class="t">Visible
@@ -35,14 +35,14 @@
 				<div class="c   ">{{ enchere.DateFin }}</div>
 
 				<div class="c ">{{ enchere.TimbreNom }}</div>
+				
 				<div class="c dr">{{ enchere.PrixActuel }}$</div>
 
 				<div class="c mi">{{ enchere.NombreMises }}</div>
 				{# <div class="c dr">{{ enchere.TimbreNombreMises }}</div> #}
 				<div class="c   ">
 					<a href="admin?entite={{ entite }}&action=m&id={{ enchere.ID }}">modifier</a>
-					{% if not genre.nb_films
-              and oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
+					{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
                                                    constant('Utilisateur::PROFIL_EDITEUR')] %}
 						<span class="confirmer" data-href="admin?entite={{ entite }}&action=s&id={{ enchere.ID }}">supprimer</span>
 					{% endif %}

@@ -1,0 +1,108 @@
+<section class="conteneur-flex">
+  <h1>{{ titre|upper }}</h1>
+
+  <form class="conteneur-flex" method="POST" action="admin?entite={{ entite }}&action=m&id={{ enchere.ID }}">
+    <div class="champs">
+      <fieldset>
+        <legend>Encherese</legend>
+        <div class="champ">
+          <label for="UtilisateurID">Utilisateur ID</label>
+          <input type="text" id="UtilisateurID" name="UtilisateurID" value="{{ enchere.UtilisateurID }}" />
+          <span class="erreur">{{ erreurs.UtilisateurID }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="Visible">Enchere Visible</label>
+          <input type="checkbox" id="Visible" name="Visible" value="{{ enchere.Visible }}" {{ enchere.Visible ? 'checked' : '' }} />
+          <span class="erreur">{{ erreurs.enchere.Visible }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="DateDebut">Date Debut</label>
+          <input type="text" id="DateDebut" name="DateDebut" value="{{ enchere.DateDebut }}" />
+          <span class="erreur">{{ erreurs.DateDebut }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="DateFin">Date Fin</label>
+          <input type="text" id="DateFin" name="DateFin" value="{{ enchere.DateFin }}" />
+          <span class="erreur">{{ erreurs.DateFin }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="PrixPlancher">Prix Plancher</label>
+          <input type="text" id="PrixPlancher" name="PrixPlancher" value="{{ enchere.PrixPlancher }}" />
+          <span class="erreur">{{ erreurs.PrixPlancher }}</span>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Timbre</legend>
+        <div class="champ">
+          <label for="TimbreNom">Nom</label>
+          <input type="text" id="TimbreNom" name="TimbreNom" value="{{ enchere.TimbreNom }}" />
+          <span class="erreur">{{ erreurs.TimbreNom }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreCouleur">Couleur</label>
+          <input type="text" id="TimbreCouleur" name="TimbreCouleur" value="{{ enchere.TimbreCouleur }}" />
+          <span class="erreur">{{ erreurs.TimbreCouleur }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbrePaysOrigine">Pays Origine</label>
+          <input type="text" id="TimbrePaysOrigine" name="TimbrePaysOrigine" value="{{ enchere.TimbrePaysOrigine }}" />
+          <span class="erreur">{{ erreurs.TimbrePaysOrigine }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreEtatCondition">Etat Condition</label>
+          <input type="text" id="TimbreEtatCondition" name="TimbreEtatCondition" value="{{ enchere.TimbreEtatCondition }}" />
+          <span class="erreur">{{ erreurs.TimbreEtatCondition }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreLongueur">Longueur</label>
+          <input type="text" id="TimbreLongueur" name="TimbreLongueur" value="{{ enchere.TimbreLongueur }}" />
+          <span class="erreur">{{ erreurs.TimbreLongueur }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreLargeur">Largeur</label>
+          <input type="text" id="TimbreLargeur" name="TimbreLargeur" value="{{ enchere.TimbreLargeur }}" />
+          <span class="erreur">{{ erreurs.TimbreLargeur }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreCertifie">Certifie</label>
+          <input type="checkbox" id="TimbreCertifie" name="TimbreCertifie" value="{{ enchere.TimbreCertifie }}" {{ enchere.TimbreCertifie ? 'checked' : '' }} />
+          <span class="erreur">{{ erreurs.TimbreCertifie }}</span>
+        </div>
+
+        <div class="champ">
+          <label for="TimbreCategorieID">Categorie</label>
+          <input type="text" id="TimbreCategorieID" nawme="TimbreCategorieID" value="{{ enchere.TimbreCategorieID }}" />
+          
+
+ <select name="TimbreCategorieID">
+      
+
+
+          	{% for categorie in categories %}
+					<option value="{{ categorie.ID }}" {{ categorie.ID == enchere.TimbreCategorieID ? 'selected' : '' }}>{{ categorie.Nom }}</option>
+				{% endfor %}
+          </select>
+          <span class="erreur">{{ erreurs.TimbreCategorie }}</span>
+        </div>
+      </fieldset>
+    </div>
+
+    <input type="hidden" name="TimbreID" value="{{ enchere.TimbreID }}">
+    <input type="hidden" name="id" value="{{ enchere.ID }}">
+
+    <div class="bouton-container">
+      <input type="submit" value="Envoyer" class="bouton">
+    </div>
+  </form>
+</section>
