@@ -362,8 +362,8 @@ WHERE e.ID = :ID;";
   public function ajouterEnchere($champs)
   {
     $this->sql = '
-      INSERT INTO enchere (DateDebut, DateFin, PrixPlancher, UtilisateurID, Visible, Status)
-      VALUES (:DateDebut, :DateFin, :PrixPlancher, :UtilisateurID, :Visible, :Status)';
+      INSERT INTO enchere (DateDebut, DateFin, PrixPlancher, UtilisateurID, Visible)
+      VALUES (:DateDebut, :DateFin, :PrixPlancher, :UtilisateurID, :Visible)';
     return $this->CUDLigne($champs);
   }
 
@@ -376,6 +376,22 @@ WHERE e.ID = :ID;";
     );
     return $this->modifierTable('timbre', $plChamps, $whereClause);
   }
+
+  
+  
+
+  public function ajouterTimbre($champs)
+  {
+    $this->sql = ' INSERT INTO timbre
+    (Nom, Couleur, PaysOrigine, EtatCondition, Tirage, Longueur, Largeur, Certifie, CategorieID, EnchereID) 
+    VALUES 
+    (:Nom, :Couleur, :PaysOrigine, :EtatCondition, :Tirage, :Longueur, :Largeur, :Certifie, :CategorieID, :EnchereID)
+    ';
+    return $this->CUDLigne($champs);
+  }
+
+
+
 
 
   public function modifierEnchere($plChamps)

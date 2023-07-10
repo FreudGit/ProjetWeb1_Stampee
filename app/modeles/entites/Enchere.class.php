@@ -137,9 +137,9 @@ class Enchere extends Entite
    */
   public function setVisible($Visible) {
     unset($this->erreurs['Visible']);
-    $Visible = filter_var($Visible, FILTER_VALIDATE_INT);
+    $test = filter_var($Visible, FILTER_VALIDATE_INT);
 
-    if ($Visible === null) {
+    if ($test === null) {
       $this->erreurs['Visible'] = 'La visibilité doit être un int(boolean).';
     }
     $this->Visible = $Visible;
@@ -302,9 +302,9 @@ class Enchere extends Entite
    */
   public function setTimbreCertifie($TimbreCertifie) {
     unset($this->erreurs['TimbreCertifie']);
-    $TimbreCertifie = filter_var($TimbreCertifie, FILTER_VALIDATE_INT);
+    $test = filter_var($TimbreCertifie, FILTER_VALIDATE_INT);
 
-    if ($TimbreCertifie === null) {
+    if ($test === null) {
       $this->erreurs['TimbreCertifie'] = 'La certification doit être un booléen.';
     }
     $this->TimbreCertifie = $TimbreCertifie;

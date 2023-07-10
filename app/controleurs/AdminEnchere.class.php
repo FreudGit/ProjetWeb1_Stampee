@@ -64,7 +64,7 @@ class AdminEnchere extends Admin
           'UtilisateurID' => $oEnchere->UtilisateurID,
           'Visible' => $oEnchere->Visible,
           //'Status' => $oEnchere->Status,
-          'ID' => $oEnchere->ID
+          //'ID' => $oEnchere->ID
         ]);
 
         $retourB = $this->oRequetesSQL->ajouterTimbre([
@@ -78,8 +78,7 @@ class AdminEnchere extends Admin
           'Largeur' => $oEnchere->TimbreLargeur,
           'Certifie' => $oEnchere->TimbreCertifie,
           'CategorieID' => $oEnchere->TimbreCategorieID,
-          'ID' => $oEnchere->TimbreID
-        ]);
+          'EnchereID' => $retour        ]);
 
 
         if (preg_match('/^[1-9]\d*$/', $retour)) {
