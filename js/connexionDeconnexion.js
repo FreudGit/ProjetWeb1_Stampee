@@ -15,8 +15,16 @@ eDeconnecter.onclick  = deconnecter;
  */
 function afficherFenetreModale() {
   eMessageErreurConnexion.innerHTML = "&nbsp;";
+  eModaleConnexion.showModal();
   document.getElementById('modaleConnexion').showModal();
 }
+
+
+eModaleConnexion.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.removeAttribute("open");
+  }
+});
 
 /**
  * Traitement du formulaire dans la fenêtre modale suite à l'événement submit

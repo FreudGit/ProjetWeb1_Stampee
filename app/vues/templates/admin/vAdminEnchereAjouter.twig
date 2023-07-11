@@ -13,7 +13,7 @@
 
 				<div class="champ">
 					<label for="Visible">Enchere Visiblew</label>
-					<input type="checkbox" id="Visible" name="Visible" checked value='1' />
+					<input type="checkbox" id="Visible" name="Visible" checked value='1'/>
 					<span class="erreur">{{ erreurs.enchere.Visible }}</span>
 				</div>
 
@@ -87,6 +87,12 @@
 				</div>
 
 				<div class="champ">
+					<label>Image au format jpgf</label>
+					<input id="ImageCheminImage"  name="ImageCheminImage" type="file">
+					<span>&nbsp;{{ erreurs.ImageCheminImage }}</span>
+				</div>
+
+				<div class="champ">
 					<label for="TimbreCategorieID">Categorie</label>
 					<input type="text" id="TimbreCategorieID" nawme="TimbreCategorieID" value="{{ enchere.TimbreCategorieID }}"/>
 
@@ -103,7 +109,6 @@
 			</fieldset>
 		</div>
 
-		
 
 		<div class="bouton-container">
 			<input type="submit" value="Envoyer" class="bouton">

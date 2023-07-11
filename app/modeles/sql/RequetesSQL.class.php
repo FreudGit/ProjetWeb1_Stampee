@@ -129,6 +129,7 @@ class RequetesSQL extends RequetesPDO
     if ($utilisateur !== false)
       return ['utilisateur_courriel' => Utilisateur::ERR_COURRIEL_EXISTANT];
     unset($champs['nouveau_mdp_bis']);
+    //$champs['utilisateur_profil'] = Utilisateur::PROFIL_CLIENT ;
     $this->sql = '
       INSERT INTO utilisateur SET
       utilisateur_nom            = :utilisateur_nom,
@@ -137,7 +138,24 @@ class RequetesSQL extends RequetesPDO
       utilisateur_mdp            = SHA2(:nouveau_mdp, 512),
       utilisateur_renouveler_mdp = "non",
       utilisateur_profil         = "' . Utilisateur::PROFIL_CLIENT . '"';
+
+    $this->sql = '
+      INSERT INTO utilisateur (utilisateur_nom, utilisateur_prenom, utilisateur_courriel, utilisateur_mdp, utilisateur_renouveler_mdp, utilisateur_roleID)
+      SELECT
+        :utilisateur_nom,
+        :utilisateur_prenom,
+        :utilisateur_courriel,
+        SHA2(:nouveau_mdp, 512),
+        "oui",
+        role.ID
+      FROM role
+      WHERE role.Nom = "' . Utilisateur::PROFIL_CLIENT . '"';
     return $this->CUDLigne($champs);
+
+    //return $this->getLignes([$champs], RequetesPDO::UNE_SEULE_LIGNE);
+
+
+    //return $this->CUDLigne($champs);
   }
 
 
@@ -229,10 +247,10 @@ class RequetesSQL extends RequetesPDO
    * @param  string $critere
    * @return array tableau des lignes produites par la select   
    */
-  public function getEncheres()
+  public function getEncheres($userID = null)
   {
 
-
+    $params = [];
     $this->sql = "SELECT
 e.ID ,
 e.DateDebut,
@@ -240,6 +258,8 @@ e.DateFin,
 e.PrixPlancher,
 e.Visible,
 e.Status,
+e.UtilisateurID,
+
 t.ID AS TimbreID,
 t.Nom AS TimbreNom,
 t.DateCreation AS TimbreDateCreation,
@@ -275,9 +295,15 @@ LEFT JOIN (
         image
     WHERE
         Ordre = 1
-) i ON t.ID = i.TimbreID;";
+) i ON t.ID = i.TimbreID";
 
-    return $this->getLignes();
+    if ($userID != null) {
+      $params = ['ID' => $userID];
+      $this->sql .= "
+WHERE e.UtilisateurID = :ID;";
+    }
+
+    return $this->getLignes($params);
   }
 
 
@@ -334,8 +360,7 @@ LEFT JOIN (
         CheminImage
     FROM
         image
-    WHERE
-        Ordre = 1
+    
 ) i ON t.ID = i.TimbreID
 WHERE e.ID = :ID;";
 
@@ -344,20 +369,6 @@ WHERE e.ID = :ID;";
   }
 
 
-
-  public function modifierEnchereOLD($champs)
-  {
-    $this->sql = '
-      UPDATE enchere SET
-      DateDebut            = :DateDebut, 
-      DateFin            = :DateFin, 
-      PrixPlancher            = :PrixPlancher, 
-      UtilisateurID            = :UtilisateurID, 
-      Visible            = :Visible, 
-      Status            = :Status
-      WHERE ID = :ID';
-    return $this->CUDLigne($champs);
-  }
 
   public function ajouterEnchere($champs)
   {
@@ -374,11 +385,13 @@ WHERE e.ID = :ID;";
     $whereClause = array(
       'ID' => $plChamps['ID']
     );
+    $this->modifierImageTimbre($plChamps['ID'] );
+
     return $this->modifierTable('timbre', $plChamps, $whereClause);
   }
 
-  
-  
+
+
 
   public function ajouterTimbre($champs)
   {
@@ -401,6 +414,10 @@ WHERE e.ID = :ID;";
     $whereClause = array(
       'ID' => $plChamps['ID']
     );
+    
+      //$this->sql = 'UPDATE image SET CheminImage = :CheminImage WHERE TimbreID = :TimbreID AND Ordre = 1';
+      //return $this->CUDLigne($champs);
+    //}
     return $this->modifierTable('enchere', $plChamps, $whereClause);
   }
 
@@ -461,12 +478,44 @@ WHERE e.ID = :ID;";
    * @param  string $critere
    * @return array tableau des lignes produites par la select   
    */
-  public function getTimbres()
+  public function getTimbres($userID = null)
   {
-    $this->sql = "SELECT * from Timbre ORDER BY ID desc";
-    return $this->getLignes();
+    $params = [];
+    $this->sql = "SELECT * from Timbre ";
+    if ($userID != null) {
+      $params = ['ID' => $userID];
+      $this->sql .= "INNER JOIN Enchere ON Timbre.EnchereID = Enchere.ID WHERE Enchere.utilisateurID = :ID ";
+    }
+    $this->sql .= " ORDER BY Timbre.ID desc";
+    return $this->getLignes($params);
   }
 
+
+
+  /*  GESTION DES OFFRES 
+   ================= */
+
+  /**
+   * Récupération des roles
+   * @param  string $critere
+   * @return array tableau des lignes produites par la select   
+   */
+  public function getOffres($userID = null)
+  {
+    $params = [];
+    $this->sql = "SELECT * from offre ";
+    if ($userID != null) {
+      $params = ['ID' => $userID];
+      $this->sql .= " WHERE EnchereID IN (
+        SELECT ID FROM enchere
+        WHERE UtilisateurID = :ID 
+    ) ";
+    }
+
+
+    $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
+    return $this->getLignes($params);
+  }
 
 
 
@@ -483,6 +532,34 @@ WHERE e.ID = :ID;";
   {
     $this->sql = "SELECT * from categorie ORDER BY ID desc";
     return $this->getLignes();
+  }
+
+
+
+   /**
+   * Modifier l'image d'un timbre
+   * @param int $timbre_id
+   * @return boolean true si téléversement, false sinon
+   */ 
+  public function modifierImageTimbre($timbre_id) {
+    if ($_FILES['ImageCheminImage']['tmp_name'] !== "") {
+      //$this->sql = 'update image set CheminImage = :CheminImage where TimbreID = :TimbreID';
+      //$this->sql = 'UPDATE film SET film_affiche = :film_affiche WHERE film_id = :film_id';
+
+      $this->sql = 'INSERT INTO image (TimbreID, CheminImage) VALUES (:TimbreID, :ImageCheminImage) 
+              ON DUPLICATE KEY UPDATE CheminImage = :ImageCheminImage';
+      $champs['TimbreID']      = $timbre_id;
+      $champs['ImageCheminImage'] = "medias/stamps/a-$timbre_id-".time().".jpg";
+      $res=$this->CUDLigne($champs);
+      foreach (glob("medias/stamps/a-$timbre_id-*") as $fichier) {
+        if (!@unlink($fichier)) 
+          throw new Exception("Erreur dans la suppression de l'ancien fichier image de l'affiche.");
+      } 
+      if (!@move_uploaded_file($_FILES['ImageCheminImage']['tmp_name'], $champs['ImageCheminImage']))
+        throw new Exception("Le stockage du fichier image de l'affiche a échoué.");
+      return true; 
+    }
+    return false;
   }
 
 }

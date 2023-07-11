@@ -1,7 +1,7 @@
 <section class="conteneur-flex">
 	<h1>{{ titre|upper }}</h1>
 
-	<form class="conteneur-flex" method="POST" action="admin?entite={{ entite }}&action=m&id={{ enchere.ID }}">
+	<form class="conteneur-flex" method="POST" enctype="multipart/form-data" action="admin?entite={{ entite }}&action=m&id={{ enchere.ID }} ">
 		<div class="champs">
 			<fieldset>
 				<legend>Encherese</legend>
@@ -79,6 +79,17 @@
 					<input type="checkbox" id="TimbreCertifie" name="TimbreCertifie" value="1" {{ enchere.TimbreCertifie ? 'checked' : '' }}/>
 					<span class="erreur">{{ erreurs.TimbreCertifie }}</span>
 				</div>
+
+
+				<div class="champ">
+					<label>Image au format jpg</label>
+					<input name="ImageCheminImage" type="file">
+					{% if enchere.PremiereImage is not empty %}
+						<img src="{{ enchere.PremiereImage }}" alt="Thumbnail" style="max-width:100px; height:auto;"/>
+					{% endif %}
+					<span>&nbsp;{{ erreurs.ImageCheminImage }}</span>
+				</div>
+
 
 				<div class="champ">
 					<label for="TimbreCategorieID">Categorie</label>

@@ -10,11 +10,11 @@
             "request": "launch",
             "runtimeArgs": [
                 "-S",
-                "localhost:8000",
+                "localhost:8001",
                 "-t",
                 "."
             ],
-            "port": 9003,
+            "port": 9004,
             "serverReadyAction": {
                 "action": "openExternally"
             }
@@ -26,13 +26,13 @@
             "program": "${file}",
             "cwd": "${fileDirname}",
             "externalConsole": false,
-            "port": 9003
+            "port": 9004
         },
         {
             "name": "Listen for Xdebug",
             "type": "php",
             "request": "launch",
-            "port": 9003
+            "port": 9004
         }
     ]
 }

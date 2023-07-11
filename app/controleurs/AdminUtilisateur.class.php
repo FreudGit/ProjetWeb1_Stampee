@@ -7,6 +7,8 @@
 class AdminUtilisateur extends Admin {
 
   protected $methodes = [
+    'w'           => ['nom'    => 'bienvenueUtilisateur',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_CLIENT, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
+
     'l'           => ['nom'    => 'listerUtilisateurs',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]],
     'a'           => ['nom'    =>'ajouterUtilisateur',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]],
     'm'           => ['nom'    =>'modifierUtilisateur',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR]],
@@ -21,7 +23,8 @@ class AdminUtilisateur extends Admin {
    * 
    */
   public function __construct() {
-    $this->utilisateur_id = $_GET['utilisateur_id'] ?? null; 
+    $this->id = $_GET['id'] ?? null; 
+    self::$action = $_GET['action'] ?? 'w';
     $this->oRequetesSQL = new RequetesSQL;
   }
 
@@ -93,6 +96,30 @@ class AdminUtilisateur extends Admin {
     unset ($_SESSION['oUtilConn']);
     parent::gererEntite();
   }
+
+
+  /**
+   * Afficher une page de Bienvenue
+   */
+  public function bienvenueUtilisateur() {
+    $utilisateurs = $this->oRequetesSQL->getUtilisateurs();
+
+    (new Vue)->generer(
+      'vAdminUtilisateurBienvenue',
+      [
+        'oUtilConn'           => self::$oUtilConn,
+        'titre'               => 'Gestion des utilisateurs',
+        'entite'               => 'utilisateur',
+        'entite_action'               => 'w',
+        'utilisateurs'        => $utilisateurs,
+        'classRetour'         => $this->classRetour,  
+        'messageRetourAction' => $this->messageRetourAction
+      ],
+      'gabarit-admin');
+  }
+
+
+
 
   /**
    * Lister les utilisateurs
@@ -175,7 +202,7 @@ class AdminUtilisateur extends Admin {
    * Modifier un utilisateur
    */
   public function modifierUtilisateur() {
-    if (!preg_match('/^\d+$/', $this->utilisateur_id))
+    if (!preg_match('/^\d+$/', $this->id))
       throw new Exception("Numéro d'utilisateur non renseigné pour une modification");
 
     if (count($_POST) !== 0) {
@@ -193,10 +220,10 @@ class AdminUtilisateur extends Admin {
       ]);
       if ($retour !== Utilisateur::ERR_COURRIEL_EXISTANT) {
         if ($retour === true)  {
-          $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id effectuée.";    
+          $this->messageRetourAction = "Modification de l'utilisateur numéro $this->id effectuée.";    
         } else {  
           $this->classRetour = "erreur";
-          $this->messageRetourAction = "Modification de l'utilisateur numéro $this->utilisateur_id non effectuée.";
+          $this->messageRetourAction = "Modification de l'utilisateur numéro $this->id non effectuée.";
         }
         $this->listerUtilisateurs();
         exit;
@@ -205,7 +232,7 @@ class AdminUtilisateur extends Admin {
       }
     }
   } else {
-    $utilisateur = $this->oRequetesSQL->getUtilisateur($this->utilisateur_id);
+    $utilisateur = $this->oRequetesSQL->getUtilisateur($this->id);
     $erreurs = [];
   }
   
@@ -214,7 +241,7 @@ class AdminUtilisateur extends Admin {
     [
       'oUtilConn'   => self::$oUtilConn,
       'entite'               => 'utilisateur',
-      'titre'       => "Modifier l'utilisateur numéro $this->utilisateur_id",
+      'titre'       => "Modifier l'utilisateur numéro $this->id",
       'utilisateur' => $utilisateur,
       'erreurs'     => $erreurs
     ],
@@ -225,12 +252,12 @@ class AdminUtilisateur extends Admin {
    * Supprimer un utilisateur
    */
   public function supprimerUtilisateur() {
-    if (!preg_match('/^\d+$/', $this->utilisateur_id))
+    if (!preg_match('/^\d+$/', $this->id))
       throw new Exception("Numéro d'utilisateur incorrect pour une suppression.");
 
-    $retour = $this->oRequetesSQL->supprimerUtilisateur($this->utilisateur_id);
+    $retour = $this->oRequetesSQL->supprimerUtilisateur($this->id);
     if ($retour === false) $this->classRetour = "erreur";
-    $this->messageRetourAction = "Suppression de l'utilisateur numéro $this->utilisateur_id ".($retour ? "" : "non ")."effectuée.";
+    $this->messageRetourAction = "Suppression de l'utilisateur numéro $this->id ".($retour ? "" : "non ")."effectuée.";
     $this->listerUtilisateurs();
   }
 
@@ -238,18 +265,18 @@ class AdminUtilisateur extends Admin {
    * Générer un nouveau mot de passe
    */
   public function genererMdp() {
-    if (!preg_match('/^\d+$/', $this->utilisateur_id))
+    if (!preg_match('/^\d+$/', $this->id))
       throw new Exception("Numéro d'utilisateur incorrect pour une modification du mot de passe.");
 
-    $utilisateur = $this->oRequetesSQL->getUtilisateur($this->utilisateur_id);
+    $utilisateur = $this->oRequetesSQL->getUtilisateur($this->id);
     $oUtilisateur = new Utilisateur($utilisateur);
     $mdp = $oUtilisateur->genererMdp();
     $retour = $this->oRequetesSQL->modifierUtilisateurMdpGenere([
-        'utilisateur_id'  => $this->utilisateur_id, 
+        'utilisateur_id'  => $this->id, 
         'utilisateur_mdp' => $mdp
     ]);
     if ($retour === true)  {
-      $this->messageRetourAction = "Modification du mot de passe de l'utilisateur numéro $this->utilisateur_id effectuée.";
+      $this->messageRetourAction = "Modification du mot de passe de l'utilisateur numéro $this->id effectuée.";
       $retour = (new GestionCourriel)->envoyerMdp($oUtilisateur); 
       $this->messageRetourAction .= $retour
                                     ? " Courriel envoyé à l'utilisateur."
@@ -259,7 +286,7 @@ class AdminUtilisateur extends Admin {
       } 
     } else {  
       $this->classRetour = "erreur";
-      $this->messageRetourAction = "Modification du mot de passe de l'utilisateur numéro $this->utilisateur_id non effectuée.";
+      $this->messageRetourAction = "Modification du mot de passe de l'utilisateur numéro $this->id non effectuée.";
     }
     $this->listerUtilisateurs();
   }

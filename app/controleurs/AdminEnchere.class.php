@@ -11,7 +11,9 @@ class AdminEnchere extends Admin
     'l' => ['nom' => 'listerEncheres', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
     'a' => ['nom' => 'ajouterEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
     'm' => ['nom' => 'modifierEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    's' => ['nom' => 'supprimerEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]]
+    's' => ['nom' => 'supprimerEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
+    'lu' => ['nom' => 'listerEncheresUser', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]]
+
   ];
 
   /**
@@ -22,15 +24,26 @@ class AdminEnchere extends Admin
   public function __construct()
   {
     $this->id = $_GET['id'] ?? null;
+    self::$action = $_GET['action'] ?? 'l';
+
     $this->oRequetesSQL = new RequetesSQL;
   }
 
   /**
-   * Lister les genres
+   * Lister les encheres liées à un utilisateur courant
    */
-  public function listerEncheres()
+  public function listerEncheresUser()
   {
-    $encheres = $this->oRequetesSQL->getEncheres();
+    $this->listerEncheres(self::$oUtilConn->utilisateur_id);
+
+  }
+
+  /**
+   * Lister les encheres
+   */
+  public function listerEncheres($id = null)
+  {
+    $encheres = $this->oRequetesSQL->getEncheres($id);
     (new Vue)->generer(
       'vAdminEncheres',
       [
@@ -47,7 +60,7 @@ class AdminEnchere extends Admin
   }
 
   /**
-   * Ajouter un genre
+   * Ajouter une enchère
    */
   public function ajouterEnchere()
   {
@@ -56,7 +69,7 @@ class AdminEnchere extends Admin
       $oEnchere = new Enchere($enchere);
       $erreurs = $oEnchere->erreurs;
       if (count($erreurs) === 0) {
-        
+
         $retour = $this->oRequetesSQL->AjouterEnchere([
           'DateDebut' => $oEnchere->DateDebut,
           'DateFin' => $oEnchere->DateFin,
@@ -78,7 +91,8 @@ class AdminEnchere extends Admin
           'Largeur' => $oEnchere->TimbreLargeur,
           'Certifie' => $oEnchere->TimbreCertifie,
           'CategorieID' => $oEnchere->TimbreCategorieID,
-          'EnchereID' => $retour        ]);
+          'EnchereID' => $retour
+        ]);
 
 
         if (preg_match('/^[1-9]\d*$/', $retour)) {
@@ -111,12 +125,14 @@ class AdminEnchere extends Admin
   }
 
   /**
-   * Modifier un genre
+   * Modifier une enchere
    */
   public function modifierEnchere()
   {
     if (count($_POST) !== 0) {
       $enchere = $_POST;
+      $file = $_FILES;
+      $file = $_FILES['ImageCheminImage'];
       $oEnchere = new Enchere($enchere);
       $erreurs = $oEnchere->erreurs;
       if (count($erreurs) === 0) {
@@ -174,7 +190,7 @@ class AdminEnchere extends Admin
   }
 
   /**
-   * Supprimer un genre
+   * Supprimer une enchère
    */
   public function supprimerEnchere()
   {

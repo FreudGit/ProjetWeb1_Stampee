@@ -136,7 +136,7 @@ main {
   .g.enchere { grid-template-columns: repeat(8, max-content);  }
 
   .g.timbre       { grid-template-columns: repeat(9, max-content);  }
-  .g.offre { grid-template-columns: repeat(4, max-content);  }
+  .g.offre { grid-template-columns: repeat(7, max-content);  }
   .g.role     { grid-template-columns: repeat(4, max-content);  }
 
   .l {
@@ -226,7 +226,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: flex
-  
+  }
 
 
   /* fenêtres modales 

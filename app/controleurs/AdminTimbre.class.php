@@ -10,7 +10,8 @@ class AdminTimbre extends Admin {
     'l' => ['nom' => 'listerTimbres',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
     'a' => ['nom' => 'ajouterTimbre',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
     'm' => ['nom' => 'modifierTimbre',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    's' => ['nom' => 'supprimerTimbre', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]]
+    's' => ['nom' => 'supprimerTimbre', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
+    'lu' => ['nom' => 'listerTimbresUser', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]]
   ];
 
   /**
@@ -19,15 +20,26 @@ class AdminTimbre extends Admin {
    * 
    */
   public function __construct() {
-    $this->genre_id = $_GET['genre_id'] ?? null;
+    $this->id = $_GET['id'] ?? null;
+    self::$action = $_GET['action'] ?? 'l';
     $this->oRequetesSQL = new RequetesSQL;
+  }
+
+
+/**
+   * Lister les Timbres pour un usager courant
+   */
+  public function listerTimbresUser()
+  {
+    $this->listerTimbres(self::$oUtilConn->utilisateur_id);
+
   }
 
   /**
    * Lister les genres
    */
-  public function listerTimbres() {
-    $timbres = $this->oRequetesSQL->getTimbres();
+  public function listerTimbres($id=null) {
+    $timbres = $this->oRequetesSQL->getTimbres($id);
     (new Vue)->generer(
       'vAdminTimbres',
       [
@@ -44,12 +56,12 @@ class AdminTimbre extends Admin {
 
     
   /**
-   * Supprimer un genre
+   * Supprimer un Timbre
    */
   public function supprimerTimbre() {
-    $retour = $this->oRequetesSQL->supprimerTimbre($this->genre_id);
+    $retour = $this->oRequetesSQL->supprimerTimbre($this->id);
     if ($retour === false) $this->classRetour = "erreur";
-    $this->messageRetourAction = "Suppression du genre numéro $this->genre_id ".($retour ? "" : "non ")."effectuée.";
+    $this->messageRetourAction = "Suppression du genre numéro $this->id ".($retour ? "" : "non ")."effectuée.";
     $this->listerTimbres();
   }
 }

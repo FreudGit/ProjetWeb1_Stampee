@@ -11,7 +11,8 @@ class AdminOffre extends Admin {
     'l' => ['nom' => 'listerOffres',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
     'a' => ['nom' => 'ajouterOffre',   'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
     'm' => ['nom' => 'modifierGenre',  'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    's' => ['nom' => 'supprimerGenre', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]]
+    's' => ['nom' => 'supprimerGenre', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
+    'lu' => ['nom' => 'listerOffresUser', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]]
   ];
 
   /**
@@ -20,111 +21,38 @@ class AdminOffre extends Admin {
    * 
    */
   public function __construct() {
-    $this->genre_id = $_GET['genre_id'] ?? null;
+    $this->id = $_GET['id'] ?? null;
+    self::$action = $_GET['action'] ?? 'l';
     $this->oRequetesSQL = new RequetesSQL;
   }
 
+
   /**
-   * Lister les genres
+   * Lister les offres pour un usager courant
    */
-  public function listerOffres() {
-    $genres = $this->oRequetesSQL->getTimbres();
+  public function listerOffresUser() {
+    $this->listerOffres(self::$oUtilConn->utilisateur_id);
+    
+  }
+
+  
+/**
+   * Lister les offres 
+   */
+  public function listerOffres($userID=null) {
+    $offres = $this->oRequetesSQL->getOffres($userID);
     (new Vue)->generer(
       'vAdminOffres',
       [
         'oUtilConn'           => self::$oUtilConn,
-        'titre'               => 'Gestion des genres',
+        'titre'               => 'Gestion des Offres',
         'entite'              => 'offre',
-        'genres'              => $genres,
+        'action'              => self::$action,
+        'offres'              => $offres ,
         'classRetour'         => $this->classRetour,  
         'messageRetourAction' => $this->messageRetourAction
       ],
       'gabarit-admin');
   }
 
-  /**
-   * Ajouter un genre
-   */
-  public function ajouterGenre() {
-    if (count($_POST) !== 0) {
-      $genre = $_POST;
-      $oGenre = new Genre($genre);
-      $erreurs = $oGenre->erreurs;
-      if (count($erreurs) === 0) {
-        $retour = $this->oRequetesSQL->ajouterGenre([
-          'genre_id'  => $oGenre->genre_id,
-          'genre_nom' => $oGenre->genre_nom
-        ]);
-        if (preg_match('/^[1-9]\d*$/', $retour)) {
-          $this->messageRetourAction = "Ajout du genre numéro $oGenre->genre_id effectué.";
-        } else {
-          $this->classRetour = "erreur";         
-          $this->messageRetourAction = "Ajout du genre non effectué.";
-        }
-        $this->listerGenres();
-        exit;
-      }
-    } else {
-      $genre   = [];
-      $erreurs = [];
-    }
-    
-    (new Vue)->generer(
-      'vAdminGenreAjouter',
-      [
-        'oUtilConn' => self::$oUtilConn,
-        'titre'     => 'Ajouter un genre',
-        'genre'     => $genre,
-        'erreurs'   => $erreurs
-      ],
-      'gabarit-admin');
-  }
-
-  /**
-   * Modifier un genre
-   */
-  public function modifierGenre() {
-    if (count($_POST) !== 0) {
-      $genre = $_POST;
-      $oGenre = new Genre($genre);
-      $erreurs = $oGenre->erreurs;
-      if (count($erreurs) === 0) {
-        $retour = $this->oRequetesSQL->modifierGenre([
-          'genre_id'  => $oGenre->genre_id, 
-          'genre_nom' => $oGenre->genre_nom
-        ]);
-        if ($retour === true)  {
-          $this->messageRetourAction = "Modification du genre numéro $this->genre_id effectuée.";    
-        } else {  
-          $this->classRetour = "erreur";
-          $this->messageRetourAction = "Modification du genre numéro $this->genre_id non effectuée.";
-        }
-        $this->listerGenres();
-        exit;
-      }
-    } else {
-      $genre = $this->oRequetesSQL->getGenre($this->genre_id);
-      $erreurs = [];
-    }
-    
-    (new Vue)->generer(
-      'vAdminGenreModifier',
-      [
-        'oUtilConn' => self::$oUtilConn,
-        'titre'     => "Modifier le genre numéro $this->genre_id",
-        'genre'     => $genre,
-        'erreurs'   => $erreurs
-      ],
-      'gabarit-admin');
-  }
-    
-  /**
-   * Supprimer un genre
-   */
-  public function supprimerGenre() {
-    $retour = $this->oRequetesSQL->supprimerGenre($this->genre_id);
-    if ($retour === false) $this->classRetour = "erreur";
-    $this->messageRetourAction = "Suppression du genre numéro $this->genre_id ".($retour ? "" : "non ")."effectuée.";
-    $this->listerGenres();
-  }
 }

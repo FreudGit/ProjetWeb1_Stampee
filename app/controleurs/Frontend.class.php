@@ -8,7 +8,7 @@
 class Frontend extends Routeur
 {
 
-  private $film_id;
+  private $id;
 
   private $oUtilConn;
 
@@ -20,7 +20,7 @@ class Frontend extends Routeur
   public function __construct()
   {
     $this->oUtilConn = $_SESSION['oUtilConn'] ?? null;
-    $this->film_id = $_GET['film_id'] ?? null;
+    $this->id = $_GET['id'] ?? null;
     $this->oRequetesSQL = new RequetesSQL;
   }
 
@@ -64,19 +64,44 @@ class Frontend extends Routeur
     echo json_encode(true);
   }
 
+
+
+  public function afficherLogin()
+  {
+    (new Vue)->generer(
+      "vLoginContent",
+      [
+        'oUtilConn' => $this->oUtilConn,
+        'titre' => "Welcome"
+      ],
+      "gabarit-frontendS"
+    );
+  }
+
+
+  public function afficherLoginCreate()
+  {
+    (new Vue)->generer(
+      "vLoginContent",
+      [
+        'oUtilConn' => $this->oUtilConn,
+        'titre' => "Welcome"
+      ],
+      "gabarit-frontendS"
+    );
+  }
+
   /**
-   * pageWelcome
+   * page Welcome
    * 
    */
   public function afficherWelcome()
   {
-    $encheres = $this->oRequetesSQL->getEncheres();
     (new Vue)->generer(
       "vWelcomeContent",
       [
         'oUtilConn' => $this->oUtilConn,
         'titre' => "Welcome",
-        'films' => $encheres
       ],
       "gabarit-frontendS"
     );
@@ -93,12 +118,9 @@ class Frontend extends Routeur
     $aEncheres = [];
     $now = new DateTime(); // Current date and time
     foreach ($encheres as &$enchere) {
-
       $endDateTime = new DateTime($enchere['DateFin']); // Date and time from the database
-
       $interval = $now->diff($endDateTime); // Calculate the difference between now and the end date
       $remainingTime = '';
-
       if ($interval->d > 0) {
         $remainingTime .= $interval->d . 'j ';
       }
@@ -108,7 +130,6 @@ class Frontend extends Routeur
       if ($interval->i > 0) {
         $remainingTime .= $interval->i . 'min';
       }
-
       $enchere['RemainingTime'] = $remainingTime;
     }
 
@@ -123,81 +144,27 @@ class Frontend extends Routeur
     );
   }
 
-  /**
-   * Lister les films à l'affiche
-   * 
-   */
-  public function listerAlaffiche()
-  {
-    $films = $this->oRequetesSQL->getFilms('enSalle');
-    (new Vue)->generer(
-      "vListeFilms",
-      [
-        'oUtilConn' => $this->oUtilConn,
-        'titre' => "À l'affiche",
-        'films' => $films
-      ],
-      "gabarit-frontend"
-    );
-  }
 
   /**
-   * Lister les films diffusés prochainement
+   * Voir les informations d'une enchere
    * 
    */
-  public function listerProchainement()
+  public function voirEnchere()
   {
-    $films = $this->oRequetesSQL->getFilms('prochainement');
-    (new Vue)->generer(
-      "vListeFilms",
-      [
-        'oUtilConn' => $this->oUtilConn,
-        'titre' => "Prochainement",
-        'films' => $films
-      ],
-      "gabarit-frontend"
-    );
-  }
-
-  /**
-   * Voir les informations d'un film
-   * 
-   */
-  public function voirFilm()
-  {
-    $film = false;
-    if (!is_null($this->film_id)) {
-      $film = $this->oRequetesSQL->getFilm($this->film_id);
-      $realisateurs = $this->oRequetesSQL->getRealisateursFilm($this->film_id);
-      $pays = $this->oRequetesSQL->getPaysFilm($this->film_id);
-      $acteurs = $this->oRequetesSQL->getActeursFilm($this->film_id);
-
-      // si affichage avec vFilm2.twig
-      // =============================
-      // $seances      = $this->oRequetesSQL->getSeancesFilm($this->film_id); 
-
-      // si affichage avec vFilm.twig
-      // ============================
-      $seancesTemp = $this->oRequetesSQL->getSeancesFilm($this->film_id);
-      $seances = [];
-      foreach ($seancesTemp as $seance) {
-        $seances[$seance['seance_date']]['jour'] = $seance['seance_jour'];
-        $seances[$seance['seance_date']]['heures'][] = $seance['seance_heure'];
-      }
+    //TODO: Coder/tester la méthode voirEnchere
+    $enchere = false;
+    if (!is_null($this->id)) {
+      $enchere = $this->oRequetesSQL->getEnchere($this->id);
     }
-    if (!$film)
-      throw new Exception("Film inexistant.");
+    if (!$enchere)
+      throw new Exception("Enchere inexistante.");
 
     (new Vue)->generer(
-      "vFilm",
+      "vEnchere",
       [
         'oUtilConn' => $this->oUtilConn,
-        'titre' => $film['film_titre'],
-        'film' => $film,
-        'realisateurs' => $realisateurs,
-        'pays' => $pays,
-        'acteurs' => $acteurs,
-        'seances' => $seances
+        'titre' => $enchere['Nom'],
+        'enchere' => $enchere,
       ],
       "gabarit-frontend"
     );

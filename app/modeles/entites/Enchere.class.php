@@ -28,6 +28,10 @@ class Enchere extends Entite
   protected $TimbreCertifie  = 0;
   protected $TimbreCategorieID;
 
+  protected $ImageCheminImage;
+
+
+
   /**
    * Mutateur de la propriété ID
    * @param int $ID
@@ -324,6 +328,23 @@ class Enchere extends Entite
       $this->erreurs['TimbreCategorieID'] = 'Numéro de catégorie incorrect.';
     }
     $this->TimbreCategorieID = $TimbreCategorieID;
+    return $this;
+  }
+
+
+   /**
+   * Mutateur de la propriété TimbreCouleur
+   * @param string $ImageCheminImage
+   * @return $this
+   */
+  public function setImageCheminImage($ImageCheminImage) {
+    unset($this->erreurs['ImageCheminImage']);
+    $ImageCheminImage = trim($ImageCheminImage);
+    $regExp = '/^.+$/';
+    if (!preg_match($regExp, $ImageCheminImage)) {
+      $this->erreurs['ImageCheminImage'] = 'Au moins un caractère.';
+    }
+    $this->ImageCheminImage = $ImageCheminImage;
     return $this;
   }
 }

@@ -1,52 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="robots" content="noindex, nofollow">
-  <title>{{ titre }}</title>
-  <link rel="stylesheet" type="text/css" href="css/admin.css?v=1.1">
-  <script type="module" src="js/admin.js"></script>
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="robots" content="noindex, nofollow">
+		<title>{{ titre }}</title>
+		<link rel="stylesheet" type="text/css" href="css/admin.css?v=1.1">
+		<script type="module" src="js/admin.js"></script>
+	</head>
 
-<body>
-  <div id="page">
-    <header>
-      <div id="puce"><div id="triangle"></div></div>
-      <p>
-        {{ oUtilConn.utilisateur_prenom }} {{ oUtilConn.utilisateur_nom }}
-        <a href="admin?entite=utilisateur&action=d">Déconnecter</a>
-      </p>
-      <nav>
-        <ul>
-          <li>
-            <hr>
-            <a href="admin">Profil</a>
-          </li>
-          <li>
-            <a href="admin?entite=enchere">Encheres</a>
-          </li>
-          <li>
-            <a href="admin?entite=timbre">Timbres</a>
-          </li>
+	<body>
+		<div id="page">
+			<header>
+				<div id="puce">
+					<div id="triangle"></div>
+				</div>
+				<p>
+					{{ oUtilConn.utilisateur_prenom }}
+					{{ oUtilConn.utilisateur_nom }}
+					<a href="admin?entite=utilisateur&action=d">Déconnecter</a>
+				</p>
+				<nav>
+					<ul>
 
-          <li>
-            <a href="admin?entite=offre">Offres</a>
-          </li>
-          
-          {% if oUtilConn.utilisateur_profil == constant('Utilisateur::PROFIL_ADMINISTRATEUR') %}
-          <li>
-            <hr>
-            <a href="admin?entite=utilisateur">Utilisateurs</a>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
-    <main>
+						<li>
+							<hr>
+							<a href="admin?entite=utilisateur&action=m&id={{ oUtilConn.utilisateur_ID }}">Mon Profil</a>
+						</li>
+						<li>
+							<a href="admin?entite=enchere&action=lu">Mes Encheres</a>
+						</li>
+						<li>
+							<a href="admin?entite=timbre&action=lu">Mes Timbres</a>
+						</li>
 
-    {{ include(templateMain) }}
+						<li>
+							<a href="admin?entite=offre&action=lu">Mes Offres</a>
+						</li>
 
-    </main>
-  </div>
-</body>
+
+						<li>
+            <br> <br> <br>
+
+						{% if oUtilConn.utilisateur_profil == constant('Utilisateur::PROFIL_ADMINISTRATEUR') or  oUtilConn.utilisateur_profil == constant('Utilisateur::PROFIL_EDITEUR')%}
+
+            ADMINISTRATION
+							<hr>
+						
+							<a href="admin?entite=enchere">Encheres</a>
+						</li>
+						<li>
+							<a href="admin?entite=timbre">Timbres</a>
+						</li>
+
+						<li>
+							<a href="admin?entite=offre">Offres</a>
+						</li>
+
+							<li>
+								<hr>
+								<a href="admin?entite=utilisateur&action=l">Utilisateurs</a>
+							</li>
+						{% endif %}
+					</ul>
+				</nav>
+			</header>
+			<main>
+
+				{{ include(templateMain) }}
+
+			</main>
+		</div>
+	</body>
 </html>

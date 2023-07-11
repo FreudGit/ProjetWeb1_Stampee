@@ -5,18 +5,7 @@
  */
 
 class Admin extends Routeur {
-
-  protected $utilisateur_id;
-  protected $film_id;
-  protected $acteur_id;
-  protected $genre_id;
   protected $id;
-  protected $pays_id;
-  protected $realisateur_id;
-  protected $salle_numero;
-  protected $seance_date;
-  protected $seance_heure;
-  
   protected $methodes;
   protected static $entite;
   protected static $action;
@@ -31,7 +20,7 @@ class Admin extends Routeur {
    */
   public function __construct() {
     self::$entite = $_GET['entite'] ?? 'utilisateur';
-    self::$action = $_GET['action'] ?? 'l';
+    self::$action = $_GET['action'] ?? 'w';
   }
 
   /**

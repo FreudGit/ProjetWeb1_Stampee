@@ -1,3 +1,5 @@
+  <script type="module" src="./../../../../../js/connexionDeconnexion.js"></script>
+  <script type="module" src="js/creerCompte.js"></script>
 
   <header class='header'>
     <nav id="navigation" aria-label="Menu principal">
@@ -13,6 +15,12 @@
         </div>
       </div>
       <a href="#">A propos du Lord</a>
+
+      <span id="utilisateur">{{ oUtilConn.utilisateur_prenom }} {{ oUtilConn.utilisateur_nom }}</span>
+      <span id="connecter"   class="{{     oUtilConn ? 'cache' : '' }}">Connecter</span>
+      <span id="creerCompte" class="{{     oUtilConn ? 'cache' : '' }}">Créer un compte</span>
+      <span id="deconnecter" class="{{ not oUtilConn ? 'cache' : '' }}">Déconnecter</span>
+
       <a class="cote-droit secondaire" href="admin">Espace Membre</a>
       <div class="cote-droit">
         <form name="frmRechercheTop" action="/rechercher" method="get" class="recherche-form"

@@ -5,7 +5,10 @@
 		>
 		<a href="#">Toutes conditions</a>
 	</h3>
-	<div class="h4">{{ aEncheres|length }} items trouvés(filtrés). Voici les résultats 1 à {{ aEncheres|length }} .</div>
+	<div class="h4">{{ aEncheres|length }}
+		items trouvés(filtrés). Voici les résultats 1 à
+		{{ aEncheres|length }}
+		.</div>
 </section>
 
 <div>
@@ -28,7 +31,7 @@
 					<div class="h5">Ordre d'affichage:</div>
 					<div class="h8">
 						Hint: Vous pouvez aussi cliquer sur l'icône du filtre pour
-												              prioriser...
+																		              prioriser...
 					</div>
 					<div class="content-line">
 						<select aria-label="Choisir ordre">
@@ -194,7 +197,8 @@
 				<article class="carte">
 					<a href="#">
 						<picture>
-							<img src='medias/stamps/{{ oEnchere.PremiereImage }}' alt="Timbre -2">
+							{# <img src='medias/stamps/{{ oEnchere.PremiereImage }}' alt="Timbre -2"> #}
+							<img src='{{ oEnchere.PremiereImage }}' alt="Image de timbre">
 						</picture>
 					</a>
 					<div>
