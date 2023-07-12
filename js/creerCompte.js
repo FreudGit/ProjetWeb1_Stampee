@@ -37,9 +37,9 @@ let controlesChamps = {
 };
 let erreur = false; // true si au moins un champ erroné
 
-eCreerCompte.onclick    = afficherFenetreModale;
+//eCreerCompte.onclick    = afficherFenetreModale;
 frmCreerCompte.onchange = controlerChamp;
-frmCreerCompte.onsubmit = traiterFormulaire;
+//frmCreerCompte.onsubmit = traiterFormulaire;
 
 /**
  * Affichage de la fenêtre modale
@@ -87,10 +87,10 @@ function traiterFormulaire(event) {
       }
     } else {
       eUtilisateur.innerHTML = frmCreerCompte.utilisateur_prenom.value + " " + frmCreerCompte.utilisateur_nom.value;
-      eConnecter  .classList.add('cache');
-      eCreerCompte.classList.add('cache');
-      eDeconnecter.classList.remove('cache'); 
-      eModaleCreerCompte.close();
+      //eConnecter  .classList.add('cache');
+      //eCreerCompte.classList.add('cache');
+      //eDeconnecter.classList.remove('cache'); 
+      //eModaleCreerCompte.close();
     }
   })
   .catch((e) => {

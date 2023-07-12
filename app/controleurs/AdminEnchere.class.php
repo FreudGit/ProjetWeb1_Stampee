@@ -8,12 +8,11 @@ class AdminEnchere extends Admin
 {
 
   protected $methodes = [
-    'l' => ['nom' => 'listerEncheres', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    'a' => ['nom' => 'ajouterEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
-    'm' => ['nom' => 'modifierEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR]],
-    's' => ['nom' => 'supprimerEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR]],
-    'lu' => ['nom' => 'listerEncheresUser', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]]
-
+    'l' => ['nom' => 'listerEncheres', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR, Utilisateur::PROFIL_CLIENT]],
+    'a' => ['nom' => 'ajouterEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]],
+    'm' => ['nom' => 'modifierEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CORRECTEUR, Utilisateur::PROFIL_CLIENT]],
+    's' => ['nom' => 'supprimerEnchere', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT]],
+    'lu' => ['nom' => 'listerEncheresUser', 'droits' => [Utilisateur::PROFIL_ADMINISTRATEUR, Utilisateur::PROFIL_EDITEUR, Utilisateur::PROFIL_CLIENT, Utilisateur::PROFIL_CLIENT]]
   ];
 
   /**
@@ -25,7 +24,6 @@ class AdminEnchere extends Admin
   {
     $this->id = $_GET['id'] ?? null;
     self::$action = $_GET['action'] ?? 'l';
-
     $this->oRequetesSQL = new RequetesSQL;
   }
 
@@ -34,8 +32,8 @@ class AdminEnchere extends Admin
    */
   public function listerEncheresUser()
   {
+    $moi = self::$oUtilConn;
     $this->listerEncheres(self::$oUtilConn->utilisateur_id);
-
   }
 
   /**
@@ -56,7 +54,6 @@ class AdminEnchere extends Admin
       ],
       'gabarit-admin'
     );
-
   }
 
   /**
@@ -76,13 +73,10 @@ class AdminEnchere extends Admin
           'PrixPlancher' => $oEnchere->PrixPlancher,
           'UtilisateurID' => $oEnchere->UtilisateurID,
           'Visible' => $oEnchere->Visible,
-          //'Status' => $oEnchere->Status,
-          //'ID' => $oEnchere->ID
         ]);
 
         $retourB = $this->oRequetesSQL->ajouterTimbre([
           'Nom' => $oEnchere->TimbreNom,
-          //'DateCreation' => $oEnchere->TimbreDateCreation,
           'Couleur' => $oEnchere->TimbreCouleur,
           'PaysOrigine' => $oEnchere->TimbrePaysOrigine,
           'EtatCondition' => $oEnchere->TimbreEtatCondition,
@@ -94,9 +88,8 @@ class AdminEnchere extends Admin
           'EnchereID' => $retour
         ]);
 
-
         if (preg_match('/^[1-9]\d*$/', $retour)) {
-          $this->messageRetourAction = "Ajout de l'enchère numéro $oEnchere->id effectué.";
+          $this->messageRetourAction = "Ajout de l'enchère numéro $retour effectué.";
         } else {
           $this->classRetour = "erreur";
           $this->messageRetourAction = "Ajout de l'enchère non effectué.";
@@ -143,13 +136,11 @@ class AdminEnchere extends Admin
           'PrixPlancher' => $oEnchere->PrixPlancher,
           'UtilisateurID' => $oEnchere->UtilisateurID,
           'Visible' => $oEnchere->Visible,
-          //'Status' => $oEnchere->Status,
           'ID' => $oEnchere->ID
         ]);
 
-        $retourB = $this->oRequetesSQL->modifierTimbre([
+        $retourTimbre = $this->oRequetesSQL->modifierTimbre([
           'Nom' => $oEnchere->TimbreNom,
-          //'DateCreation' => $oEnchere->TimbreDateCreation,
           'Couleur' => $oEnchere->TimbreCouleur,
           'PaysOrigine' => $oEnchere->TimbrePaysOrigine,
           'EtatCondition' => $oEnchere->TimbreEtatCondition,
@@ -160,11 +151,20 @@ class AdminEnchere extends Admin
           'CategorieID' => $oEnchere->TimbreCategorieID,
           'ID' => $oEnchere->TimbreID
         ]);
-        if ($retour === true) {
+
+        $this->messageRetourAction = '';
+        if ($retour) {
+          $this->messageRetourAction .= "Modification de l'enchère numéro $this->id effectuée.";
+        }
+        if ($retourTimbre) {
+          $this->messageRetourAction .= "Modification au timbre de l'enchère numéro $this->id effectuée.";
+        }
+
+        if ($retour === true || $retourTimbre === true) {
           $this->messageRetourAction = "Modification de l'enchère numéro $this->id effectuée.";
         } else {
           $this->classRetour = "erreur";
-          $this->messageRetourAction = "Modification enchère numéro $this->id non effectuée.";
+          $this->messageRetourAction = "Pas de changements pour enchère numéro $this->id.";
         }
         $this->listerEncheres();
         exit;

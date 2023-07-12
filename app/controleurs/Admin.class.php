@@ -6,11 +6,11 @@
 
 class Admin extends Routeur {
   protected $id;
+  protected $utilisateur_id;
   protected $methodes;
   protected static $entite;
   protected static $action;
   protected static $oUtilConn; // objet Utilisateur connecté
-  
   protected $classRetour = "fait";
   protected $messageRetourAction = "";
 
@@ -21,6 +21,7 @@ class Admin extends Routeur {
   public function __construct() {
     self::$entite = $_GET['entite'] ?? 'utilisateur';
     self::$action = $_GET['action'] ?? 'w';
+    $this->id = $_GET['id'] ?? null;
   }
 
   /**
@@ -45,7 +46,6 @@ class Admin extends Routeur {
    * Gérer l'interface d'administration d'une entité
    */  
   public function gererAction() {
-    
     if (isset($this->methodes[self::$action])) {
       $methode = $this->methodes[self::$action]['nom'];
       if (isset($this->methodes[self::$action]['droits'])) {
@@ -63,6 +63,5 @@ class Admin extends Routeur {
     } else {
       throw new Exception("L'action ".self::$action." de l'entité ".self::$entite." n'existe pas.");
     }
-
   }
 }

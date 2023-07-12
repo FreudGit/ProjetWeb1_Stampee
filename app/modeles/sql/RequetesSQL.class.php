@@ -151,11 +151,6 @@ class RequetesSQL extends RequetesPDO
       FROM role
       WHERE role.Nom = "' . Utilisateur::PROFIL_CLIENT . '"';
     return $this->CUDLigne($champs);
-
-    //return $this->getLignes([$champs], RequetesPDO::UNE_SEULE_LIGNE);
-
-
-    //return $this->CUDLigne($champs);
   }
 
 
@@ -293,8 +288,7 @@ LEFT JOIN (
         CheminImage
     FROM
         image
-    WHERE
-        Ordre = 1
+    
 ) i ON t.ID = i.TimbreID";
 
     if ($userID != null) {
@@ -309,8 +303,8 @@ WHERE e.UtilisateurID = :ID;";
 
 
   /**
-   * Récupération des encheres à l'affiche ou prochainement ou pour l'interface admin
-   * @param  string $critere
+   * Récupération d'une enchere
+   * @param  integer $if identifiant de l'enchere
    * @return array tableau des lignes produites par la select   
    */
   public function getEnchere($id)
@@ -365,11 +359,15 @@ LEFT JOIN (
 WHERE e.ID = :ID;";
 
     return $this->getLignes(['ID' => $id], RequetesPDO::UNE_SEULE_LIGNE);
-
   }
 
 
 
+  /**
+   * Ajout d'une enchere
+   * @param  array $champs champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
   public function ajouterEnchere($champs)
   {
     $this->sql = '
@@ -378,20 +376,50 @@ WHERE e.ID = :ID;";
     return $this->CUDLigne($champs);
   }
 
-  public function modifierTimbre($plChamps)
+
+
+  /**
+   * Modification d'une enchere
+   * @param  array $plChamps champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
+  public function modifierEnchere($plChamps)
   {
-
-
     $whereClause = array(
       'ID' => $plChamps['ID']
     );
-    $this->modifierImageTimbre($plChamps['ID'] );
-
-    return $this->modifierTable('timbre', $plChamps, $whereClause);
+    return $this->modifierTable('enchere', $plChamps, $whereClause);
   }
 
 
 
+
+  /* GESTION DES TIMBRES 
+     ================= */
+  /**
+   * Modification d'une enchere
+   * @param  array $plChamps champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
+  public function modifierTimbre($plChamps)
+  {
+    $whereClause = array(
+      'ID' => $plChamps['ID']
+    );
+    $resTimbreImage = $this->modifierImageTimbre($plChamps['ID']);
+    $resTimbre =  $this->modifierTable('timbre', $plChamps, $whereClause);
+    return ($resTimbreImage == true || $resTimbre == true);
+
+  }
+
+
+
+
+  /**
+   * Ajout d'un Timbre
+   * @param  array $champs champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
 
   public function ajouterTimbre($champs)
   {
@@ -400,58 +428,60 @@ WHERE e.ID = :ID;";
     VALUES 
     (:Nom, :Couleur, :PaysOrigine, :EtatCondition, :Tirage, :Longueur, :Largeur, :Certifie, :CategorieID, :EnchereID)
     ';
-    return $this->CUDLigne($champs);
-  }
-
-
-
-
-
-  public function modifierEnchere($plChamps)
-  {
-
-
-    $whereClause = array(
-      'ID' => $plChamps['ID']
-    );
+    $aResults =$this->CUDLigne($champs);
+    if ($aResults) {
+      $resTimbreImage = $this->modifierImageTimbre($aResults);
+    }
     
-      //$this->sql = 'UPDATE image SET CheminImage = :CheminImage WHERE TimbreID = :TimbreID AND Ordre = 1';
-      //return $this->CUDLigne($champs);
-    //}
-    return $this->modifierTable('enchere', $plChamps, $whereClause);
+    return ($aResults  || $resTimbreImage);
+
   }
 
 
-  public function modifierTable($table, $champs, $plWhereClause)
+  /**
+   * Modifier l'image d'un timbre
+   * @param int $timbre_id
+   * @return boolean true si téléversement, false sinon
+   */
+  public function modifierImageTimbre($timbre_id)
   {
-    $this->sql = 'UPDATE ' . $table . ' SET ';
-    $valeurs = '';
+    if ($_FILES['ImageCheminImage']['tmp_name'] !== "") {
+      //$this->sql = 'update image set CheminImage = :CheminImage where TimbreID = :TimbreID';
+      //$this->sql = 'UPDATE film SET film_affiche = :film_affiche WHERE film_id = :film_id';
 
-    foreach ($champs as $champ => $valeur) {
-      $valeurs .= $champ . ' = :' . $champ . ', ';
+      $this->sql = 'INSERT INTO image (TimbreID, CheminImage) VALUES (:TimbreID, :ImageCheminImage) 
+              ON DUPLICATE KEY UPDATE CheminImage = :ImageCheminImage';
+      $champs['TimbreID']      = $timbre_id;
+      $champs['ImageCheminImage'] = "medias/stamps/a-$timbre_id-" . time() . ".jpg";
+      $res = $this->CUDLigne($champs);
+      foreach (glob("medias/stamps/a-$timbre_id-*") as $fichier) {
+        if (!@unlink($fichier))
+          throw new Exception("Erreur dans la suppression de l'ancien fichier image de l'affiche.");
+      }
+      if (!@move_uploaded_file($_FILES['ImageCheminImage']['tmp_name'], $champs['ImageCheminImage']))
+        throw new Exception("Le stockage du fichier image de l'affiche a échoué.");
+      return true;
     }
-
-    $this->sql .= rtrim($valeurs, ', ');
-
-    // Ajout de la clause WHERE
-    $whereClause = '';
-    foreach ($plWhereClause as $champ => $valeur) {
-      $whereClause .= $champ . ' = :' . $champ . ' AND ';
-    }
-
-    // Supprimer le dernier 'AND' pour compléter la clause WHERE
-    if (!empty($whereClause)) {
-      $whereClause = substr($whereClause, 0, -5); // Cela enlève les 5 derniers caractères ' AND '
-    }
-
-    $this->sql .= ' WHERE ' . $whereClause;
-
-    $param = $champs + $plWhereClause;
-
-    return $this->CUDLigne($param);
+    return false;
   }
 
 
+  /**
+   * Récupération des Timbres
+   * @param  string $critere
+   * @return array tableau des lignes produites par la select   
+   */
+  public function getTimbres($userID = null)
+  {
+    $params = [];
+    $this->sql = "SELECT * from Timbre ";
+    if ($userID != null) {
+      $params = ['ID' => $userID];
+      $this->sql .= "INNER JOIN Enchere ON Timbre.EnchereID = Enchere.ID WHERE Enchere.utilisateurID = :ID ";
+    }
+    $this->sql .= " ORDER BY Timbre.ID desc";
+    return $this->getLignes($params);
+  }
 
 
   /* GESTION DES ROLES 
@@ -466,28 +496,6 @@ WHERE e.ID = :ID;";
   {
     $this->sql = "SELECT * from Role ORDER BY ID desc";
     return $this->getLignes();
-  }
-
-
-
-  /* GESTION DES TIMBRES 
-   ================= */
-
-  /**
-   * Récupération des roles
-   * @param  string $critere
-   * @return array tableau des lignes produites par la select   
-   */
-  public function getTimbres($userID = null)
-  {
-    $params = [];
-    $this->sql = "SELECT * from Timbre ";
-    if ($userID != null) {
-      $params = ['ID' => $userID];
-      $this->sql .= "INNER JOIN Enchere ON Timbre.EnchereID = Enchere.ID WHERE Enchere.utilisateurID = :ID ";
-    }
-    $this->sql .= " ORDER BY Timbre.ID desc";
-    return $this->getLignes($params);
   }
 
 
@@ -536,30 +544,39 @@ WHERE e.ID = :ID;";
 
 
 
-   /**
-   * Modifier l'image d'un timbre
-   * @param int $timbre_id
-   * @return boolean true si téléversement, false sinon
-   */ 
-  public function modifierImageTimbre($timbre_id) {
-    if ($_FILES['ImageCheminImage']['tmp_name'] !== "") {
-      //$this->sql = 'update image set CheminImage = :CheminImage where TimbreID = :TimbreID';
-      //$this->sql = 'UPDATE film SET film_affiche = :film_affiche WHERE film_id = :film_id';
+  /**
+   * Methode  generique pour modifier une table
+   * @param  string $table nom de la table
+   * @param  array $champs champs à ajouter
+   * @param  array $plWhereClause clause where
+   * @return array|bool tableau des lignes produites par la select
+   */
 
-      $this->sql = 'INSERT INTO image (TimbreID, CheminImage) VALUES (:TimbreID, :ImageCheminImage) 
-              ON DUPLICATE KEY UPDATE CheminImage = :ImageCheminImage';
-      $champs['TimbreID']      = $timbre_id;
-      $champs['ImageCheminImage'] = "medias/stamps/a-$timbre_id-".time().".jpg";
-      $res=$this->CUDLigne($champs);
-      foreach (glob("medias/stamps/a-$timbre_id-*") as $fichier) {
-        if (!@unlink($fichier)) 
-          throw new Exception("Erreur dans la suppression de l'ancien fichier image de l'affiche.");
-      } 
-      if (!@move_uploaded_file($_FILES['ImageCheminImage']['tmp_name'], $champs['ImageCheminImage']))
-        throw new Exception("Le stockage du fichier image de l'affiche a échoué.");
-      return true; 
+  public function modifierTable($table, $champs, $plWhereClause)
+  {
+    $this->sql = 'UPDATE ' . $table . ' SET ';
+    $valeurs = '';
+
+    foreach ($champs as $champ => $valeur) {
+      $valeurs .= $champ . ' = :' . $champ . ', ';
     }
-    return false;
-  }
 
+    $this->sql .= rtrim($valeurs, ', ');
+
+    // Ajout de la clause WHERE
+    $whereClause = '';
+    foreach ($plWhereClause as $champ => $valeur) {
+      $whereClause .= $champ . ' = :' . $champ . ' AND ';
+    }
+
+    // Supprimer le dernier 'AND' pour compléter la clause WHERE
+    if (!empty($whereClause)) {
+      $whereClause = substr($whereClause, 0, -5); // Cela enlève les 5 derniers caractères ' AND '
+    }
+
+    $this->sql .= ' WHERE ' . $whereClause;
+    $param = $champs + $plWhereClause;
+
+    return $this->CUDLigne($param);
+  }
 }

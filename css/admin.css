@@ -19,12 +19,12 @@ html, body, h1, p, ul, li {
   color: black;
   background: white;
 }
-a {
+#page a {
   text-decoration: none;
-  color: cornflowerblue;
+  color: var(--couleur_primaire);
 }
 a:hover {
-  color:rgb(0, 73, 207);
+  color:var(--couleur_bouton);
 }
 .dr {
   text-align: right;
@@ -40,7 +40,7 @@ a:hover {
 }
 header {
   box-sizing: border-box;
-  width: 200px;
+  width: 300px;
   padding: 20px;
   background-color: #eee;
 }
@@ -52,12 +52,12 @@ header.invisible {
 header #puce {
   position: fixed;
   top: 20px;
-  left: 175px;
+  left: 275px;
   box-sizing: border-box;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color:cornflowerblue;
+  background-color:var(--couleur_primaire);
   transform: rotate(180deg);
   cursor: pointer;
 }
@@ -92,12 +92,12 @@ header ul li a {
   display: block;
   line-height: 32px;
   overflow: hidden;
-  color:cornflowerblue;
+  color:var(--couleur_primaire);
 }
 header ul li hr {
   border: 0;
   height: 1px;
-  background-color:cornflowerblue;
+  background-color:var(--couleur_primaire);
 }
 
 /* contenu spécifique de la page (main)
@@ -151,7 +151,7 @@ main {
   .t {
     text-align: center;
     font-weight: bold;
-    border: 2px solid cornflowerblue;
+    border: 2px solid var(--couleur_primaire);
   }
   .t img {
     width: 10px;

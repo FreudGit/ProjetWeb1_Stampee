@@ -1,12 +1,12 @@
 <script>
-	history.pushState({}, '', 'admin?entite={{ entite }}')
+	history.pushState({}, '', 'admin?entite= {{ entite }}')
 </script>
 <script type="module" src="js/filtrer.js"></script>
 <section>
 	<h1>{{ titre|upper }}</h1>
 	<input id="filtrer" data-filtre="filtre{{ entite }}" value="" placeholder="Filtrage des lignes contenant cette chaîne">
 	{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
-                                         constant('Utilisateur::PROFIL_EDITEUR'), constant('Utilisateur::PROFIL_CLIENT')] %}
+                                         constant('Utilisateur::PROFIL_EDITEUR')] %}
 		<a href="admin?entite={{ entite }}&action=a">Ajouter une offre</a>
 	{% endif %}
 	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction }}&nbsp;</p>
@@ -41,7 +41,7 @@
 						<span class="confirmer" data-href="admin?entite={{ entite }}&action=s&id={{ offre.ID }}">supprimer</span>
 					{% endif %}
 
-          
+
 				</div>
 			</div>
 		{% endfor %}

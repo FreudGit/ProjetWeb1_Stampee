@@ -9,7 +9,6 @@ class Frontend extends Routeur
 {
 
   private $id;
-
   private $oUtilConn;
 
   /**
@@ -48,8 +47,11 @@ class Frontend extends Routeur
     } else {
       $retour = $this->oRequetesSQL->creerCompteClient($_POST);
       if (!is_array($retour) && preg_match('/^[1-9]\d*$/', $retour)) {
+        $oUtilisateur->utilisateur_id = $retour;
         $oUtilisateur->utilisateur_profil = Utilisateur::PROFIL_CLIENT;
         $_SESSION['oUtilConn'] = $oUtilisateur;
+        $this->afficherWelcome();
+        exit;
       }
     }
     echo json_encode($retour);
@@ -63,7 +65,6 @@ class Frontend extends Routeur
     unset($_SESSION['oUtilConn']);
     echo json_encode(true);
   }
-
 
 
   public function afficherLogin()

@@ -1,15 +1,23 @@
 <section class="conteneur-flex">
 	<h1>{{ titre|upper }}</h1>
 
-	<form class="conteneur-flex" method="POST" action="admin?entite={{ entite }}&action=a&id={{ enchere.ID }}">
+	<form class="conteneur-flex" method="POST" enctype="multipart/form-data" action="admin?entite={{ entite }}&action=a&id={{ enchere.ID }}">
 		<div class="champs">
 			<fieldset>
-				<legend>Encherese</legend>
-				<div class="champ">
-					<label for="UtilisateurID">Utilisateur ID</label>
-					<input type="text" id="UtilisateurID" name="UtilisateurID" value="{{ enchere.UtilisateurID }}"/>
-					<span class="erreur">{{ erreurs.UtilisateurID }}</span>
-				</div>
+				<legend>Encheres</legend>
+
+
+				{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
+                                                   constant('Utilisateur::PROFIL_EDITEUR')] %}
+					<div class="champ">
+						<label for="UtilisateurID">Utilisateur ID</label>
+						<input type="text" id="UtilisateurID" name="UtilisateurID" value="{{ enchere.UtilisateurID }}"/>
+						<span class="erreur">{{ erreurs.UtilisateurID }}</span>
+					</div>
+
+				{% else %}
+					<input type="hidden" id="UtilisateurID" name="UtilisateurID" value="{{ oUtilConn.utilisateur_id }}"/>
+				{% endif %}
 
 				<div class="champ">
 					<label for="Visible">Enchere Visiblew</label>
@@ -63,7 +71,7 @@
 				</div>
 
 				<div class="champ">
-					<label for="TimbreTirage">Longueur</label>
+					<label for="TimbreTirage">Tirage</label>
 					<input type="text" id="TimbreTirage" name="TimbreTirage" value="{{ enchere.TimbreTirage }}"/>
 					<span class="erreur">{{ erreurs.TimbreTirage }}</span>
 				</div>
@@ -87,19 +95,17 @@
 				</div>
 
 				<div class="champ">
-					<label>Image au format jpgf</label>
-					<input id="ImageCheminImage"  name="ImageCheminImage" type="file">
+					<label>Image au format jpg</label>
+					<input name="ImageCheminImage" type="file">
+					{% if enchere.PremiereImage is not empty %}
+						<img src="{{ enchere.PremiereImage }}" alt="Thumbnail" style="max-width:100px; height:auto;"/>
+					{% endif %}
 					<span>&nbsp;{{ erreurs.ImageCheminImage }}</span>
 				</div>
 
 				<div class="champ">
 					<label for="TimbreCategorieID">Categorie</label>
-					<input type="text" id="TimbreCategorieID" nawme="TimbreCategorieID" value="{{ enchere.TimbreCategorieID }}"/>
-
-
 					<select name="TimbreCategorieID">
-
-
 						{% for categorie in categories %}
 							<option value="{{ categorie.ID }}" {{ categorie.ID == enchere.TimbreCategorieID ? 'selected' : '' }}>{{ categorie.Nom }}</option>
 						{% endfor %}

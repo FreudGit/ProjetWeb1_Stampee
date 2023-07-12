@@ -1,34 +1,36 @@
 <section>
-  <h1>{{ titre|upper }}</h1>
-  
-  <form method="POST" action="admin?entite={{ entite }}&action=m&utilisateur_id={{  utilisateur.utilisateur_id }}">
+	<h1>{{ titre|upper }}</h1>
 
-    <label>Nom</label>
-    <input name="utilisateur_nom" value="{{ utilisateur.utilisateur_nom }}">
-    <span>&nbsp;{{ erreurs.utilisateur_nom }}</span>
+	<form method="POST" action="admin?entite={{ entite }}&action=m&utilisateur_id={{  utilisateur.utilisateur_id }}">
 
-    <label>Prénom</label>
-    <input name="utilisateur_prenom" value="{{ utilisateur.utilisateur_prenom }}">
-    <span>&nbsp;{{ erreurs.utilisateur_prenom }}</span>
+		<label>Nom</label>
+		<input name="utilisateur_nom" value="{{ utilisateur.utilisateur_nom }}">
+		<span>&nbsp;{{ erreurs.utilisateur_nom }}</span>
 
-    <label>Courriel</label>
-    <input name="utilisateur_courriel" value="{{ utilisateur.utilisateur_courriel }}">
-    <span>&nbsp;{{ erreurs.utilisateur_courriel }}</span>
+		<label>Prénom</label>
+		<input name="utilisateur_prenom" value="{{ utilisateur.utilisateur_prenom }}">
+		<span>&nbsp;{{ erreurs.utilisateur_prenom }}</span>
 
+		<label>Courriel</label>
+		<input name="utilisateur_courriel" value="{{ utilisateur.utilisateur_courriel }}">
+		<span>&nbsp;{{ erreurs.utilisateur_courriel }}</span>
 
-    <label>Profil</label>
-    <select name="utilisateur_profil">
-      <option value="{{ constant('utilisateur::PROFIL_CLIENT')         }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_CLIENT')         ? 'selected' : '' }}>Client</option>
-      <option value="{{ constant('utilisateur::PROFIL_CORRECTEUR')     }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_CORRECTEUR')     ? 'selected' : '' }}>Correcteur</option>
-      <option value="{{ constant('utilisateur::PROFIL_EDITEUR')        }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_EDITEUR')        ? 'selected' : '' }}>Editeur</option>
-      <option value="{{ constant('utilisateur::PROFIL_ADMINISTRATEUR') }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_ADMINISTRATEUR') ? 'selected' : '' }}>Administrateur</option>
-    </select>
-    <span>&nbsp;{{ erreurs.utilisateur_profil }}</span>
+		{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
+                                                   constant('Utilisateur::PROFIL_EDITEUR')] %}
 
-    <input type="hidden" name="utilisateur_id" value="{{ utilisateur.utilisateur_id }}">
+			<label>Profil</label>
+			<select name="utilisateur_profil">
+				<option value="{{ constant('utilisateur::PROFIL_CLIENT') }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_CLIENT') ? 'selected' : '' }}>Client</option>
+				<option value="{{ constant('utilisateur::PROFIL_CORRECTEUR') }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_CORRECTEUR') ? 'selected' : '' }}>Correcteur</option>
+				<option value="{{ constant('utilisateur::PROFIL_EDITEUR') }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_EDITEUR') ? 'selected' : '' }}>Editeur</option>
+				<option value="{{ constant('utilisateur::PROFIL_ADMINISTRATEUR') }}" {{ utilisateur.utilisateur_profil == constant('utilisateur::PROFIL_ADMINISTRATEUR') ? 'selected' : '' }}>Administrateur</option>
+			</select>
+			<span>&nbsp;{{ erreurs.utilisateur_profil }}</span>
+		{% else %}
+			<input type="hidden" id="utilisateur_profil" name="utilisateur_profil" value="{{ utilisateur.utilisateur_profil }}"/>
+		{% endif %}
 
-    <input type="submit" value="Envoyer">
-
-  </form>
-
+		<input type="hidden" name="utilisateur_id" value="{{ utilisateur.utilisateur_id }}">
+		<input type="submit" value="Envoyer">
+	</form>
 </section>

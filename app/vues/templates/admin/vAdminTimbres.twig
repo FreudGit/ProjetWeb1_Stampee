@@ -1,5 +1,5 @@
 <script>
-	history.pushState({}, '', 'admin?entite={{ entite }}')
+	history.pushState({}, '', 'admin?entite= {{ entite }}')
 </script>
 <script type="module" src="js/filtrer.js"></script>
 <section>
@@ -7,7 +7,7 @@
 	<input id="filtrer" data-filtre="filtreGenres" value="" placeholder="Filtrage des lignes contenant cette chaîne">
 	{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
                                          constant('Utilisateur::PROFIL_EDITEUR')] %}
-		<a href="admin?entite={{ entite }}&action=a">Ajouter une enchere</a>
+		<a href="admin?entite={{ entite }}&action=a">Ajouter un timbre</a>
 	{% endif %}
 	<p class="messageRetourAction {{ classRetour }}">{{ messageRetourAction }}&nbsp;</p>
 	<div class="g {{ entite }}">
@@ -20,7 +20,8 @@
 		<div class="t">Pays Origine
 			<img src="assets/images/i-asc.svg"><img src="assets/images/i-desc.svg"></div>
 		<div class="t">EtatCondition<img src="assets/images/i-asc.svg"><img src="assets/images/i-desc.svg"></div>
-		<div class="t"> Longueur
+		<div class="t">
+			Longueur
 			<img src="assets/images/i-asc.svg"><img src="assets/images/i-desc.svg"></div>
 		<div class="t">Largeur
 			<img src="assets/images/i-asc.svg"><img src="assets/images/i-desc.svg"></div>

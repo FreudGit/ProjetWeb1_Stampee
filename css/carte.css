@@ -94,6 +94,7 @@
 .carte aside {
   display: flex;
   gap: calc(var(--gouttiere) / 4);
+
   /* flex-basis: 20ch; */
 }
 
@@ -102,6 +103,7 @@
 .carte>.h7 {
   text-decoration: underline;
   color: #737373;
+
 }
 
 
@@ -112,6 +114,8 @@
   border-radius: 5px;
   font-weight: bold;
   animation: glow 2s infinite;
+  padding-right: 15px;
+
 }
 
 .carte .alerteBackground-Color {
