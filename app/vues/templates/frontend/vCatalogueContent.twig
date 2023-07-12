@@ -195,7 +195,7 @@
 		<div class="grille">
 			{% for oEnchere in aEncheres %}
 				<article class="carte">
-					<a href="#">
+					<a href="enchere?id={{ oEnchere.ID }}">
 						<picture>
 							{# <img src='medias/stamps/{{ oEnchere.PremiereImage }}' alt="Timbre -2"> #}
 							<img src='{{ oEnchere.PremiereImage }}' alt="{{ oEnchere.PremiereImage }}">
@@ -225,7 +225,7 @@
 						</div>
 					</div>
 					<footer>
-						<button class="bouton alerteBackground-Color" aria-label="Enchérir" target='enchere'>Enchérir</button>
+						<button class="bouton alerteBackground-Color" onclick="location.href='enchere?id={{ oEnchere.ID }}';" aria-label="Enchérir" target='enchere'>Enchérir</button>
 					</footer>
 				</article>
 			{% else %}

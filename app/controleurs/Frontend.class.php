@@ -187,7 +187,4 @@ class Frontend extends Routeur
   }
 
 
-
-
-
 }
