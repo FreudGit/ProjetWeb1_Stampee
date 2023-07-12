@@ -56,3 +56,10 @@ h8,
   -webkit-text-fill-color: transparent;
   display: inline-block;
 }
+
+.erreur {
+  color: brown;
+}
+.fait {
+  color: mediumseagreen; 
+}

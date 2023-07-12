@@ -15,6 +15,8 @@ class Routeur
     ["", "Frontend", "afficherWelcome"],
     ["index", "Frontend", "afficherWelcome"],
     ["catalogue", "Frontend", "afficherCatalogue"],
+    ["enchere", "Frontend", "afficherEnchere"],
+
     ["login", "Frontend", "afficherLogin"],
     ["connecter", "Frontend", "connecter"],
     ["creerCompte", "Frontend", "creerCompte"]

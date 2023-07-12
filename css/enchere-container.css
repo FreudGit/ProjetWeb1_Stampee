@@ -1,0 +1,38 @@
+.enchere-container {
+    display: flex;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.enchere-container .left-section {
+    flex: 1;
+    padding-right: 10px;
+    text-align: left;
+}
+
+.enchere-container .right-section {
+    flex: 1;
+    padding-left: 10px;
+    text-align: left;
+}
+
+.enchere-container #bid-form {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.enchere-container .left-section ul {
+    margin-left: 30px;
+}
+
+.enchere-container .left-section ul li:first-child {
+    color: black;
+}
+
+.enchere-container .left-section ul li:not(:first-child) {
+    color: gray;
+}

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Enchère Timbre</title>
+		<style>
+
+			.fav-icon {
+				float: right;
+				height: 30px;
+				width: auto;
+				fill: gray;
+				cursor: pointer;
+				transition: fill 0.3s ease;
+			}
+
+			.fav-icon:hover,
+			.fav-icon.selected {
+				fill: red;
+			}
+		</style>
+		<script>
+			function addToFavorites(element) {
+alert("Ajouté aux favoris !");
+element.classList.add("selected");
+}
+		</script>
+	</head>
+	<body>
+		<div class="enchere-container">
+			<div class="left-section">
+				<img src="{{ oEnchere.PremiereImage }}" alt="Timbre" style="max-height: 250px; width: auto;">
+				<p>{{ oEnchere.PremiereImageDescription }}</p>
+			</div>
+
+			<div class="right-section">
+				<h2 title="Numéro de timbre: {{ oEnchere.TimbreID }}">Informations du Timbre
+					<svg class="fav-icon" title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" onclick="addToFavorites(this)">
+						<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+					</svg>
+				</h2>
+				<table>
+					<tr>
+						<td>Nom:</td>
+						<td>{{ oEnchere.TimbreNom }}</td>
+					</tr>
+					<tr>
+						<td>Catégorie:</td>
+						<td>{{ oEnchere.CategorieID }}</td>
+					</tr>
+					<tr>
+						<td>Etat:</td>
+						<td>{{ oEnchere.TimbreEtatCondition }}</td>
+					</tr>
+					<tr>
+						<td>Tirage:</td>
+						<td>{{ oEnchere.Tirage }}</td>
+					</tr>
+					<tr>
+						<td>Couleur:</td>
+						<td>{{ oEnchere.TimbreCouleur }}</td>
+					</tr>
+					<tr>
+						<td>Pays Origine:</td>
+						<td>{{ oEnchere.TimbrePaysOrigine }}</td>
+					</tr>
+					<tr>
+						<td>Dimension:</td>
+						<td>{{ oEnchere.TimbreLongueur }}
+							x
+							{{ oEnchere.TimbreLargeur }}
+							(mm)</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="enchere-container">
+			<div class="left-section">
+				<h2 title="Numéro d'enchère: {{ oEnchere.ID }}">Informations de l'Enchère</h2>
+				<p class="{{ erreurs.classRetour }}">
+					Prix actuel:
+					{{ oEnchere.PrixActuel }}</p>
+				<p>
+					Nombre de mises:
+					<strong>{{ oEnchere.NombreMises }}</p>
+				</p>
+			</strong>
+			<p>
+				Liste des offres:
+			</p>
+			<ul>
+				{% for offre in offres %}
+					<li title="Numéro d'offre: {{ offre.ID }}">{{ offre.Prix }}
+						({{ offre.OffreDate }})</li>
+				{% endfor %}
+			</ul>
+		</div>
+
+		<div class="right-section">
+			<form id="bid-form" method="POST">
+				<label for="bid-amount">Montant:</label>
+				<input type="number" id="EncherePrix" name="EncherePrix" value='{{ (oEnchere.PrixActuel + 5 )|number_format(2, '.', '') }}' min='{{ oEnchere.PrixActuel + 2 }}' max="10000" step="any" required style="width: 100px;">
+				<input type="hidden" name="TimbreID" value="{{ oEnchere.TimbreID }}">
+				<input type="hidden" name="EnchereID" value="{{ oEnchere.ID }}">
+
+				<button type="submit">Enchérir</button>
+			</form>
+			<p class="{{ erreurs.classRetour }}">{{ erreurs.messageRetour }}&nbsp;</p>
+		</div>
+	</body>
+</html></div></body></html>

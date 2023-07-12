@@ -110,7 +110,7 @@ class Frontend extends Routeur
 
 
   /**
-   * pageWelcome
+   * page Catalogue
    * 
    */
   public function afficherCatalogue()
@@ -146,28 +146,48 @@ class Frontend extends Routeur
   }
 
 
+
+
   /**
    * Voir les informations d'une enchere
    * 
    */
-  public function voirEnchere()
+  public function afficherEnchere()
   {
-    //TODO: Coder/tester la méthode voirEnchere
+    $erreurs = [];
+    if (count($_POST) !== 0) {
+
+      $enchere = $this->oRequetesSQL->ajouterOffre([
+        'EnchereID' => $_POST['EnchereID'],
+        'EncherePrix' => $_POST['EncherePrix'],
+        'UtilisateurID' => $this->oUtilConn->utilisateur_id
+      ]);
+      $erreurs['messageRetour'] = '      Offre ajoutée!';
+      $erreurs['classRetour'] = 'fait';
+    }
     $enchere = false;
     if (!is_null($this->id)) {
       $enchere = $this->oRequetesSQL->getEnchere($this->id);
     }
     if (!$enchere)
       throw new Exception("Enchere inexistante.");
+    $offres = $this->oRequetesSQL->getOffres($this->id);
 
     (new Vue)->generer(
-      "vEnchere",
+      "vEnchereContent",
       [
         'oUtilConn' => $this->oUtilConn,
-        'titre' => $enchere['Nom'],
-        'enchere' => $enchere,
+        'titre' => $enchere['TimbreNom'],
+        'oEnchere' => $enchere,
+        'offres' => $offres,
+        'erreurs' => $erreurs
       ],
-      "gabarit-frontend"
+      "gabarit-frontendS"
     );
   }
+
+
+
+
+
 }

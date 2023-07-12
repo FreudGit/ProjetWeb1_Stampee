@@ -504,11 +504,26 @@ WHERE e.ID = :ID;";
    ================= */
 
   /**
-   * Récupération des roles
+   * Récupération des offres
    * @param  string $critere
    * @return array tableau des lignes produites par la select   
    */
-  public function getOffres($userID = null)
+
+
+   public function getOffres($enchereID = null)
+   {
+     $params = [];
+     $this->sql = "SELECT * from offre ";
+     if ($enchereID != null) {
+       $params = ['ID' => $enchereID];
+       $this->sql .= " WHERE EnchereID = :ID";
+     }
+ 
+ 
+     $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
+     return $this->getLignes($params);
+   }
+  public function getOffresOLD($userID = null)
   {
     $params = [];
     $this->sql = "SELECT * from offre ";
@@ -524,6 +539,25 @@ WHERE e.ID = :ID;";
     $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
     return $this->getLignes($params);
   }
+
+
+
+  /**
+   * Ajout d'un Timbre
+   * @param  array $champs champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
+
+   public function ajouterOffre($champs)
+   {
+     $this->sql = ' INSERT INTO offre
+      (EnchereID, UtilisateurID, Prix)
+      VALUES 
+      (:EnchereID, :UtilisateurID, :EncherePrix)
+      ';
+      return $this->CUDLigne($champs);
+    }
+
 
 
 
