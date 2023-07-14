@@ -19,15 +19,20 @@ class Routeur
 
     ["login", "Frontend", "afficherLogin"],
     ["connecter", "Frontend", "connecter"],
-    ["creerCompte", "Frontend", "creerCompte"]
+    ["creerCompte", "Frontend", "creerCompte"],
+    ["recupererEncheresFromJS", "Frontend", "recupererEncheresFromJS"]
+
   ];
 
   protected $oRequetesSQL; // objet RequetesSQL utilisé par tous les contrôleurs
 
   // const BASE_URI = '/31B/TP3/'; // dossier racine du site par rapport au dossier racine d'Apache 
+  
+  
   //const BASE_URI = '/'; // pour le PHP Server de Visual Studio Code
 
-  const BASE_URI = '/stampee/'; // pour le PHP Server de Visual Studio Code
+  const BASE_URI = (ENV =="DEV") ? '/' : '/stampee/';
+  //const BASE_URI = '/stampee/'; // pour le PHP Server de Visual Studio Code
 
 //
   const ERROR_FORBIDDEN = "HTTP 403";

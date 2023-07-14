@@ -117,6 +117,7 @@ class Frontend extends Routeur
   {
     $encheres = $this->oRequetesSQL->getEncheres();
     $aEncheres = [];
+
     $now = new DateTime(); // Current date and time
     foreach ($encheres as &$enchere) {
       $endDateTime = new DateTime($enchere['DateFin']); // Date and time from the database
@@ -133,6 +134,11 @@ class Frontend extends Routeur
       }
       $enchere['RemainingTime'] = $remainingTime;
     }
+    //save to session encheres
+    $_SESSION['aEncheres'] = $encheres;
+    $_SESSION['hello'] = 'hello';
+
+    //get encheres from session
 
     (new Vue)->generer(
       "vCatalogueContent",
@@ -145,6 +151,28 @@ class Frontend extends Routeur
     );
   }
 
+  public function recupererEncheresFromJS() {
+    $encheres = $this->oRequetesSQL->getEncheres();
+    $aEncheres = [];
+
+    $now = new DateTime(); // Current date and time
+    foreach ($encheres as &$enchere) {
+      $endDateTime = new DateTime($enchere['DateFin']); // Date and time from the database
+      $interval = $now->diff($endDateTime); // Calculate the difference between now and the end date
+      $remainingTime = '';
+      if ($interval->d > 0) {
+        $remainingTime .= $interval->d . 'j ';
+      }
+      if ($interval->h > 0) {
+        $remainingTime .= $interval->h . 'h ';
+      }
+      if ($interval->i > 0) {
+        $remainingTime .= $interval->i . 'min';
+      }
+      $enchere['RemainingTime'] = $remainingTime;
+    }
+    echo json_encode($encheres);
+  }
 
 
 
