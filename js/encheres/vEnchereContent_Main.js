@@ -34,38 +34,32 @@ app.fetchItems(page);
 
 const btnSearch = document.querySelector("#frmRechercherButton");
 const searchInput = document.querySelector("#frmRechercherText"); 
-console.log(33333);
+
 btnSearch.addEventListener("click", (element) => {
   element.preventDefault();
-  console.log(searchInput.value);
+  //return;
+  //console.log('hello', searchInput.value);
   //app.filterAndDisplay(searchInput.value);
-  app.filterBySearch();
-
-  let urlParams = new URLSearchParams(window.location.search);
-urlParams.set("hello", 2);
-console.log(urlParams.toString());
-const urlParamsw = new URLSearchParams(window.location.search);
-console.log(urlParamsw.toString());
+  //app.filterBySearch();
+  app.searchString = searchInput.value;
 
 
-//urlParams.append('x', 42);
-
-// If your expected result is "http://foo.bar/?x=42&y=2"
-//urlParams.set('x', 42);
+  app.filterAndDisplay();
+});
 
 
 
-//urlParams = new URLSearchParams(window.location.search);
+const frmDropDownFavoris = document.querySelector("#frmDropDownFavoris");
+frmDropDownFavoris.addEventListener("change", (element) => {
+  element.preventDefault();
+  app.favorisType = frmDropDownFavoris.value;
+  //element element value
+  console.log('action dd', frmDropDownFavoris.value);
+  //app.filterByFavoris(frmDropDownFavoris.value);
 
-//urlParams.set('order', 'date');
+  app.filterAndDisplay();
 
-//window.location.search = urlParams;
+
 
 });
 
-// const btnReset = document.querySelector("#reset");
-// btnReset.addEventListener("click", (element) => {
-//   element.preventDefault();
-//   searchInput.value = "";
-//   app.filterAndDisplay(searchInput.value);
-// });

@@ -242,7 +242,66 @@ class RequetesSQL extends RequetesPDO
    * @param  string $critere
    * @return array tableau des lignes produites par la select   
    */
-  public function getEncheres($userID = null)
+
+
+   public function getEncheres($userID = null)
+{
+    $params = [];
+    $this->sql = "SELECT
+        e.ID,
+        e.DateDebut,
+        e.DateFin,
+        e.PrixPlancher,
+        e.Visible,
+        e.Status,
+        e.UtilisateurID,
+        t.ID AS TimbreID,
+        t.Nom AS TimbreNom,
+        t.DateCreation AS TimbreDateCreation,
+        t.Couleur AS TimbreCouleur,
+        t.PaysOrigine AS TimbrePaysOrigine,
+        t.EtatCondition AS TimbreEtatCondition,
+        t.Tirage AS TimbreTirage,
+        t.Longueur AS TimbreLongueur,
+        t.Largeur AS TimbreLargeur,
+        t.Certifie AS TimbreCertifie,
+        t.CategorieID,
+        COALESCE(mises.NombreMises, 0) AS NombreMises,
+        COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
+        i.CheminImage AS PremiereImage,
+        CASE WHEN f.ID IS NOT NULL THEN 1 ELSE 0 END AS bFavoris,
+        CASE WHEN fLord.ID IS NOT NULL THEN 1 ELSE 0 END AS bFavorisLord
+    FROM
+        enchere e
+        LEFT JOIN timbre t ON e.ID = t.EnchereID
+        LEFT JOIN (
+            SELECT
+                EnchereID,
+                COUNT(*) AS NombreMises,
+                MAX(Prix) AS PrixActuel
+            FROM
+                offre
+            GROUP BY
+                EnchereID
+        ) mises ON e.ID = mises.EnchereID
+        LEFT JOIN favoris f ON e.ID = f.EnchereID AND f.UtilisateurID = :userID
+        LEFT JOIN favoris fLord ON e.ID = fLord.EnchereID AND fLord.UtilisateurID = 2
+        LEFT JOIN image i ON t.ID = i.TimbreID";
+        $params = ['userID' => $userID];
+
+    if ($userID != null) {
+        $params = ['userID' => $userID];
+        $this->sql .= " WHERE e.UtilisateurID = :userID";
+    }
+
+    return $this->getLignes($params);
+}
+
+   
+
+
+
+  public function getEncheresOLD($userID = null)
   {
 
     $params = [];

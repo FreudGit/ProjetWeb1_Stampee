@@ -4,8 +4,10 @@ export default class EncheresApp {
   #displayTarget;
   #resultsEL;
   #countEL;
-  #searchString;
+  searchString;
   #originalData;
+  favorisType;
+
   /**
    *
    * @param {Array} data - Jeu de données à afficher.
@@ -18,7 +20,7 @@ export default class EncheresApp {
     // this.#currentpage = 1;
     this.#resultsEL = resultsEL;
     this.#countEL = countEL;
-    this.#searchString = "";
+    this.searchString = "";
   }
 
   /**
@@ -27,7 +29,7 @@ export default class EncheresApp {
    * @param {Array} items - Tableau contenant les objects à afficher.
    * @returns {Array} - Tableau contenant les objects à afficher.
    */
-  filterItems(searchString = this.#searchString, items = this.#dataItems) {
+  filterItems(searchString = this.searchString, items = this.#dataItems) {
     console.log("dataitems", this.#dataItems);
     console.log("bosbo");
     searchString = "";
@@ -47,52 +49,43 @@ export default class EncheresApp {
     return filteredItems;
   }
 
-  // hideItemsBySearch(
-  //   searchString = this.#searchString,
-  //   items = this.#dataItems
-  // ) {
-  //   console.log("dataitems", this.#dataItems);
-  //   console.log("bosbo");
-  //   searchString = "Timbre";
-  //   console.log(searchString);
-  //   //const cartesItems = userList.querySelectorAll(".carte");
-  //   console.log("dataitems", this.#dataItems);
+  filterAndDisplay(searchString = this.searchString) {
+    this.searchString = searchString;
+    this.#dataItems = this.#originalData;
+    // console.log("originaldatas", this.#originalData);
+    // console.log("dataitems", this.#dataItems);
+    // console.log("this.favorisType", this.favorisType);
 
-  //   //filter array items. Item.DateFin should indlude searchString
-  //   const filteredItems = items.filter((item) => {
-  //     if (searchString === "") return true;
-  //     if (item.TimbreNom === null) return false;
-  //     const itemDateFin = item.TimbreNom;
-  //     const lc = itemDateFin.toLowerCase();
-  //     const filter = searchString.toLowerCase();
-  //     const bFound = lc.includes(filter);
-  //     if (bFound) {
-  //       console.log("itemFOund", item);
-  //       const carteItem = document.getElementById("Enchere" + item.ID);
-  //       console.log("carteItem", carteItem);
-  //       carteItem.classList.add("hidden");
-  //     }
-  //     return bFound;
-  //   });
+    let filteredItems = this.filterBySearch();
+    filteredItems=this.filterByFavoris(this.favorisType, filteredItems);
 
-  //   console.log("filter", filteredItems);
-  //   return filteredItems;
-  // }
+    this.displayItems(filteredItems);
+    this.displayResults();
+  }
 
-  filterBySearch(searchString = this.#searchString, items = this.#dataItems) {
-    console.log("dataitems", this.#dataItems);
-    console.log("bosbo");
-    searchString = "Timbre";
-    console.log(searchString);
-    //const cartesItems = userList.querySelectorAll(".carte");
-    console.log("dataitems", this.#dataItems);
+  displayItems(items = this.#dataItems) {
+    const elementsCartes = this.#displayTarget.querySelectorAll(".carte");
+    for (const elementCarte of elementsCartes) {
+      elementCarte.classList.add("hidden");
+    }
 
-    let urlParams = new URLSearchParams(window.location.search);
+    for (const item of items) {
+      const carteItem = document.getElementById("Enchere" + item.ID);
+      console.log("carteItem", carteItem);
+      carteItem.classList.remove("hidden");
+    }
+  }
 
-    urlParams.set("search", searchString);
+  updateUrlParam(paramName, paramValue) {
+    var url = new URL(window.location.href);
+    url.searchParams.set(paramName, paramValue);
+    window.history.pushState({ path: url.href }, "", url.href);
+  }
 
-    window.location.search = urlParams;
-
+  filterBySearch(searchString = this.searchString, items = this.#dataItems) {
+    const url = new URL(window.location.href);
+    this.updateUrlParam("search", searchString);
+    console.log("searchString", searchString);
     //filter array items. Item.DateFin should indlude searchString
     const filteredItems = items.filter((item) => {
       if (searchString === "") return true;
@@ -109,58 +102,36 @@ export default class EncheresApp {
       }
       return bFound;
     });
-
-    console.log("filter", filteredItems);
     return filteredItems;
   }
 
-  /**
-   * Crée les objets html et les affiche
-   * @param {Array} items - Tableau contenant les objects à afficher.
-   */
-  displayItems(items = this.#dataItems) {
-    const sectionEL = document.createElement("section");
-    for (const movie of items) {
-      const movieArticleEl = this.createArticleEl(movie);
-      sectionEL.appendChild(movieArticleEl);
-    }
+  filterByFavoris(sType = this.favorisType, items = this.#dataItems) {
+    this.updateUrlParam("favoris", sType);
+    const filteredItems = items.filter((item) => {
+      let favItem = "";
+      if (sType === "FavorisLord") {
+        favItem = item.bFavorisLord;
+      } else if (sType === "FavorisUsager") {
+        favItem = item.bFavoris;
+      } else {
+        favItem = 1;
+      }
 
-    this.#displayTarget.replaceChildren(sectionEL);
-    sectionEL.classList.add("contentBox");
-  }
-
-  /**
-   * Crée les objets html et les affiche
-   * @param {Array} items - Tableau contenant les objects à afficher.
-   */
-  displayItemsOLD(items = this.#dataItems) {
-    const sectionEL = document.createElement("section");
-    for (const movie of items) {
-      const movieArticleEl = this.createArticleEl(movie);
-      sectionEL.appendChild(movieArticleEl);
-    }
-
-    this.#displayTarget.replaceChildren(sectionEL);
-    sectionEL.classList.add("contentBox");
-  }
-
-  /**
-   * Filtre les items et les affiche
-   * @param {string} searchString - Chaîne de caractères à rechercher.
-   */
-  filterAndDisplay(searchString = this.#searchString) {
-    this.#searchString = searchString;
-    const filteredItems = this.filterItems(searchString);
-    this.displayItems(filteredItems);
-    this.displayResults();
+      if (favItem == 1) {
+        console.log("itesmFOund", item);
+        const carteItem = document.getElementById("Enchere" + item.ID);
+        //console.log("carsteItem", carteItem);
+        //carteItem.classList.add("hidden");
+      }
+      return favItem;
+    });
+    return filteredItems;
   }
 
   /**
    * Récupère les données de l'API et les affiche
    */
   async fetchItems(page = 1) {
-    //this.#currentpage = page;
-    console.log("fetchItems");
     fetch("recupererEncheresFromJS")
       .then((reponse) => {
         if (!reponse.ok) throw { message: "Problème technique sur le serveur" };
@@ -171,13 +142,7 @@ export default class EncheresApp {
         console.log(liste);
         this.#data = liste;
         this.#dataItems = liste;
-        //this.#dataItems = liste.data;
-
-        //this.filterAndDisplay();
-
-        // Ajuster le param de page
         const urlCourant = new URL(window.location.href);
-        //urlCourant.searchParams.set("page", this.#currentpage);
         window.history.replaceState(null, null, urlCourant);
         document.body.style.cursor = "auto";
         console.log("fin fetch");
@@ -185,39 +150,6 @@ export default class EncheresApp {
       .catch((e) => {
         console.log("Erreur: " + e.message);
       });
-
-    //const data = sessionStorage.getItem("aEncheres");
-    //const hey = sessionStorage.setItem("bobo", "bobjo");
-    //console.log(sessionStorage.getItem("bobo"));
-
-    // try {
-    //   // const url =
-    //   //   "https://api.artic.edu/api/v1/artworks?page=" +
-    //   //   this.#currentpage +
-    //   //   "&limit=10";
-    //   // const res = await fetch(url);
-    //   // const data = await res.json();
-
-    //   //get data from session var Data
-    //   //const session = $_SESSION['aEncheres'];
-    //   //const session = sessionStorage.getItem("aEncheres");
-    //   const data = sessionStorage.getItem("aEncheres");
-    //   this.#data = JSON.parse(data);
-    //   console.log(data);
-
-    //   //this.#data = data;
-    //   //this.#dataItems = data.data;
-
-    //   this.filterAndDisplay();
-
-    //   // Ajuster le param de page
-    //   const urlCourant = new URL(window.location.href);
-    //   //urlCourant.searchParams.set("page", this.#currentpage);
-    //   window.history.replaceState(null, null, urlCourant);
-    //   document.body.style.cursor = "auto";
-    // } catch (error) {
-    //   console.error(error);
-    // }
   }
 
   /**
@@ -229,45 +161,4 @@ export default class EncheresApp {
     //this.#countEL.textContent =
     //  "Nombre de résultats: " + this.#data.pagination.total;
   }
-
-  // /**
-  //  * Crée un élément article pour un item
-  //  * @param {Object} oItem - Objet contenant les données d'un item.
-  //  * @returns {HTMLElement} - Élément article contenant les données d'un item.
-  //  */
-  // createArticleEl(oItem) {
-  //   const articleEl = document.createElement("article");
-
-  //   // Récupération de l'image https://api.artic.edu/docs/#iiif-image-api pour détails sur l'API
-  //   if (oItem.image_id !== null) {
-  //     const imgEl = document.createElement("img");
-  //     const imgSource =
-  //       "https://www.artic.edu/iiif/2/" +
-  //       oItem.image_id +
-  //       "/full/843,/0/default.jpg";
-  //     imgEl.src = imgSource;
-  //     imgEl.alt = "";
-  //     articleEl.appendChild(imgEl);
-  //   }
-
-  //   if (oItem.title !== null) {
-  //     const titreEl = document.createElement("h2");
-  //     titreEl.textContent = oItem.title;
-  //     articleEl.appendChild(titreEl);
-  //   }
-
-  //   if (oItem.dimensions !== null) {
-  //     const dimensionsEl = document.createElement("p");
-  //     dimensionsEl.textContent = "Dimension: " + oItem.dimensions;
-  //     articleEl.appendChild(dimensionsEl);
-  //   }
-
-  //   if (oItem.artist_title !== null) {
-  //     const artisteEl = document.createElement("p");
-  //     artisteEl.textContent = "Artiste: " + oItem.artist_title;
-  //     articleEl.appendChild(artisteEl);
-  //   }
-
-  //   return articleEl;
-  // }
 }
