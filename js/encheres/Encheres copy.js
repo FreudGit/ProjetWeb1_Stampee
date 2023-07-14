@@ -47,51 +47,16 @@ export default class EncheresApp {
     return filteredItems;
   }
 
-  // hideItemsBySearch(
-  //   searchString = this.#searchString,
-  //   items = this.#dataItems
-  // ) {
-  //   console.log("dataitems", this.#dataItems);
-  //   console.log("bosbo");
-  //   searchString = "Timbre";
-  //   console.log(searchString);
-  //   //const cartesItems = userList.querySelectorAll(".carte");
-  //   console.log("dataitems", this.#dataItems);
-
-  //   //filter array items. Item.DateFin should indlude searchString
-  //   const filteredItems = items.filter((item) => {
-  //     if (searchString === "") return true;
-  //     if (item.TimbreNom === null) return false;
-  //     const itemDateFin = item.TimbreNom;
-  //     const lc = itemDateFin.toLowerCase();
-  //     const filter = searchString.toLowerCase();
-  //     const bFound = lc.includes(filter);
-  //     if (bFound) {
-  //       console.log("itemFOund", item);
-  //       const carteItem = document.getElementById("Enchere" + item.ID);
-  //       console.log("carteItem", carteItem);
-  //       carteItem.classList.add("hidden");
-  //     }
-  //     return bFound;
-  //   });
-
-  //   console.log("filter", filteredItems);
-  //   return filteredItems;
-  // }
-
-  filterBySearch(searchString = this.#searchString, items = this.#dataItems) {
+  hideItemsBySearch(
+    searchString = this.#searchString,
+    items = this.#dataItems
+  ) {
     console.log("dataitems", this.#dataItems);
     console.log("bosbo");
     searchString = "Timbre";
     console.log(searchString);
     //const cartesItems = userList.querySelectorAll(".carte");
     console.log("dataitems", this.#dataItems);
-
-    let urlParams = new URLSearchParams(window.location.search);
-
-    urlParams.set("search", searchString);
-
-    window.location.search = urlParams;
 
     //filter array items. Item.DateFin should indlude searchString
     const filteredItems = items.filter((item) => {
