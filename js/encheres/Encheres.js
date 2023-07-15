@@ -85,7 +85,7 @@ export default class EncheresApp {
   filterBySearch(searchString = this.searchString, items = this.#dataItems) {
     const url = new URL(window.location.href);
     this.updateUrlParam("search", searchString);
-    console.log("searchString", searchString);
+    console.log("filterBySearch searchString", searchString);
     //filter array items. Item.DateFin should indlude searchString
     const filteredItems = items.filter((item) => {
       if (searchString === "") return true;
@@ -95,13 +95,14 @@ export default class EncheresApp {
       const filter = searchString.toLowerCase();
       const bFound = lc.includes(filter);
       if (bFound) {
-        console.log("itemFOund", item);
         const carteItem = document.getElementById("Enchere" + item.ID);
-        console.log("carteItem", carteItem);
+        console.log("filterBySearch itemFOund", item, carteItem);
         carteItem.classList.add("hidden");
       }
       return bFound;
     });
+    console.log("filterBySearch filteredItems", filteredItems);
+
     return filteredItems;
   }
 
@@ -116,15 +117,15 @@ export default class EncheresApp {
       } else {
         favItem = 1;
       }
-
-      if (favItem == 1) {
-        console.log("itesmFOund", item);
+      if (parseInt(favItem) == 1) {
         const carteItem = document.getElementById("Enchere" + item.ID);
-        //console.log("carsteItem", carteItem);
-        //carteItem.classList.add("hidden");
+        console.log("filterByFav itesmFOund", item), carteItem;
+
       }
       return favItem;
     });
+    console.log("filterByFav filteredItems", filteredItems);
+
     return filteredItems;
   }
 
