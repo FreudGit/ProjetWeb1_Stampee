@@ -110,6 +110,7 @@ export default class EncheresApp {
     this.updateUrlParam("favoris", sType);
     const filteredItems = items.filter((item) => {
       let favItem = "";
+      console.log("filterByFav sType", sType);
       if (sType === "FavorisLord") {
         favItem = item.bFavorisLord;
       } else if (sType === "FavorisUsager") {
@@ -117,6 +118,13 @@ export default class EncheresApp {
       } else {
         favItem = 1;
       }
+      let moi ="1"
+      console.log("moi == 1", moi =="1");
+      console.log("parseInt(moi) == 1", parseInt(moi) =="1");
+
+      console.log("favItem", favItem);
+      console.log("parseInt(favItem) == 1", parseInt(favItem) =="1");
+
       if (parseInt(favItem) == 1) {
         const carteItem = document.getElementById("Enchere" + item.ID);
         console.log("filterByFav itesmFOund", item), carteItem;
