@@ -128,9 +128,9 @@ export default class EncheresApp {
       if (parseInt(favItem) == 1) {
         const carteItem = document.getElementById("Enchere" + item.ID);
         console.log("filterByFav itesmFOund", item), carteItem;
-
+        return true;
       }
-      return favItem;
+      return false;
     });
     console.log("filterByFav filteredItems", filteredItems);
 
