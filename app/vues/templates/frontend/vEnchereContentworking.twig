@@ -4,20 +4,34 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Enchère Timbre
-			{{ oEnchere.TimbreNom }}</title>
+		<title>Enchère Timbre</title>
+		<style>
+			.fav-icon {
+				float: right;
+				height: 30px;
+				width: auto;
+				fill: gray;
+				cursor: pointer;
+				transition: fill 0.3s ease;
+			}
+
+			.fav-icon:hover,
+			.fav-icon.selected {
+				fill: red;
+			}
+		</style>
 	</head>
+
 	<body>
 		<div class="enchere-container">
 			<div class="left-section">
 				<img src="{{ oEnchere.PremiereImage }}" alt="Timbre" style="max-height: 250px; width: auto;">
 				<p>{{ oEnchere.PremiereImageDescription }}</p>
 			</div>
-
 			<div class="right-section">
 				<h2 title="Numéro de timbre: {{ oEnchere.TimbreID }}">Informations du Timbre
 					{% if  oUtilConn %}
-						<svg id='btnAjouterFavoris' data-enchere-id="{{ oEnchere.ID }}"  name='btnAjouterFavoris' class="fav-icon {{ oEnchere.bFavoris ? 'selected' : '' }}" title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" >
+						<svg id='btnAjouterFavoris' data-enchere-id="{{ oEnchere.ID }}"  name='btnAjouterFavoris' class="fav-icon" title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" onwclick="actionAjouterFavoris(this)">
 							<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
 						</svg>
 					{% endif %}
@@ -49,15 +63,11 @@
 					</tr>
 					<tr>
 						<td>Dimension:</td>
-						<td>{{ oEnchere.TimbreLongueur }}
-							x
-							{{ oEnchere.TimbreLargeur }}
-							(mm)</td>
+						<td>{{ oEnchere.TimbreLongueur }} x {{ oEnchere.TimbreLargeur }} (mm)</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-
 		<div class="enchere-container">
 			<div class="left-section">
 				<h2 title="Numéro d'enchère: {{ oEnchere.ID }}">Informations de l'Enchère</h2>
@@ -69,17 +79,16 @@
 					Nombre de mises:
 					<strong>{{ oEnchere.NombreMises }}</strong>
 				</p>
-			</p>
+			</div>
 			{% if  offres %}
-				<p>
-					Liste des mises:
-				</p>
-				<ul>
-					{% for offre in offres %}
-						<li title="Numéro d'offre: {{ offre.ID }}">{{ offre.Prix }}
-							({{ offre.OffreDate }})</li>
-					{% endfor %}
-				</ul>
+				<div class="right-section">
+					<p>Liste des mises:</p>
+					<ul>
+						{% for offre in offres %}
+							<li title="Numéro d'offre: {{ offre.ID }}">{{ offre.Prix }} ({{ offre.OffreDate }})</li>
+						{% endfor %}
+					</ul>
+				</div>
 			{% endif %}
 		</div>
 
@@ -95,9 +104,13 @@
 				</form>
 				<p class="{{ erreurs.classRetour }}">{{ erreurs.messageRetour }}&nbsp;</p>
 			{% else %}
-				<button type="button" onclick="location.href='/admin';">Connectez-vous pour pouvoir enchérir!</button>
+				<button type="button" onclick="location.href='/admin';">
+					Connectez-vous pour pouvoir enchérir!
+				</button>
 			{% endif %}
-
 		</div>
+
+		
+
 	</body>
-</html></div></body></html>
+</html>

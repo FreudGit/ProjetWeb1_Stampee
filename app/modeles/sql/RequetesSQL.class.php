@@ -244,8 +244,8 @@ class RequetesSQL extends RequetesPDO
    */
 
 
-   public function getEncheres($userID = null)
-{
+  public function getEncheres($userID = null, $userIDFav = null)
+  {
     $params = [];
     $this->sql = "SELECT
         e.ID,
@@ -284,76 +284,15 @@ class RequetesSQL extends RequetesPDO
             GROUP BY
                 EnchereID
         ) mises ON e.ID = mises.EnchereID
-        LEFT JOIN favoris f ON e.ID = f.EnchereID AND f.UtilisateurID = :userID
+        LEFT JOIN favoris f ON e.ID = f.EnchereID AND f.UtilisateurID = :userIDFav
         LEFT JOIN favoris fLord ON e.ID = fLord.EnchereID AND fLord.UtilisateurID = 2
         LEFT JOIN image i ON t.ID = i.TimbreID";
-        $params = ['userID' => $userID];
+    $params = ['userIDFav' => $userIDFav];
 
     if ($userID != null) {
-        $params = ['userID' => $userID];
-        $this->sql .= " WHERE e.UtilisateurID = :userID";
-    }
-
-    return $this->getLignes($params);
-}
-
-   
-
-
-
-  public function getEncheresOLD($userID = null)
-  {
-
-    $params = [];
-    $this->sql = "SELECT
-e.ID ,
-e.DateDebut,
-e.DateFin,
-e.PrixPlancher,
-e.Visible,
-e.Status,
-e.UtilisateurID,
-
-t.ID AS TimbreID,
-t.Nom AS TimbreNom,
-t.DateCreation AS TimbreDateCreation,
-t.Couleur AS TimbreCouleur,
-t.PaysOrigine AS TimbrePaysOrigine,
-t.EtatCondition AS TimbreEtatCondition,
-t.Tirage AS TimbreTirage,
-t.Longueur AS TimbreLongueur,
-t.Largeur AS TimbreLargeur,
-t.Certifie AS TimbreCertifie,
-t.CategorieID,
-COALESCE(mises.NombreMises, 0) AS NombreMises,
-COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
-i.CheminImage AS PremiereImage
-FROM
-enchere e
-LEFT JOIN timbre t ON e.ID = t.EnchereID
-LEFT JOIN (
-    SELECT
-        EnchereID,
-        COUNT(*) AS NombreMises,
-        MAX(Prix) AS PrixActuel
-    FROM
-        offre
-    GROUP BY
-        EnchereID
-) mises ON e.ID = mises.EnchereID
-LEFT JOIN (
-    SELECT
-        TimbreID,
-        CheminImage
-    FROM
-        image
-    
-) i ON t.ID = i.TimbreID";
-
-    if ($userID != null) {
-      $params = ['ID' => $userID];
-      $this->sql .= "
-WHERE e.UtilisateurID = :ID;";
+      $params['userID'] = $userID;
+      //$params = ['userID' => $userID];
+      $this->sql .= " WHERE e.UtilisateurID = :userID";
     }
 
     return $this->getLignes($params);
@@ -361,65 +300,59 @@ WHERE e.UtilisateurID = :ID;";
 
 
 
-  /**
-   * Récupération d'une enchere
-   * @param  integer $if identifiant de l'enchere
-   * @return array tableau des lignes produites par la select   
-   */
-  public function getEnchere($id)
+  public function getEnchere($id, $userID=null)
   {
-
-
     $this->sql = "SELECT
-e.ID ,
-e.DateDebut,
-e.DateFin,
-e.PrixPlancher,
-e.UtilisateurID,
-e.Visible,
-e.Status,
-t.ID AS TimbreID,
-t.Nom AS TimbreNom,
-t.DateCreation AS TimbreDateCreation,
-t.Couleur AS TimbreCouleur,
-t.PaysOrigine AS TimbrePaysOrigine,
-t.EtatCondition AS TimbreEtatCondition,
-t.Tirage AS TimbreTirage,
-t.Longueur AS TimbreLongueur,
-t.Largeur AS TimbreLargeur,
-t.Certifie AS TimbreCertifie,
-t.CategorieID AS TimbreCategorieID,
-COALESCE(mises.NombreMises, 0) AS NombreMises,
-COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
-i.CheminImage AS PremiereImage
-FROM
-enchere e
-
-
-LEFT JOIN timbre t ON e.ID = t.EnchereID
-LEFT JOIN (
-    SELECT
+      e.ID,
+      e.DateDebut,
+      e.DateFin,
+      e.PrixPlancher,
+      e.UtilisateurID,
+      e.Visible,
+      e.Status,
+      t.ID AS TimbreID,
+      t.Nom AS TimbreNom,
+      t.DateCreation AS TimbreDateCreation,
+      t.Couleur AS TimbreCouleur,
+      t.PaysOrigine AS TimbrePaysOrigine,
+      t.EtatCondition AS TimbreEtatCondition,
+      t.Tirage AS TimbreTirage,
+      t.Longueur AS TimbreLongueur,
+      t.Largeur AS TimbreLargeur,
+      t.Certifie AS TimbreCertifie,
+      t.CategorieID AS TimbreCategorieID,
+      COALESCE(mises.NombreMises, 0) AS NombreMises,
+      COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
+      i.CheminImage AS PremiereImage,
+      CASE WHEN f.ID IS NOT NULL THEN 1 ELSE 0 END AS bFavoris,
+      CASE WHEN fLord.ID IS NOT NULL THEN 1 ELSE 0 END AS bFavorisLord
+    FROM
+      enchere e
+    LEFT JOIN timbre t ON e.ID = t.EnchereID
+    LEFT JOIN favoris f ON e.ID = f.EnchereID AND f.UtilisateurID = :userID
+    LEFT JOIN favoris fLord ON e.ID = fLord.EnchereID AND fLord.UtilisateurID = 2
+    LEFT JOIN (
+      SELECT
         EnchereID,
         COUNT(*) AS NombreMises,
         MAX(Prix) AS PrixActuel
-    FROM
+      FROM
         offre
-    GROUP BY
+      GROUP BY
         EnchereID
-) mises ON e.ID = mises.EnchereID
-LEFT JOIN (
-    SELECT
+    ) mises ON e.ID = mises.EnchereID
+    LEFT JOIN (
+      SELECT
         TimbreID,
         CheminImage
-    FROM
+      FROM
         image
-    
-) i ON t.ID = i.TimbreID
-WHERE e.ID = :ID;";
-
-    return $this->getLignes(['ID' => $id], RequetesPDO::UNE_SEULE_LIGNE);
+    ) i ON t.ID = i.TimbreID
+    WHERE e.ID = :ID;";
+  
+    return $this->getLignes(['ID' => $id, 'userID' => $userID], RequetesPDO::UNE_SEULE_LIGNE);
   }
-
+  
 
 
   /**
@@ -466,7 +399,7 @@ WHERE e.ID = :ID;";
       'ID' => $plChamps['ID']
     );
     $resTimbreImage = $this->modifierImageTimbre($plChamps['ID']);
-    $resTimbre =  $this->modifierTable('timbre', $plChamps, $whereClause);
+    $resTimbre = $this->modifierTable('timbre', $plChamps, $whereClause);
     return ($resTimbreImage == true || $resTimbre == true);
 
   }
@@ -487,12 +420,12 @@ WHERE e.ID = :ID;";
     VALUES 
     (:Nom, :Couleur, :PaysOrigine, :EtatCondition, :Tirage, :Longueur, :Largeur, :Certifie, :CategorieID, :EnchereID)
     ';
-    $aResults =$this->CUDLigne($champs);
+    $aResults = $this->CUDLigne($champs);
     if ($aResults) {
       $resTimbreImage = $this->modifierImageTimbre($aResults);
     }
-    
-    return ($aResults  || $resTimbreImage);
+
+    return ($aResults || $resTimbreImage);
 
   }
 
@@ -510,7 +443,7 @@ WHERE e.ID = :ID;";
 
       $this->sql = 'INSERT INTO image (TimbreID, CheminImage) VALUES (:TimbreID, :ImageCheminImage) 
               ON DUPLICATE KEY UPDATE CheminImage = :ImageCheminImage';
-      $champs['TimbreID']      = $timbre_id;
+      $champs['TimbreID'] = $timbre_id;
       $champs['ImageCheminImage'] = "medias/stamps/a-$timbre_id-" . time() . ".jpg";
       $res = $this->CUDLigne($champs);
       foreach (glob("medias/stamps/a-$timbre_id-*") as $fichier) {
@@ -569,19 +502,19 @@ WHERE e.ID = :ID;";
    */
 
 
-   public function getOffres($enchereID = null)
-   {
-     $params = [];
-     $this->sql = "SELECT * from offre ";
-     if ($enchereID != null) {
-       $params = ['ID' => $enchereID];
-       $this->sql .= " WHERE EnchereID = :ID";
-     }
- 
- 
-     $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
-     return $this->getLignes($params);
-   }
+  public function getOffres($enchereID = null)
+  {
+    $params = [];
+    $this->sql = "SELECT * from offre ";
+    if ($enchereID != null) {
+      $params = ['ID' => $enchereID];
+      $this->sql .= " WHERE EnchereID = :ID";
+    }
+
+
+    $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
+    return $this->getLignes($params);
+  }
   public function getOffresOLD($userID = null)
   {
     $params = [];
@@ -607,15 +540,15 @@ WHERE e.ID = :ID;";
    * @return array|bool tableau des lignes produites par la select   
    */
 
-   public function ajouterOffre($champs)
-   {
-     $this->sql = ' INSERT INTO offre
+  public function ajouterOffre($champs)
+  {
+    $this->sql = ' INSERT INTO offre
       (EnchereID, UtilisateurID, Prix)
       VALUES 
       (:EnchereID, :UtilisateurID, :EncherePrix)
       ';
-      return $this->CUDLigne($champs);
-    }
+    return $this->CUDLigne($champs);
+  }
 
 
 
@@ -671,5 +604,27 @@ WHERE e.ID = :ID;";
     $param = $champs + $plWhereClause;
 
     return $this->CUDLigne($param);
+  }
+
+
+
+
+  public function ajouterEnchereAFavoris($champs)
+  {
+    $this->sql = ' INSERT INTO favoris
+    (EnchereID, UtilisateurID)
+    VALUES 
+    (:EnchereID, :UtilisateurID)
+    ';
+    return $this->CUDLigne($champs);
+  }
+
+  public function retirerEnchereAFavoris($champs)
+  {
+
+    $this->sql = ' DELETE FROM favoris
+    WHERE EnchereID = :EnchereID AND UtilisateurID = :UtilisateurID
+    ';
+    return $this->CUDLigne($champs);
   }
 }

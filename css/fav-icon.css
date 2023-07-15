@@ -1,0 +1,13 @@
+.fav-icon {
+    float: right;
+    height: 30px;
+    width: auto;
+    fill: gray;
+    cursor: pointer;
+    transition: fill 0.3s ease;
+}
+
+.fav-icon:hover,
+.fav-icon.selected {
+    fill: red;
+}

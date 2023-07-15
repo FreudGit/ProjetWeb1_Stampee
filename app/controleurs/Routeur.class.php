@@ -20,8 +20,9 @@ class Routeur
     ["login", "Frontend", "afficherLogin"],
     ["connecter", "Frontend", "connecter"],
     ["creerCompte", "Frontend", "creerCompte"],
-    ["recupererEncheresFromJS", "Frontend", "recupererEncheresFromJS"]
-
+    ["recupererEncheresFromJS", "Frontend", "recupererEncheresFromJS"],
+    ["ajouterEnchereAFavorisFromPost", "Frontend", "ajouterEnchereAFavorisFromPost"],
+    ["retirerEnchereAFavorisFromPost", "Frontend", "retirerEnchereAFavorisFromPost"]
   ];
 
   protected $oRequetesSQL; // objet RequetesSQL utilisé par tous les contrôleurs

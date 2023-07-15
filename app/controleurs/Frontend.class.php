@@ -58,6 +58,38 @@ class Frontend extends Routeur
   }
 
   /**
+   * Ajouter une enchère à la liste des favoris
+   * retourne true si l'enchère a été ajoutée, false sinon
+   */
+
+  public function ajouterEnchereAFavorisFromPost()
+  {
+    $post = $_POST;
+    $params = [];
+    $params['UtilisateurID'] = $this->oUtilConn->utilisateur_id;
+    $params['EnchereID'] = $post['enchereID'];
+    $retour = $this->oRequetesSQL->ajouterEnchereAFavoris($params);
+    echo json_encode($retour);
+  }
+
+
+  /**
+   * Retirer une enchère à la liste des favoris
+   * retourne true si l'enchère a été ajoutée, false sinon
+   */
+
+   public function retirerEnchereAFavorisFromPost()
+   {
+     $post = $_POST;
+     $params = [];
+     $params['UtilisateurID'] = $this->oUtilConn->utilisateur_id;
+     $params['EnchereID'] = $post['enchereID'];
+     $retour = $this->oRequetesSQL->retirerEnchereAFavoris($params);
+     echo json_encode($retour);
+   }
+
+
+  /**
    * Déconnecter un utilisateur
    */
   public function deconnecter()
@@ -115,7 +147,11 @@ class Frontend extends Routeur
    */
   public function afficherCatalogue()
   {
-    $encheres = $this->oRequetesSQL->getEncheres();
+    $userIDFav=null;
+    if ($this->oUtilConn ) {
+      $userIDFav=$this->oUtilConn->utilisateur_id;
+    }
+    $encheres = $this->oRequetesSQL->getEncheres(null, $userIDFav);
     $aEncheres = [];
 
     $now = new DateTime(); // Current date and time
@@ -152,7 +188,13 @@ class Frontend extends Routeur
   }
 
   public function recupererEncheresFromJS() {
-    $encheres = $this->oRequetesSQL->getEncheres();
+
+    $userIDFav=null;
+    if ($this->oUtilConn ) {
+      $userIDFav=$this->oUtilConn->utilisateur_id;
+    }
+    $encheres = $this->oRequetesSQL->getEncheres(null, $userIDFav);
+    //$encheres = $this->oRequetesSQL->getEncheres(null, $this->oUtilConn->utilisateur_id);
     $aEncheres = [];
 
     $now = new DateTime(); // Current date and time
@@ -194,8 +236,14 @@ class Frontend extends Routeur
       $erreurs['classRetour'] = 'fait';
     }
     $enchere = false;
+
+    $userIDFav=null;
+    if ($this->oUtilConn ) {
+      $userIDFav=$this->oUtilConn->utilisateur_id;
+    }
+    
     if (!is_null($this->id)) {
-      $enchere = $this->oRequetesSQL->getEnchere($this->id);
+      $enchere = $this->oRequetesSQL->getEnchere($this->id, $userIDFav);
     }
     if (!$enchere)
       throw new Exception("Enchere inexistante.");

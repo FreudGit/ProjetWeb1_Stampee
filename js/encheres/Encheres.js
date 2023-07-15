@@ -57,7 +57,7 @@ export default class EncheresApp {
     // console.log("this.favorisType", this.favorisType);
 
     let filteredItems = this.filterBySearch();
-    filteredItems=this.filterByFavoris(this.favorisType, filteredItems);
+    filteredItems = this.filterByFavoris(this.favorisType, filteredItems);
 
     this.displayItems(filteredItems);
     this.displayResults();
@@ -160,5 +160,75 @@ export default class EncheresApp {
     //  "Page " + this.#currentpage + " sur " + this.#data.pagination.total_pages;
     //this.#countEL.textContent =
     //  "Nombre de résultats: " + this.#data.pagination.total;
+  }
+
+  /**
+   * Ajouter aux favoris
+   * @param {HTMLElement} element - Élément HTML qui a été cliqué
+   * @param {number} idEncheres - ID de l'enchère
+   * @param {number} idUser - ID de l'utilisateur
+   * @returns {boolean} - true si l'enchère a été ajoutée aux favoris, false sinon
+   *
+   **/
+  ajouterFavorisOLD(element, idEncheres, idUser) {
+    fetch("ajouterFavoris")
+      .then((reponse) => {
+        if (!reponse.ok) {
+          throw { message: "Problème technique sur le serveur" };
+        }
+        return reponse.json();
+      })
+      .then((codeRetour) => {
+        console.log("codeRetour", codeRetour);
+        if (codeRetour) {
+          eDeconnecter.classList.toggle("selected");
+          return true;
+        }
+      })
+      .catch((e) => {
+        eMessageErreurConnexion.innerHTML = "Erreur: " + e.message;
+        return false;
+      });
+  }
+
+  ajouterFavoris(element) {
+    const currentTarget = element.currentTarget;
+    const app = new EncheresApp();
+    const fd = new FormData();
+    fd.append(
+      "enchereID",
+      element.currentTarget.getAttribute("data-enchere-id")
+    );
+    fd.append(
+      "utilisateurID",
+      element.currentTarget.getAttribute("data-user-id")
+    );
+
+    let $action;
+    if (element.currentTarget.classList.contains("selected")) {
+      $action = "retirerEnchereAFavorisFromPost";
+    } else {
+      $action = "ajouterEnchereAFavorisFromPost";
+    }
+
+    console.log($action, fd);
+    fetch($action, {
+      method: "POST",
+      body: fd,
+    })
+      .then(function (response) {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Error: " + response.status);
+        }
+      })
+      .then(function (data) {
+        console.log("Response " + $action, data);
+        currentTarget.classList.toggle("selected");
+      })
+      .catch(function (error) {
+        console.error("Error " + $action, error);
+      });
   }
 }
