@@ -71,9 +71,11 @@ export default class EncheresApp {
 
     for (const item of items) {
       const carteItem = document.getElementById("Enchere" + item.ID);
-      console.log("carteItem", carteItem);
+      console.log("displayItems: carteItem(hidden removed)", carteItem);
       carteItem.classList.remove("hidden");
     }
+    console.log("displayItems: carteItems(array)", items);
+
   }
 
   updateUrlParam(paramName, paramValue) {
@@ -108,9 +110,11 @@ export default class EncheresApp {
 
   filterByFavoris(sType = this.favorisType, items = this.#dataItems) {
     this.updateUrlParam("favoris", sType);
+    console.log("filterByFav sType", sType);
+    console.log("filterByFav items avant recherche", items);
+
     const filteredItems = items.filter((item) => {
       let favItem = "";
-      console.log("filterByFav sType", sType);
       if (sType === "FavorisLord") {
         favItem = item.bFavorisLord;
       } else if (sType === "FavorisUsager") {
@@ -118,16 +122,10 @@ export default class EncheresApp {
       } else {
         favItem = 1;
       }
-      let moi ="1"
-      console.log("moi == 1", moi =="1");
-      console.log("parseInt(moi) == 1", parseInt(moi) =="1");
-
-      console.log("favItem", favItem);
-      console.log("parseInt(favItem) == 1", parseInt(favItem) =="1");
 
       if (parseInt(favItem) == 1) {
-        const carteItem = document.getElementById("Enchere" + item.ID);
-        console.log("filterByFav itesmFOund", item), carteItem;
+        //const carteItem = document.getElementById("Enchere" + item.ID);
+        console.log("filterByFav itesmFound", item);
         return true;
       }
       return false;
