@@ -25,7 +25,6 @@ btnSearch.addEventListener("click", (element) => {
 });
 app.searchString = searchInput.value;
 
-
 const frmDropDownFavoris = document.querySelector("#frmDropDownFavoris");
 frmDropDownFavoris.addEventListener("change", (element) => {
   element.preventDefault();
@@ -33,7 +32,6 @@ frmDropDownFavoris.addEventListener("change", (element) => {
   app.filterAndDisplay();
 });
 app.favorisType = frmDropDownFavoris.value;
-
 
 const frmDropDownCategories = document.querySelector("#frmDropDownCategories");
 frmDropDownCategories.addEventListener("change", (element) => {
@@ -43,8 +41,9 @@ frmDropDownCategories.addEventListener("change", (element) => {
 });
 app.categorieType = frmDropDownCategories.value;
 
-
-const frmDropDownCertificats = document.querySelector("#frmDropDownCertificats");
+const frmDropDownCertificats = document.querySelector(
+  "#frmDropDownCertificats"
+);
 frmDropDownCertificats.addEventListener("change", (element) => {
   element.preventDefault();
   app.certificatType = frmDropDownCertificats.value;
@@ -52,69 +51,65 @@ frmDropDownCertificats.addEventListener("change", (element) => {
 });
 app.certificatType = frmDropDownCertificats.value;
 
-
-
 const btnAjouterFavoris = document.querySelector("#btnAjouterFavoris");
-btnAjouterFavoris.addEventListener("click", (element) => {
-  element.preventDefault();
-  let appl = new EncheresApp();
-  appl.toggleFavoris(element);
-});
+if (btnAjouterFavoris) {
+  btnAjouterFavoris.addEventListener("click", (element) => {
+    element.preventDefault();
+    let appl = new EncheresApp();
+    appl.toggleFavoris(element);
+  });
+}
 
 
+// gestion des boutons
+const boutonGrille = document.querySelector("#btnGrille");
+boutonGrille.onclick = function (event) {
+  const parametre = false;
+  actionGrid(event, parametre);
+};
 
+const boutonList = document.querySelector("#btnListe");
+boutonList.onclick = function (event) {
+  const parametre = true;
+  actionGrid(event, parametre);
+};
+const grille = document.querySelector(".grille");
+document.getElementById("tab1").style.display = "block";
+document.querySelector(".tablinks").classList.add("active");
 
-    // gestion des boutons
-    const boutonGrille = document.querySelector("#btnGrille");
-    boutonGrille.onclick = function(event) {
-      const parametre = false;
-      actionGrid(event, parametre);
-    };
+// action pour afficher en grid ou liste
+function actionGrid(evt, bGrid) {
+  evt.preventDefault();
+  console.log(evt.currentTarget);
+  if (!bGrid) {
+    boutonList.querySelector("i").classList.remove("gradient");
+    grille.classList.remove("en-pile");
+  } else {
+    boutonGrille.querySelector("i").classList.remove("gradient");
+    grille.classList.add("en-pile");
+  }
+  evt.currentTarget.classList.add("selected");
+  evt.currentTarget.querySelector("i").classList.add("gradient");
+}
 
-    const boutonList = document.querySelector("#btnListe");
-    boutonList.onclick = function(event) {
-      const parametre = true;
-      actionGrid(event, parametre);
-    };
-    const grille = document.querySelector(".grille");
-    document.getElementById("tab1").style.display = "block";
-    document.querySelector(".tablinks").classList.add("active");
+// Ouverture de l'onglet dans le aside
+function openTab(evt, tabName) {
+  evt.preventDefault();
+  var i, tabcontent, tablinks;
 
+  // Cacher tous les contenus des onglets
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
 
-    // action pour afficher en grid ou liste
-    function actionGrid(evt, bGrid) {
-      evt.preventDefault();
-      console.log(evt.currentTarget);
-      if (!bGrid) {
-        boutonList.querySelector("i").classList.remove("gradient");
-        grille.classList.remove("en-pile");
-      } else {
-        boutonGrille.querySelector("i").classList.remove("gradient");
-        grille.classList.add("en-pile");
-      }
-      evt.currentTarget.classList.add("selected");
-      evt.currentTarget.querySelector("i").classList.add("gradient");
-    }
+  // Supprimer la classe "active" de tous les boutons d'onglet
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace("active", "");
+  }
 
-    // Ouverture de l'onglet dans le aside
-    function openTab(evt, tabName) {
-      evt.preventDefault();
-      var i, tabcontent, tablinks;
-
-      // Cacher tous les contenus des onglets
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-
-      // Supprimer la classe "active" de tous les boutons d'onglet
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace("active", "");
-      }
-
-      // Afficher le contenu de l'onglet sélectionné et ajouter la classe "active" au bouton d'onglet correspondant
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.classList.add("active");
-    }
-
+  // Afficher le contenu de l'onglet sélectionné et ajouter la classe "active" au bouton d'onglet correspondant
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.classList.add("active");
+}
