@@ -1,12 +1,10 @@
 <section class="conteneur-flex">
 	<h1>{{ titre|upper }}</h1>
 
-	<form class="conteneur-flex" method="POST" enctype="multipart/form-data" action="admin?entite={{ entite }}&action=a&id={{ enchere.ID }}">
+	<form class="conteneur-flex" method="POST" enctype="multipart/form-data" action="admin?entite={{ entite }}&action=m&id={{ enchere.ID }} ">
 		<div class="champs">
 			<fieldset>
-				<legend>Encheres</legend>
-
-
+				<legend>Enchères</legend>
 				{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
                                                    constant('Utilisateur::PROFIL_EDITEUR')] %}
 					<div class="champ">
@@ -20,8 +18,8 @@
 				{% endif %}
 
 				<div class="champ">
-					<label for="Visible">Enchere Visiblew</label>
-					<input type="checkbox" id="Visible" name="Visible" checked value='1'/>
+					<label for="Visible">Enchere Visible</label>
+					<input type="checkbox" id="Visible" name="Visible" value="{{ enchere.Visible }}" {{ enchere.Visible ? 'checked' : '' }}/>
 					<span class="erreur">{{ erreurs.enchere.Visible }}</span>
 				</div>
 
@@ -39,7 +37,7 @@
 
 				<div class="champ">
 					<label for="PrixPlancher">Prix Plancher</label>
-					<input type="number" min="0.00" step="0.01" id="PrixPlancher" name="PrixPlancher" value="{{ enchere.PrixPlancher }}"/>
+					<input type="text" id="PrixPlancher" name="PrixPlancher" value="{{ enchere.PrixPlancher }}"/>
 					<span class="erreur">{{ erreurs.PrixPlancher }}</span>
 				</div>
 			</fieldset>
@@ -60,13 +58,7 @@
 
 				<div class="champ">
 					<label for="TimbrePaysOrigine">Pays Origine</label>
-
-					<select name="TimbrePaysOrigine">
-						{% for pays in aPays %}
-							<option value="{{ pays }}" {{ pays == enchere.TimbrePaysOrigine ? 'selected' : '' }}>{{ pays }}</option>
-						{% endfor %}
-					</select>
-					{# <input type="text" id="TimbrePaysOrigine" name="TimbrePaysOrigine" value="{{ enchere.TimbrePaysOrigine }}"/> #}
+					<input type="text" id="TimbrePaysOrigine" name="TimbrePaysOrigine" value="{{ enchere.TimbrePaysOrigine }}"/>
 					<span class="erreur">{{ erreurs.TimbrePaysOrigine }}</span>
 				</div>
 
@@ -78,19 +70,19 @@
 
 				<div class="champ">
 					<label for="TimbreTirage">Tirage</label>
-					<input type="number" id="TimbreTirage" name="TimbreTirage" value="{{ enchere.TimbreTirage }}"/>
+					<input type="text" id="TimbreTirage" name="TimbreTirage" value="{{ enchere.TimbreTirage }}"/>
 					<span class="erreur">{{ erreurs.TimbreTirage }}</span>
 				</div>
 
 				<div class="champ">
-					<label for="TimbreLongueur">Longueur(mm)</label>
-					<input type="number" id="TimbreLongueur" name="TimbreLongueur" value="{{ enchere.TimbreLongueur }}"/>
+					<label for="TimbreLongueur">Longueur</label>
+					<input type="text" id="TimbreLongueur" name="TimbreLongueur" value="{{ enchere.TimbreLongueur }}"/>
 					<span class="erreur">{{ erreurs.TimbreLongueur }}</span>
 				</div>
 
 				<div class="champ">
-					<label for="TimbreLargeur">Largeur(mm)</label>
-					<input type="number" id="TimbreLargeur" name="TimbreLargeur" value="{{ enchere.TimbreLargeur }}"/>
+					<label for="TimbreLargeur">Largeur</label>
+					<input type="text" id="TimbreLargeur" name="TimbreLargeur" value="{{ enchere.TimbreLargeur }}"/>
 					<span class="erreur">{{ erreurs.TimbreLargeur }}</span>
 				</div>
 
@@ -99,6 +91,7 @@
 					<input type="checkbox" id="TimbreCertifie" name="TimbreCertifie" value="1" {{ enchere.TimbreCertifie ? 'checked' : '' }}/>
 					<span class="erreur">{{ erreurs.TimbreCertifie }}</span>
 				</div>
+
 
 				<div class="champ">
 					<label>Image au format jpg</label>
@@ -121,6 +114,8 @@
 			</fieldset>
 		</div>
 
+		<input type="hidden" name="TimbreID" value="{{ enchere.TimbreID }}">
+		<input type="hidden" name="id" value="{{ enchere.ID }}">
 
 		<div class="bouton-container">
 			<input type="submit" value="Envoyer" class="bouton">

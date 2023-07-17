@@ -7,6 +7,9 @@ export default class EncheresApp {
   searchString;
   #originalData;
   favorisType;
+  categorieType;
+  certificatType;
+
 
   /**
    *
@@ -30,8 +33,6 @@ export default class EncheresApp {
    * @returns {Array} - Tableau contenant les objects à afficher.
    */
   filterItems(searchString = this.searchString, items = this.#dataItems) {
-    console.log("dataitems", this.#dataItems);
-    console.log("bosbo");
     searchString = "";
     console.log(searchString);
 
@@ -50,14 +51,15 @@ export default class EncheresApp {
   }
 
   filterAndDisplay(searchString = this.searchString) {
+    console.log("filterAndDisplay: searchString", searchString);
     this.searchString = searchString;
     this.#dataItems = this.#originalData;
-    // console.log("originaldatas", this.#originalData);
-    // console.log("dataitems", this.#dataItems);
-    // console.log("this.favorisType", this.favorisType);
 
     let filteredItems = this.filterBySearch();
     filteredItems = this.filterByFavoris(this.favorisType, filteredItems);
+    filteredItems = this.filterByCategories(this.categorieType, filteredItems);
+    filteredItems = this.filterByCertificats(this.certificatType, filteredItems);
+    this.#dataItems=filteredItems;
 
     this.displayItems(filteredItems);
     this.displayResults();
@@ -71,7 +73,6 @@ export default class EncheresApp {
 
     for (const item of items) {
       const carteItem = document.getElementById("Enchere" + item.ID);
-      console.log("displayItems: carteItem(hidden removed)", carteItem);
       carteItem.classList.remove("hidden");
     }
     console.log("displayItems: carteItems(array)", items);
@@ -98,7 +99,6 @@ export default class EncheresApp {
       const bFound = lc.includes(filter);
       if (bFound) {
         const carteItem = document.getElementById("Enchere" + item.ID);
-        console.log("filterBySearch itemFOund", item, carteItem);
         carteItem.classList.add("hidden");
       }
       return bFound;
@@ -108,10 +108,15 @@ export default class EncheresApp {
     return filteredItems;
   }
 
+  /**
+   * filtre les items selon le type de favoris
+   * @param {*} sType type de favoris
+   * @param {*} items items à filtrer
+   * @returns items filtrés
+   */
   filterByFavoris(sType = this.favorisType, items = this.#dataItems) {
     this.updateUrlParam("favoris", sType);
-    console.log("filterByFav sType", sType);
-    console.log("filterByFav items avant recherche", items);
+    console.log("filterByFav items avant recherche", sType, items);
 
     const filteredItems = items.filter((item) => {
       let favItem = "";
@@ -124,14 +129,62 @@ export default class EncheresApp {
       }
 
       if (parseInt(favItem) == 1) {
-        //const carteItem = document.getElementById("Enchere" + item.ID);
-        console.log("filterByFav itesmFound", item);
         return true;
       }
       return false;
     });
     console.log("filterByFav filteredItems", filteredItems);
+    return filteredItems;
+  }
 
+
+ /**
+   * filtre les items selon le type de favoris
+   * @param {*} sType type de favoris
+   * @param {*} items items à filtrer
+   * @returns items filtrés
+   */
+  filterByCategories(sType = this.categorieType, items = this.#dataItems) {
+    this.updateUrlParam("categorie", sType);
+    console.log("filterByCategories sType", sType);
+    console.log("filterByCategories items avant recherche", items);
+    if (sType === "Toutes") {
+      return items;
+    }
+    const filteredItems = items.filter((item) => {
+      if (item.CategorieID == sType) {
+        return true;
+      }
+      return false;
+    });
+    console.log("filterByCategories filteredItems", filteredItems);
+    return filteredItems;
+  }
+
+
+
+  /**
+   * filtre les items selon le type de favoris
+   * @param {*} sType type de favoris
+   * @param {*} items items à filtrer
+   * @returns items filtrés
+   */
+  filterByCertificats(sType = this.certificatType, items = this.#dataItems) {
+    this.updateUrlParam("certificat", sType);
+    console.log("filterByCertificats items avant recherche", sType, items);
+    if (sType === "Toutes") {
+      return items;
+    }
+    const filteredItems = items.filter((item) => {
+      if (item.TimbreCertifie == null) {
+        item.TimbreCertifie = 0;
+      }
+      if (parseInt(item.TimbreCertifie) == sType) {
+        return true;
+      }
+      return false;
+    });
+    console.log("filterByCertificats filteredItems", filteredItems);
     return filteredItems;
   }
 
@@ -163,42 +216,16 @@ export default class EncheresApp {
    * Affiche le nombre de résultats et le numéro de page
    */
   displayResults() {
-    //this.#resultsEL.textContent =
-    //  "Page " + this.#currentpage + " sur " + this.#data.pagination.total_pages;
-    //this.#countEL.textContent =
-    //  "Nombre de résultats: " + this.#data.pagination.total;
+    this.#resultsEL.textContent = this.#dataItems.length + ' items trouvés(filtrés). Voici les résultats 1 à ' + this.#dataItems.length;
   }
 
   /**
-   * Ajouter aux favoris
+   * Ajouter ou retirer aux favoris
    * @param {HTMLElement} element - Élément HTML qui a été cliqué
-   * @param {number} idEncheres - ID de l'enchère
-   * @param {number} idUser - ID de l'utilisateur
    * @returns {boolean} - true si l'enchère a été ajoutée aux favoris, false sinon
    *
    **/
-  ajouterFavorisOLD(element, idEncheres, idUser) {
-    fetch("ajouterFavoris")
-      .then((reponse) => {
-        if (!reponse.ok) {
-          throw { message: "Problème technique sur le serveur" };
-        }
-        return reponse.json();
-      })
-      .then((codeRetour) => {
-        console.log("codeRetour", codeRetour);
-        if (codeRetour) {
-          eDeconnecter.classList.toggle("selected");
-          return true;
-        }
-      })
-      .catch((e) => {
-        eMessageErreurConnexion.innerHTML = "Erreur: " + e.message;
-        return false;
-      });
-  }
-
-  ajouterFavoris(element) {
+  toggleFavoris(element) {
     const currentTarget = element.currentTarget;
     const app = new EncheresApp();
     const fd = new FormData();
@@ -212,12 +239,13 @@ export default class EncheresApp {
     );
 
     let $action;
-    if (element.currentTarget.classList.contains("selected")) {
+    const bIsFav=!(element.currentTarget.classList.contains("selected"))
+    if (bIsFav) {
       $action = "retirerEnchereAFavorisFromPost";
     } else {
       $action = "ajouterEnchereAFavorisFromPost";
     }
-
+    currentTarget.classList.toggle("selected");
     console.log($action, fd);
     fetch($action, {
       method: "POST",
@@ -232,10 +260,12 @@ export default class EncheresApp {
       })
       .then(function (data) {
         console.log("Response " + $action, data);
-        currentTarget.classList.toggle("selected");
+       
       })
       .catch(function (error) {
         console.error("Error " + $action, error);
+        //echec de la sauvegarde, on replace l'état précédent
+        currentTarget.classList.toggle("selected");
       });
   }
 }

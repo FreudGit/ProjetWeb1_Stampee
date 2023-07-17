@@ -171,17 +171,19 @@ class Frontend extends Routeur
       $enchere['RemainingTime'] = $remainingTime;
     }
     //save to session encheres
-    $_SESSION['aEncheres'] = $encheres;
-    $_SESSION['hello'] = 'hello';
+    //$_SESSION['aEncheres'] = $encheres;
+    //$_SESSION['hello'] = 'hello';
 
-    //get encheres from session
+    $aCategories = $this->oRequetesSQL->getCategories();
+
 
     (new Vue)->generer(
       "vCatalogueContent",
       [
         'oUtilConn' => $this->oUtilConn,
         'titre' => "Welcome",
-        'aEncheres' => $encheres
+        'aEncheres' => $encheres, 
+        'aCategories' => $aCategories
       ],
       "gabarit-frontendS"
     );

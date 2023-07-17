@@ -19,7 +19,7 @@
 }
 
 
-.formulaire-enchere fieldset {
+ fieldset {
 	border: none;
 	display: flex;
 	gap: calc(var(--gouttiere) / 2);
@@ -33,13 +33,13 @@
 	line-height: 1.4;
 }
 
-input,
+.formulaire-enchere input,
 select {
 	border-radius: 3px;
 	display: block;
 	padding: 5px;
 	border: 1px solid var(--couleur_tertiaire);
-	wiwdth: 100%;
+	width: 100%;
 	box-sizing: border-box;
 }
 

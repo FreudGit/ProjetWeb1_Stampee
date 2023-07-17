@@ -8,7 +8,7 @@
 		>
 		<a href="#">Toutes conditions</a>
 	</h3>
-	<div class="h4">{{ aEncheres|length }}
+	<div class="h4" id='lblResults'>{{ aEncheres|length }}
 		items trouvés(filtrés). Voici les résultats 1 à
 		{{ aEncheres|length }}
 		.</div>
@@ -16,7 +16,7 @@
 
 <div>
 	<aside>
-		<form class="rythme-moyen">
+		<form class="rythme-moyen formulaire-enchere">
 			<div>
 				<div class="tab">
 					<button class="tablinks active" onclick="openTab(event, 'tab1')">
@@ -45,19 +45,30 @@
 								Favoris du Lord
 							</option>
 						</select>
-						<i class="fas fa-sort icon"></i>
+						<i class="fas fa-heart icon"></i>
 					</div>
-					<div class="h5">Ordre d'affichage:</div>
+					<div class="h5">Autres Filtres:</div>
 					<div class="content-line">
-						<select id="condition" aria-label="Condition">
-							<option value="Contidions">Toute Conditions</option>
+						<select id="frmDropDownCategories" aria-label="Condition">
+							<option value="Toutes">Toute Categories</option>
+							{% for value in aCategories %}
+								<option value="{{ value.ID }}" >{{ value.Nom }}</option>
+							{% endfor %}
+
+						</select>
+						<i class="fas fa-folder"></i>
+					</div>
+					<div class="content-line">
+						<select id="frmDropDownCategoriesConditions" aria-label="Condition">
+							<option value="Conditions">Toute Conditions</option>
+							<option value="Neuf">Bonne</option>
 							<option value="Bonne">Bonne</option>
 							<option value="Moyenne">Moyenne</option>
 							<option value="Mauvaise">Mauvaise</option>
 						</select>
 						<i class="fas fa-tachometer-alt"></i>
 					</div>
-					<div class="content-line">
+					{# <div class="content-line">
 						<select aria-label="Type de timbres">
 							<option value="Type de timbres">Tout type de timbres</option>
 							<option value="Tout timbres">Tout timbres</option>
@@ -73,8 +84,8 @@
 							</option>
 						</select>
 						<i class="fas fa-stamp icon"></i>
-					</div>
-					<div class="content-line">
+					</div> #}
+					{# <div class="content-line">
 						<select aria-label="Condition">
 							<option value="Condition" selected>
 								Toute Condition obligataire
@@ -92,8 +103,8 @@
 							<option value="Endommagé">Endommagé</option>
 						</select>
 						<i class="fas fa-heartbeat icon"></i>
-					</div>
-					<div class="content-line">
+					</div> #}
+					{# <div class="content-line">
 						<select aria-label="Centrage">
 							<option value="Centrage" selected>Tout Centrage</option>
 							<option value="Bien centré">Bien centré</option>
@@ -111,8 +122,8 @@
 							</option>
 						</select>
 						<i class="fas fa-arrows-alt-h icon"></i>
-					</div>
-					<div class="content-line">
+					</div> #}
+					{# <div class="content-line">
 						<select aria-label="Format">
 							<option value="Tout Format" selected>Tout Format</option>
 							<option value="Timbre simple">Timbre simple</option>
@@ -122,14 +133,14 @@
 							<option value="Plaque de timbres">Plaque de timbres</option>
 						</select>
 						<i class="fas fa-ruler icon"></i>
-					</div>
+					</div> #}
 					<div class="content-line">
-						<select aria-label="Certificat">
-							<option value="" selected>Tout Certificat</option>
-							<option value="Avec certificat d'authenticité">
+						<select id="frmDropDownCertificats" aria-label="Certificat">
+							<option value="Toutes" selected>Tout Certificat</option>
+							<option value=1>
 								Avec certificat d'authenticité
 							</option>
-							<option value="Sans certificat d'authenticité">
+							<option value=0>
 								Sans certificat d'authenticité
 							</option>
 						</select>
@@ -166,10 +177,10 @@
 	</aside>
 	<main>
 		<header>
-			<div class="recherche-form" aria-label="Rechercher Tout">
-				<input type="text" id='frmRechercherText' name="frmRechercher" class="recherche-input" placeholder="Rechercher..." aria-label="Champ recherche">
-				<button type="submit" id='frmRechercherButton' class="recherche-boutton" aria-label="Rechercher">
-					<i class="fas fa-search"></i>
+			<div class="recherche-form " aria-label="Rechercher Tout">
+				<input type="text" id='frmRechercherText' name="frmRechercher" class="recherche-input formulaire-enchere" placeholder="Rechercher..." aria-label="Champ recherche">
+				<button type="submit" id='frmRechercherButton' class="recherche-boutton formulaire-enchere" aria-label="Rechercher">
+					<i class="fas fa-search formulaire-enchere"></i>
 				</button>
 			</div>
 			<div>
@@ -185,11 +196,18 @@
 		<div class="grille">
 			{% for oEnchere in aEncheres %}
 				<article id='Enchere{{ oEnchere.ID }}' name='enchere' class="carte">
+					{% if  oUtilConn %}
+						<svg id='btnAjouterFavoris' data-enchere-id="{{ oEnchere.ID }}" name='btnAjouterFavoris' class="fav-icon {{ oEnchere.bFavoris ? 'selected' : '' }}" style="position: absolute; twop: -50%; lweft: -50%; " title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="-10 -10 34 34">
+							<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+						</svg>
+					{% endif %}
 					<a href="enchere?id={{ oEnchere.ID }}">
 						<picture>
+							{# {% if  oUtilConn %} #}
+
+							{# {% endif %} #}
 							{# <img src='medias/stamps/{{ oEnchere.PremiereImage }}' alt="Timbre -2"> #}
-							<img src='{{ oEnchere.PremiereImage }}' alt="{{ oEnchere.PremiereImage }}">
-						</picture>
+						<img src='{{ oEnchere.PremiereImage }}' alt="{{ oEnchere.PremiereImage }}"> </picture>
 					</a>
 					<div>
 						<aside>
@@ -218,6 +236,7 @@
 						<button class="bouton alerteBackground-Color" onclick="location.href='enchere?id={{ oEnchere.ID }}';" aria-label="Enchérir" target='enchere'>Enchérir</button>
 					</footer>
 				</article>
+
 			{% else %}
 				<div>Aucune Enchère.</div>
 			{% endfor %}

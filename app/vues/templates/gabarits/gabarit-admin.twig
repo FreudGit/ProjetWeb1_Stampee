@@ -1,12 +1,10 @@
-//add script to catch favorite event
-
-	<script>
-		function addFavorite() {
-			var xhr = new XMLHttpRequest();
-			xhr.open('GET', 'addFavorite.php?timbre_id=' + {{ oTimbre.timbre_ID }}, true);
-			xhr.send(null);
-		}
-	</script>
+<script>
+	function addFavorite() {
+var xhr = new XMLHttpRequest();
+xhr.open('GET', 'addFavorite.php?timbre_id=' + {{ oTimbre.timbre_ID }}, true);
+xhr.send(null);
+}
+</script>
 
 
 <!DOCTYPE html>
@@ -15,8 +13,11 @@
 		<meta charset="UTF-8">
 		<meta name="robots" content="noindex, nofollow">
 		<title>{{ titre }}</title>
-		<link rel="stylesheet" type="text/css" href="css/admin.css?v=1.1">
-		{# <link rel="stylesheet" href="css/main.css"> #}
+		<link
+		rel="stylesheet" type="text/css" href="css/admin.css?v=1.1">
+		<link rel="stylesheet" type="text/css" href="css/navigation.css?v=1.1">
+
+		<link rel="stylesheet" href="css/main.css">
 
 		<script type="module" src="js/admin.js"></script>
 	</head>
