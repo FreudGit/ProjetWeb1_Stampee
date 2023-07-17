@@ -132,9 +132,7 @@ main {
     grid-gap: 3px;
   }
   .g.utilisateur { grid-template-columns: repeat(6, max-content);  }
-  .g.films        { grid-template-columns: repeat(10, max-content); }
-  .g.enchere { grid-template-columns: repeat(8, max-content);  }
-
+  .g.enchere { grid-template-columns: repeat(9, max-content);  }
   .g.timbre       { grid-template-columns: repeat(9, max-content);  }
   .g.offre { grid-template-columns: repeat(7, max-content);  }
   .g.role     { grid-template-columns: repeat(4, max-content);  }

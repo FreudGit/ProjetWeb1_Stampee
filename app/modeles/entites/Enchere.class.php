@@ -14,6 +14,10 @@ class Enchere extends Entite
   protected $PrixPlancher;
   protected $UtilisateurActuelID;
   protected $Visible = 0;
+
+  protected $bFavorisLord = 0;
+
+  
   protected $Status;
   protected $Rating;
 
@@ -149,6 +153,24 @@ class Enchere extends Entite
     $this->Visible = $Visible;
     return $this;
   }
+
+
+/**
+   * Mutateur de la propriété Visible
+   * @param bool $bFavorisLord
+   * @return $this
+   */
+  public function setBFavorisLord($bFavorisLord) {
+    unset($this->erreurs['bFavorisLord']);
+    $test = filter_var($bFavorisLord, FILTER_VALIDATE_INT);
+
+    if ($test === null) {
+      $this->erreurs['bFavorisLord'] = ' bFavorisLord doit être un int(boolean).';
+    }
+    $this->bFavorisLord = $bFavorisLord;
+    return $this;
+  }
+
 
   /**
    * Mutateur de la propriété Status

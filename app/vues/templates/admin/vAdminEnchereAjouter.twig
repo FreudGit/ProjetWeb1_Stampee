@@ -5,8 +5,6 @@
 		<div class="champs">
 			<fieldset>
 				<legend>Encheres</legend>
-
-
 				{% if oUtilConn.utilisateur_profil in [constant('Utilisateur::PROFIL_ADMINISTRATEUR'),
                                                    constant('Utilisateur::PROFIL_EDITEUR')] %}
 					<div class="champ">
@@ -14,13 +12,12 @@
 						<input type="text" id="UtilisateurID" name="UtilisateurID" value="{{ enchere.UtilisateurID }}"/>
 						<span class="erreur">{{ erreurs.UtilisateurID }}</span>
 					</div>
-
 				{% else %}
 					<input type="hidden" id="UtilisateurID" name="UtilisateurID" value="{{ oUtilConn.utilisateur_id }}"/>
 				{% endif %}
 
 				<div class="champ">
-					<label for="Visible">Enchere Visiblew</label>
+					<label for="Visible">Enchere Visible</label>
 					<input type="checkbox" id="Visible" name="Visible" checked value='1'/>
 					<span class="erreur">{{ erreurs.enchere.Visible }}</span>
 				</div>
@@ -120,7 +117,6 @@
 				</div>
 			</fieldset>
 		</div>
-
 
 		<div class="bouton-container">
 			<input type="submit" value="Envoyer" class="bouton">

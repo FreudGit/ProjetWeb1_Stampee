@@ -177,7 +177,7 @@ class RequetesSQL extends RequetesPDO
         WHERE role.Nom = :utilisateur_profil
       )
       WHERE utilisateur_id = :utilisateur_id
-      AND utilisateur_id > 4'; // ne pas modifier les 4 premiers utilisateurs du jeu d'essai
+      AND utilisateur_id > 4'; // ne pas modifier les 4 premiers utilisateurs 
     return $this->CUDLigne($champs);
   }
 
@@ -193,7 +193,7 @@ class RequetesSQL extends RequetesPDO
       utilisateur_mdp            = SHA2(:utilisateur_mdp, 512),
       utilisateur_renouveler_mdp = "oui"
       WHERE utilisateur_id = :utilisateur_id
-      AND utilisateur_id > 4'; // ne pas modifier les 4 premiers utilisateurs du jeu d'essai
+      AND utilisateur_id > 4'; // ne pas modifier les 4 premiers utilisateurs 
     return $this->CUDLigne($champs);
   }
 

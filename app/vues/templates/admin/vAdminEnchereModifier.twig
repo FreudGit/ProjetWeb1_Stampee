@@ -12,121 +12,126 @@
 						<input type="text" id="UtilisateurID" name="UtilisateurID" value="{{ enchere.UtilisateurID }}"/>
 						<span class="erreur">{{ erreurs.UtilisateurID }}</span>
 					</div>
+					<div class="champ">
+						<label for="bFavorisLord">Favoris Du Lord</label>
+						<input type="checkbox" id="bFavorisLord" name="bFavorisLord" value='1'  {{ enchere.bFavorisLord ? 'checked' : '' }}/>
+						<span class="erreur">{{ erreurs.enchere.bFavorisLord }}</span>
+					</div>
+			{% else %}
+				<input type="hidden" id="UtilisateurID" name="UtilisateurID" value="{{ oUtilConn.utilisateur_id }}"/>
+				<input type="hidden" id="bFavorisLord" name="bFavorisLord" value="{{ enchere.bFavorisLord }}"/>
+			{% endif %}
 
-				{% else %}
-					<input type="hidden" id="UtilisateurID" name="UtilisateurID" value="{{ oUtilConn.utilisateur_id }}"/>
+			<div class="champ">
+				<label for="Visible">Enchère Visible</label>
+				<input type="checkbox" id="Visible" name="Visible" value='1' {{ enchere.Visible ? 'checked' : '' }}/>
+				<span class="erreur">{{ erreurs.enchere.Visible }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="DateDebut">Date Debut</label>
+				<input type="date" id="DateDebut" name="DateDebut" value="{{ enchere.DateDebut }}"/>
+				<span class="erreur">{{ erreurs.DateDebut }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="DateFin">Date Fin</label>
+				<input type="date" id="DateFin" name="DateFin" value="{{ enchere.DateFin }}"/>
+				<span class="erreur">{{ erreurs.DateFin }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="PrixPlancher">Prix Plancher</label>
+				<input type="number" min="0.00" step="0.01" id="PrixPlancher" name="PrixPlancher" value="{{ enchere.PrixPlancher }}"/>
+				<span class="erreur">{{ erreurs.PrixPlancher }}</span>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>Timbre</legend>
+			<div class="champ">
+				<label for="TimbreNom">Nom</label>
+				<input type="text" id="TimbreNom" name="TimbreNom" value="{{ enchere.TimbreNom }}"/>
+				<span class="erreur">{{ erreurs.TimbreNom }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreCouleur">Couleur</label>
+				<input type="text" id="TimbreCouleur" name="TimbreCouleur" value="{{ enchere.TimbreCouleur }}"/>
+				<span class="erreur">{{ erreurs.TimbreCouleur }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbrePaysOrigine">Pays Origine</label>
+
+				<select
+					name="TimbrePaysOrigine">
+					{# {% set aPays = ['Canada', 'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'] %} #}
+
+					{% for pays in aPays %}
+						<option value="{{ pays }}" {{ pays == enchere.TimbrePaysOrigine ? 'selected' : '' }}>{{ pays }}</option>
+					{% endfor %}
+				</select>
+				{# <input type="text" id="TimbrePaysOrigine" name="TimbrePaysOrigine" value="{{ enchere.TimbrePaysOrigine }}"/> #}
+				<span class="erreur">{{ erreurs.TimbrePaysOrigine }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreEtatCondition">Etat Condition</label>
+				<input type="text" id="TimbreEtatCondition" name="TimbreEtatCondition" value="{{ enchere.TimbreEtatCondition }}"/>
+				<span class="erreur">{{ erreurs.TimbreEtatCondition }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreTirage">Tirage</label>
+				<input type="number" id="TimbreTirage" name="TimbreTirage" value="{{ enchere.TimbreTirage }}"/>
+				<span class="erreur">{{ erreurs.TimbreTirage }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreLongueur">Longueur(mm)</label>
+				<input type="number" id="TimbreLongueur" name="TimbreLongueur" value="{{ enchere.TimbreLongueur }}"/>
+				<span class="erreur">{{ erreurs.TimbreLongueur }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreLargeur">Largeur(mm)</label>
+				<input type="number" id="TimbreLargeur" name="TimbreLargeur" value="{{ enchere.TimbreLargeur }}"/>
+				<span class="erreur">{{ erreurs.TimbreLargeur }}</span>
+			</div>
+
+			<div class="champ">
+				<label for="TimbreCertifie">Certifie</label>
+				<input type="checkbox" id="TimbreCertifie" name="TimbreCertifie" value="1" {{ enchere.TimbreCertifie ? 'checked' : '' }}/>
+				<span class="erreur">{{ erreurs.TimbreCertifie }}</span>
+			</div>
+
+
+			<div class="champ">
+				<label>Image au format jpg</label>
+				<input name="ImageCheminImage" type="file">
+				{% if enchere.PremiereImage is not empty %}
+					<img src="{{ enchere.PremiereImage }}" alt="Thumbnail" style="max-width:100px; height:auto;"/>
 				{% endif %}
+				<span>&nbsp;{{ erreurs.ImageCheminImage }}</span>
+			</div>
 
-				<div class="champ">
-					<label for="Visible">Enchere Visible</label>
-					<input type="checkbox" id="Visible" name="Visible" value="{{ enchere.Visible }}" {{ enchere.Visible ? 'checked' : '' }}/>
-					<span class="erreur">{{ erreurs.enchere.Visible }}</span>
-				</div>
+			<div class="champ">
+				<label for="TimbreCategorieID">Categorie</label>
+				<select name="TimbreCategorieID">
+					{% for categorie in categories %}
+						<option value="{{ categorie.ID }}" {{ categorie.ID == enchere.TimbreCategorieID ? 'selected' : '' }}>{{ categorie.Nom }}</option>
+					{% endfor %}
+				</select>
+				<span class="erreur">{{ erreurs.TimbreCategorie }}</span>
+			</div>
+		</fieldset>
+	</div>
 
-				<div class="champ">
-					<label for="DateDebut">Date Debut</label>
-					<input type="date" id="DateDebut" name="DateDebut" value="{{ enchere.DateDebut }}"/>
-					<span class="erreur">{{ erreurs.DateDebut }}</span>
-				</div>
+	<input type="hidden" name="TimbreID" value="{{ enchere.TimbreID }}">
+	<input type="hidden" name="id" value="{{ enchere.ID }}">
 
-				<div class="champ">
-					<label for="DateFin">Date Fin</label>
-					<input type="date" id="DateFin" name="DateFin" value="{{ enchere.DateFin }}"/>
-					<span class="erreur">{{ erreurs.DateFin }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="PrixPlancher">Prix Plancher</label>
-					<input type="number" min="0.00" step="0.01"  id="PrixPlancher" name="PrixPlancher" value="{{ enchere.PrixPlancher }}"/>
-					<span class="erreur">{{ erreurs.PrixPlancher }}</span>
-				</div>
-			</fieldset>
-
-			<fieldset>
-				<legend>Timbre</legend>
-				<div class="champ">
-					<label for="TimbreNom">Nom</label>
-					<input type="text" id="TimbreNom" name="TimbreNom" value="{{ enchere.TimbreNom }}"/>
-					<span class="erreur">{{ erreurs.TimbreNom }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreCouleur">Couleur</label>
-					<input type="text" id="TimbreCouleur" name="TimbreCouleur" value="{{ enchere.TimbreCouleur }}"/>
-					<span class="erreur">{{ erreurs.TimbreCouleur }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbrePaysOrigine">Pays Origine</label>
-
-					<select name="TimbrePaysOrigine">
-						{# {% set aPays = ['Canada', 'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic', 'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica', 'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland', 'France', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'North Korea', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'] %} #}
-
-						{% for pays in aPays %}
-							<option value="{{ pays }}" {{ pays == enchere.TimbrePaysOrigine ? 'selected' : '' }}>{{ pays }}</option>
-						{% endfor %}
-					</select>
-					{# <input type="text" id="TimbrePaysOrigine" name="TimbrePaysOrigine" value="{{ enchere.TimbrePaysOrigine }}"/> #}
-					<span class="erreur">{{ erreurs.TimbrePaysOrigine }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreEtatCondition">Etat Condition</label>
-					<input type="text" id="TimbreEtatCondition" name="TimbreEtatCondition" value="{{ enchere.TimbreEtatCondition }}"/>
-					<span class="erreur">{{ erreurs.TimbreEtatCondition }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreTirage">Tirage</label>
-					<input type="number" id="TimbreTirage" name="TimbreTirage" value="{{ enchere.TimbreTirage }}"/>
-					<span class="erreur">{{ erreurs.TimbreTirage }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreLongueur">Longueur(mm)</label>
-					<input type="number" id="TimbreLongueur" name="TimbreLongueur" value="{{ enchere.TimbreLongueur }}"/>
-					<span class="erreur">{{ erreurs.TimbreLongueur }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreLargeur">Largeur(mm)</label>
-					<input type="number" id="TimbreLargeur" name="TimbreLargeur" value="{{ enchere.TimbreLargeur }}"/>
-					<span class="erreur">{{ erreurs.TimbreLargeur }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreCertifie">Certifie</label>
-					<input type="checkbox" id="TimbreCertifie" name="TimbreCertifie" value="1" {{ enchere.TimbreCertifie ? 'checked' : '' }}/>
-					<span class="erreur">{{ erreurs.TimbreCertifie }}</span>
-				</div>
-
-
-				<div class="champ">
-					<label>Image au format jpg</label>
-					<input name="ImageCheminImage" type="file">
-					{% if enchere.PremiereImage is not empty %}
-						<img src="{{ enchere.PremiereImage }}" alt="Thumbnail" style="max-width:100px; height:auto;"/>
-					{% endif %}
-					<span>&nbsp;{{ erreurs.ImageCheminImage }}</span>
-				</div>
-
-				<div class="champ">
-					<label for="TimbreCategorieID">Categorie</label>
-					<select name="TimbreCategorieID">
-						{% for categorie in categories %}
-							<option value="{{ categorie.ID }}" {{ categorie.ID == enchere.TimbreCategorieID ? 'selected' : '' }}>{{ categorie.Nom }}</option>
-						{% endfor %}
-					</select>
-					<span class="erreur">{{ erreurs.TimbreCategorie }}</span>
-				</div>
-			</fieldset>
-		</div>
-
-		<input type="hidden" name="TimbreID" value="{{ enchere.TimbreID }}">
-		<input type="hidden" name="id" value="{{ enchere.ID }}">
-
-		<div class="bouton-container">
-			<input type="submit" value="Envoyer" class="bouton">
-		</div>
-	</form>
-</section>
+	<div class="bouton-container">
+		<input type="submit" value="Envoyer" class="bouton">
+	</div>
+</form></section>
