@@ -191,7 +191,7 @@
 	</aside>
 	<main>
 		<header>
-			<div class="recherche-form " aria-label="Rechercher Tout">
+			<div id='sectionSearch' class="recherche-form " aria-label="Rechercher Tout">
 				<input type="text" id='frmRechercherText' name="frmRechercher" class="recherche-input formulaire-enchere" placeholder="Rechercher..." aria-label="Champ recherche">
 				<button type="submit" id='frmRechercherButton' class="recherche-boutton formulaire-enchere" aria-label="Rechercher">
 					<i class="fas fa-search formulaire-enchere"></i>
@@ -207,7 +207,7 @@
 			</div>
 		</header>
 
-		<div class="grille">
+		<div class="grille" id='sectionGrille'>
 			{% for oEnchere in aEncheres %}
 				<article id='Enchere{{ oEnchere.ID }}' name='enchere' class="carte">
 					{% if  oUtilConn %}
