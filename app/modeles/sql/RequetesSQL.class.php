@@ -320,7 +320,7 @@ class RequetesSQL extends RequetesPDO
       t.Longueur AS TimbreLongueur,
       t.Largeur AS TimbreLargeur,
       t.Certifie AS TimbreCertifie,
-      t.CategorieID AS TimbreCategorieID,
+      t.CategorieID,
       COALESCE(mises.NombreMises, 0) AS NombreMises,
       COALESCE(mises.PrixActuel, e.PrixPlancher) AS PrixActuel,
       i.CheminImage AS PremiereImage,

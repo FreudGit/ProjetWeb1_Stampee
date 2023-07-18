@@ -9,6 +9,7 @@ export default class EncheresApp {
   favorisType;
   categorieType;
   certificatType;
+ statusType;
 
 
   /**
@@ -59,6 +60,8 @@ export default class EncheresApp {
     filteredItems = this.filterByFavoris(this.favorisType, filteredItems);
     filteredItems = this.filterByCategories(this.categorieType, filteredItems);
     filteredItems = this.filterByCertificats(this.certificatType, filteredItems);
+    filteredItems = this.filterByStatus(this.statusType, filteredItems);
+
     this.#dataItems=filteredItems;
 
     this.displayItems(filteredItems);
@@ -164,8 +167,8 @@ export default class EncheresApp {
 
 
   /**
-   * filtre les items selon le type de favoris
-   * @param {*} sType type de favoris
+   * filtre les items selon le type de certificat
+   * @param {*} sType type de certificat
    * @param {*} items items à filtrer
    * @returns items filtrés
    */
@@ -179,12 +182,42 @@ export default class EncheresApp {
       if (item.TimbreCertifie == null) {
         item.TimbreCertifie = 0;
       }
-      if (parseInt(item.TimbreCertifie) == sType) {
+      if (parseInt(item.TimbreCertifie) == parseInt(sType)) {
         return true;
       }
       return false;
     });
     console.log("filterByCertificats filteredItems", filteredItems);
+    return filteredItems;
+  }
+
+
+  /**
+   * filtre les items selon le type de certificat
+   * @param {*} sType type de certificat
+   * @param {*} items items à filtrer
+   * @returns items filtrés
+   */
+  filterByStatus(sType = this.statusType, items = this.#dataItems) {
+    this.updateUrlParam("status", sType);
+    console.log("filterByStatus items avant recherche", sType, items);
+    if (sType === "Toutes") {
+      return items;
+    }
+    const filteredItems = items.filter((item) => {
+      if (item.DateFin == null) {
+        return true;
+      }
+//dateFin > date du jour
+      const dateFin = new Date(item.DateFin);
+      const bIsActive= dateFin > new Date();
+      if (bIsActive == parseInt(sType)) {
+        return true;
+      }
+
+      return false;
+    });
+    console.log("filterByStatus filteredItems", filteredItems);
     return filteredItems;
   }
 
@@ -239,7 +272,7 @@ export default class EncheresApp {
     );
 
     let $action;
-    const bIsFav=!(element.currentTarget.classList.contains("selected"))
+    const bIsFav=(element.currentTarget.classList.contains("selected"))
     if (bIsFav) {
       $action = "retirerEnchereAFavorisFromPost";
     } else {

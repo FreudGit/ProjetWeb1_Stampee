@@ -3,6 +3,7 @@
 // concernant l'état et le comportement du site se trouve dans la classe `App`.
 
 import EncheresApp from "./Encheres.js";
+
 const mainEL = document.querySelector("main");
 const resultsEL = document.querySelector("#lblResults");
 const countEl = document.querySelector("#count");
@@ -51,15 +52,40 @@ frmDropDownCertificats.addEventListener("change", (element) => {
 });
 app.certificatType = frmDropDownCertificats.value;
 
-const btnAjouterFavoris = document.querySelector("#btnAjouterFavoris");
-if (btnAjouterFavoris) {
-  btnAjouterFavoris.addEventListener("click", (element) => {
-    element.preventDefault();
-    let appl = new EncheresApp();
-    appl.toggleFavoris(element);
-  });
-}
+const frmDropDownStatus = document.querySelector(
+  "#frmDropDownStatus"
+);
+frmDropDownStatus.addEventListener("change", (element) => {
+  element.preventDefault();
+  app.statusType = frmDropDownStatus.value;
+  app.filterAndDisplay();
+});
+app.statusType = frmDropDownStatus.value;
 
+
+
+
+const aBtnsFavoris = document.querySelectorAll("#btnAjouterFavoris");
+aBtnsFavoris.forEach((btn) => {
+  btn.addEventListener("click", (element) => {
+    element.preventDefault();
+    app.toggleFavoris(element);
+  });
+});
+
+
+
+// const btnAjouterFavoris = document.querySelector("#btnAjouterFavoris");
+// if (btnAjouterFavoris) {
+//   btnAjouterFavoris.addEventListener("click", (element) => {
+//     element.preventDefault();
+//     let appl = new EncheresApp();
+//     appl.toggleFavoris(element);
+//   });
+// }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// Gestion GRID ou LISTE
 
 // gestion des boutons
 const boutonGrille = document.querySelector("#btnGrille");
@@ -76,7 +102,7 @@ boutonList.onclick = function (event) {
 const grille = document.querySelector(".grille");
 document.getElementById("tab1").style.display = "block";
 document.querySelector(".tablinks").classList.add("active");
-
+//////////////////////////////////////////////////////////////////////////////////////////////
 // action pour afficher en grid ou liste
 function actionGrid(evt, bGrid) {
   evt.preventDefault();
@@ -92,10 +118,21 @@ function actionGrid(evt, bGrid) {
   evt.currentTarget.querySelector("i").classList.add("gradient");
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+// gestion des onglets
+document.getElementById("btnTab1").addEventListener("click", event => openTab(event, 'tab1'));
+document.getElementById("btnTab2").addEventListener("click", event => openTab(event, 'tab2'));
+document.getElementById("btnTab3").addEventListener("click", event => openTab(event, 'tab3'));
+
+
+
+
 // Ouverture de l'onglet dans le aside
-function openTab(evt, tabName) {
+ function openTab(evt, tabName) {
   evt.preventDefault();
   var i, tabcontent, tablinks;
+
 
   // Cacher tous les contenus des onglets
   tabcontent = document.getElementsByClassName("tabcontent");

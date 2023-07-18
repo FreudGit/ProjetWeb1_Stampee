@@ -14,10 +14,10 @@
 				<p>{{ oEnchere.PremiereImageDescription }}</p>
 			</div>
 
-			<div class="right-section">
+			<div id='infos' class="right-section">
 				<h2 title="Numéro de timbre: {{ oEnchere.TimbreID }}">Informations du Timbre
 					{% if  oUtilConn %}
-						<svg id='btnAjouterFavoris' data-enchere-id="{{ oEnchere.ID }}"  name='btnAjouterFavoris' class="fav-icon {{ oEnchere.bFavoris ? 'selected' : '' }}" title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" >
+						<svg id='btnAjouterFavoris' data-enchere-id="{{ oEnchere.ID }}" name='btnAjouterFavoris' class="fav-icon {{ oEnchere.bFavoris ? 'selected' : '' }}" title="Ajouter aux favoris" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24">
 							<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09 1.09-1.28 2.76-2.09 4.5-2.09 3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
 						</svg>
 					{% endif %}
@@ -28,30 +28,38 @@
 						<td>{{ oEnchere.TimbreNom }}</td>
 					</tr>
 					<tr>
-						<td>Catégorie:</td>
-						<td>{{ oEnchere.CategorieID }}</td>
+						<td>Catégorie:
+						</td>
+						<td>{{ oEnchere.CategorieID ? aCategories|filter(category => category.ID == oEnchere.CategorieID)|first.Nom : 'Inconnue' }}</td>
+
+
 					</tr>
 					<tr>
-						<td>Etat:</td>
-						<td>{{ oEnchere.TimbreEtatCondition }}</td>
+						<td>Etat/Condition:</td>
+						<td>{{ oEnchere.TimbreEtatCondition  ? oEnchere.TimbreEtatCondition : 'Inconnue'}}</td>
 					</tr>
 					<tr>
 						<td>Tirage:</td>
-						<td>{{ oEnchere.Tirage }}</td>
+						<td>{{ oEnchere.TimbreTirage ? oEnchere.TimbreTirage : 'Inconnue' }}</td>
 					</tr>
 					<tr>
 						<td>Couleur:</td>
-						<td>{{ oEnchere.TimbreCouleur }}</td>
+						<td>{{ oEnchere.TimbreCouleur ? oEnchere.TimbreCouleur : 'Inconnue' }}</td>
 					</tr>
 					<tr>
 						<td>Pays Origine:</td>
-						<td>{{ oEnchere.TimbrePaysOrigine }}</td>
+						<td>{{ oEnchere.TimbrePaysOrigine ? oEnchere.TimbrePaysOrigine : 'Inconnue' }}</td>
 					</tr>
 					<tr>
+						<td>Certification:</td>
+						<td>{{ oEnchere.TimbreCertifie ? 'oui' : 'Non' }}</td>
+					</tr>
+
+					<tr>
 						<td>Dimension:</td>
-						<td>{{ oEnchere.TimbreLongueur }}
+						<td>{{  oEnchere.TimbreLongueur ?  oEnchere.TimbreLongueur : 'Inconnu' }}
 							x
-							{{ oEnchere.TimbreLargeur }}
+							{{  oEnchere.TimbreLargeur ?  oEnchere.TimbreLargeur : 'Inconnu' }}
 							(mm)</td>
 					</tr>
 				</table>
@@ -65,13 +73,13 @@
 					Prix actuel:
 					<strong>${{ oEnchere.PrixActuel }}</strong>
 				</p>
-				<p>
+				<p id='mises'>
 					Nombre de mises:
 					<strong>{{ oEnchere.NombreMises }}</strong>
 				</p>
 			</p>
 			{% if  offres %}
-				<p>
+				<p  >
 					Liste des mises:
 				</p>
 				<ul>
@@ -83,19 +91,24 @@
 			{% endif %}
 		</div>
 
-		<div class="right-section">
-			{% if  oUtilConn %}
-				<form id="bid-form" method="POST">
-					<label for="bid-amount">Montant:</label>
-					<input type="number" id="EncherePrix" name="EncherePrix" value='{{ (oEnchere.PrixActuel + 5 )|number_format(2, '.', '') }}' min='{{ oEnchere.PrixActuel + 2 }}' max="10000" step="any" required style="width: 100px;">
-					<input type="hidden" name="TimbreID" value="{{ oEnchere.TimbreID }}">
-					<input type="hidden" name="EnchereID" value="{{ oEnchere.ID }}">
+		<div id='bidding' class="right-section">
 
-					<button type="submit">Enchérir</button>
-				</form>
-				<p class="{{ erreurs.classRetour }}">{{ erreurs.messageRetour }}&nbsp;</p>
+			{% if   oEnchere.EnchereIsActive %}
+				{% if  oUtilConn %}
+					<form id="bid-form" method="POST">
+						<label for="bid-amount">Montant:</label>
+						<input type="number" id="EncherePrix" name="EncherePrix" value='{{ (oEnchere.PrixActuel + 5 )|number_format(2, '.', '') }}' min='{{ oEnchere.PrixActuel + 2 }}' max="10000" step="any" required style="width: 100px;">
+						<input type="hidden" name="TimbreID" value="{{ oEnchere.TimbreID }}">
+						<input type="hidden" name="EnchereID" value="{{ oEnchere.ID }}">
+
+						<button type="submit">Enchérir</button>
+					</form>
+					<p class="{{ erreurs.classRetour }}">{{ erreurs.messageRetour }}&nbsp;</p>
+				{% else %}
+					<button type="button" onclick="location.href='/admin';">Connectez-vous pour pouvoir enchérir!</button>
+				{% endif %}
 			{% else %}
-				<button type="button" onclick="location.href='/admin';">Connectez-vous pour pouvoir enchérir!</button>
+				<p class="erreur">Enchère TERMINÉE, désolé.</p>
 			{% endif %}
 
 		</div>

@@ -78,15 +78,15 @@ class Frontend extends Routeur
    * retourne true si l'enchère a été ajoutée, false sinon
    */
 
-   public function retirerEnchereAFavorisFromPost()
-   {
-     $post = $_POST;
-     $params = [];
-     $params['UtilisateurID'] = $this->oUtilConn->utilisateur_id;
-     $params['EnchereID'] = $post['enchereID'];
-     $retour = $this->oRequetesSQL->retirerEnchereAFavoris($params);
-     echo json_encode($retour);
-   }
+  public function retirerEnchereAFavorisFromPost()
+  {
+    $post = $_POST;
+    $params = [];
+    $params['UtilisateurID'] = $this->oUtilConn->utilisateur_id;
+    $params['EnchereID'] = $post['enchereID'];
+    $retour = $this->oRequetesSQL->retirerEnchereAFavoris($params);
+    echo json_encode($retour);
+  }
 
 
   /**
@@ -147,57 +147,60 @@ class Frontend extends Routeur
    */
   public function afficherCatalogue()
   {
-    $userIDFav=null;
-    if ($this->oUtilConn ) {
-      $userIDFav=$this->oUtilConn->utilisateur_id;
+    $userIDFav = null;
+    if ($this->oUtilConn) {
+      $userIDFav = $this->oUtilConn->utilisateur_id;
     }
     $encheres = $this->oRequetesSQL->getEncheres(null, $userIDFav);
-    $aEncheres = [];
 
-    $now = new DateTime(); // Current date and time
+    //order by date fin asc
+    usort($encheres, function ($a, $b) {
+      return $b['DateFin'] <=> $a['DateFin'];
+    });
+
+    $now = new DateTime();
     foreach ($encheres as &$enchere) {
-      $endDateTime = new DateTime($enchere['DateFin']); // Date and time from the database
-      $interval = $now->diff($endDateTime); // Calculate the difference between now and the end date
+      $endDateTime = new DateTime($enchere['DateFin']);
+      $interval = $now->diff($endDateTime);
       $remainingTime = '';
-      if ($interval->d > 0) {
-        $remainingTime .= $interval->d . 'j ';
-      }
-      if ($interval->h > 0) {
-        $remainingTime .= $interval->h . 'h ';
-      }
-      if ($interval->i > 0) {
-        $remainingTime .= $interval->i . 'min';
+      if ($interval->invert) {
+        $remainingTime .= 'Terminée';
+      } else {
+        if ($interval->d > 0) {
+          $remainingTime .= $interval->d . 'j ';
+        }
+        if ($interval->h > 0) {
+          $remainingTime .= $interval->h . 'h ';
+        }
+        if ($interval->i > 0) {
+          $remainingTime .= $interval->i . 'min';
+        }
+
       }
       $enchere['RemainingTime'] = $remainingTime;
     }
-    //save to session encheres
-    //$_SESSION['aEncheres'] = $encheres;
-    //$_SESSION['hello'] = 'hello';
-
     $aCategories = $this->oRequetesSQL->getCategories();
-
 
     (new Vue)->generer(
       "vCatalogueContent",
       [
         'oUtilConn' => $this->oUtilConn,
         'titre' => "Welcome",
-        'aEncheres' => $encheres, 
+        'aEncheres' => $encheres,
         'aCategories' => $aCategories
       ],
       "gabarit-frontendS"
     );
   }
 
-  public function recupererEncheresFromJS() {
+  public function recupererEncheresFromJS()
+  {
 
-    $userIDFav=null;
-    if ($this->oUtilConn ) {
-      $userIDFav=$this->oUtilConn->utilisateur_id;
+    $userIDFav = null;
+    if ($this->oUtilConn) {
+      $userIDFav = $this->oUtilConn->utilisateur_id;
     }
     $encheres = $this->oRequetesSQL->getEncheres(null, $userIDFav);
-    //$encheres = $this->oRequetesSQL->getEncheres(null, $this->oUtilConn->utilisateur_id);
-    $aEncheres = [];
 
     $now = new DateTime(); // Current date and time
     foreach ($encheres as &$enchere) {
@@ -219,7 +222,6 @@ class Frontend extends Routeur
   }
 
 
-
   /**
    * Voir les informations d'une enchere
    * 
@@ -239,17 +241,25 @@ class Frontend extends Routeur
     }
     $enchere = false;
 
-    $userIDFav=null;
-    if ($this->oUtilConn ) {
-      $userIDFav=$this->oUtilConn->utilisateur_id;
+
+    $userIDFav = null;
+    if ($this->oUtilConn) {
+      $userIDFav = $this->oUtilConn->utilisateur_id;
     }
-    
+
     if (!is_null($this->id)) {
       $enchere = $this->oRequetesSQL->getEnchere($this->id, $userIDFav);
+      // Validadion si enchere terminée
+      $now = new DateTime();
+      $dateFin = new DateTime($enchere['DateFin']);
+      $interval = $now->diff($dateFin);
+      $enchere['EnchereIsActive'] = !($interval->invert);
     }
+
     if (!$enchere)
       throw new Exception("Enchere inexistante.");
     $offres = $this->oRequetesSQL->getOffres($this->id);
+    $aCategories = $this->oRequetesSQL->getCategories();
 
     (new Vue)->generer(
       "vEnchereContent",
@@ -258,11 +268,10 @@ class Frontend extends Routeur
         'titre' => $enchere['TimbreNom'],
         'oEnchere' => $enchere,
         'offres' => $offres,
+        'aCategories' => $aCategories,
         'erreurs' => $erreurs
       ],
       "gabarit-frontendS"
     );
   }
-
-
 }
