@@ -1,3 +1,6 @@
+<script type="module" src="js/connexionDeconnexion.js"></script> 
+
+
 <script type="module">
 	document.querySelectorAll(".avecOeil span").forEach(eSpan => {
 eSpan.onclick = function () {
@@ -11,7 +14,7 @@ this.classList.toggle('oeilbarre');
 
 <dialog id="modaleCreerCompte">
 	<section>
-		<h1>Créer un compte</h1>
+		<h1>Créer un compte:</h1>
 
 		<form id="frmCreerCompte" name="frmCreerCompte" method="POST">
 
@@ -19,22 +22,22 @@ this.classList.toggle('oeilbarre');
 
 			<label>Nom</label>
 			<input name="utilisateur_nom" value="">
-			<span id="err_utilisateur_nom">&nbsp;</span>
+			<span id="err_utilisateur_nom">&nbsp;{{ erreurs.utilisateur_nom }}</span>
 
-			<label>Prénom</label>
+			<label>Prenom</label>
 			<input name="utilisateur_prenom" value="">
-			<span id="err_utilisateur_prenom">&nbsp;</span>
+			<span id="err_utilisateur_prenom">&nbsp;{{ erreurs.utilisateur_prenom }}</span>
 
 			<label>Courriel</label>
 			<input name="utilisateur_courriel" value="">
-			<span id="err_utilisateur_courriel">&nbsp;</span>
+			<span id="err_utilisateur_courriel">&nbsp;{{ erreurs.utilisateur_courriel }}</span>
 
 			<label>Mot de passe</label>
 			<div class="avecOeil">
 				<input type="password" name="nouveau_mdp" value="">
 				<span class="oeil"></span>
 			</div>
-			<span id="err_nouveau_mdp">&nbsp;</span>
+			<span id="err_nouveau_mdp">&nbsp;{{ erreurs.nouveau_mdp }}</span>
 
 			<label>Confirmez le mot de passe</label>
 			<div class="avecOeil">

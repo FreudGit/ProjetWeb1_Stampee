@@ -54,7 +54,20 @@ class Frontend extends Routeur
         exit;
       }
     }
-    echo json_encode($retour);
+
+    $view = 'vModaleCreerCompte' ;
+    (new Vue)->generer(
+      $view,
+      [
+        'titre' => 'Connexion',
+        //'renouvelerMdp' => $renouvelerMdp,
+        //'messageErreurConnexion' => $messageErreurConnexion,
+        //'utilisateur' => $utilisateur,
+        'erreurs' => $erreurs
+      ],
+      'gabarit-admin-min'
+    );
+    //echo json_encode($retour);
   }
 
   /**
