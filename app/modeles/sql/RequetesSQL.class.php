@@ -295,6 +295,8 @@ class RequetesSQL extends RequetesPDO
       $this->sql .= " WHERE e.UtilisateurID = :userID";
     }
 
+    $this->sql .= " GROUP BY e.ID;";
+
     return $this->getLignes($params);
   }
 
@@ -383,7 +385,18 @@ class RequetesSQL extends RequetesPDO
     return $this->modifierTable('enchere', $plChamps, $whereClause);
   }
 
+  //     //TODO: faire cette fonction
 
+// public function effacerEnchere($plChamps)
+//   {
+//     //TODO: faire cette fonction
+//     //DELETE e FROM enchere e
+// // LEFT JOIN timbre t ON e.ID = t.EnchereID
+// // WHERE t.EnchereID IS NULL;'
+
+
+// //return $this->CUDLigne($plChamps);
+//   }
 
 
   /* GESTION DES TIMBRES 

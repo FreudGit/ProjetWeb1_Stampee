@@ -5,11 +5,14 @@
 import EncheresApp from "./Encheres.js";
 
 const btnAjouterFavoris = document.querySelector("#btnAjouterFavoris");
-btnAjouterFavoris.addEventListener("click", (element) => {
-  element.preventDefault();
-  let appl = new EncheresApp();
-  appl.toggleFavoris(element);
-});
+if (btnAjouterFavoris ) {
+  btnAjouterFavoris.addEventListener("click", (element) => {
+    element.preventDefault();
+    let appl = new EncheresApp();
+    appl.toggleFavoris(element);
+  });
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////////////
