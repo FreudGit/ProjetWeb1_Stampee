@@ -46,7 +46,7 @@ export default class EncheresApp {
       return lc.includes(filter);
     });
 
-    console.log("filter", filteredItems);
+    //console.log("filter", filteredItems);
     return filteredItems;
   }
 
@@ -58,7 +58,6 @@ export default class EncheresApp {
    *
    **/
   filterAndDisplay(searchString = this.searchString) {
-    console.log("filterAndDisplay: searchString", searchString);
     this.searchString = searchString;
     this.#dataItems = this.#originalData;
 
@@ -85,7 +84,7 @@ export default class EncheresApp {
       const carteItem = document.getElementById("Enchere" + item.ID);
       carteItem.classList.remove("hidden");
     }
-    console.log("displayItems: carteItems(array)", items);
+    //console.log("displayItems: carteItems(array)", items);
   }
 
   /**
@@ -172,7 +171,7 @@ export default class EncheresApp {
       }
       return false;
     });
-    console.log("filterByCategories filteredItems", filteredItems);
+    //console.log("filterByCategories filteredItems", filteredItems);
     return filteredItems;
   }
 
@@ -223,7 +222,7 @@ export default class EncheresApp {
 
       return false;
     });
-    console.log("filterByStatus filteredItems", filteredItems);
+    //console.log("filterByStatus filteredItems", filteredItems);
     return filteredItems;
   }
 
@@ -238,13 +237,13 @@ export default class EncheresApp {
       })
       .then((liste) => {
         this.#originalData = liste;
-        console.log(liste);
+        //console.log(liste);
         this.#data = liste;
         this.#dataItems = liste;
         const urlCourant = new URL(window.location.href);
         window.history.replaceState(null, null, urlCourant);
         document.body.style.cursor = "auto";
-        console.log("fin fetch");
+        //console.log("fin fetch");
         this.filterAndDisplay();
       })
       .catch((e) => {
@@ -259,7 +258,7 @@ export default class EncheresApp {
     if (this.#dataItems.length === 0) {
       this.#resultsEL.textContent = "Aucun résultat trouvé";
     }else{
-      this.#dataItems.length +
+      this.#resultsEL.textContent = this.#dataItems.length +
       " items trouvés(filtrés). Voici les résultats 1 à " +
       this.#dataItems.length;
     }
@@ -305,7 +304,7 @@ export default class EncheresApp {
         }
       })
       .then(function (data) {
-        console.log("Response " + $action, data);
+        //console.log("Response " + $action, data);
       })
       .catch(function (error) {
         console.error("Error " + $action, error);
