@@ -466,7 +466,7 @@ class RequetesSQL extends RequetesPDO
   public function getTimbres($userID = null)
   {
     $params = [];
-    $this->sql = "SELECT * from Timbre ";
+    $this->sql = "SELECT * from timbre ";
     if ($userID != null) {
       $params = ['ID' => $userID];
       $this->sql .= "INNER JOIN Enchere ON Timbre.EnchereID = Enchere.ID WHERE Enchere.utilisateurID = :ID ";
