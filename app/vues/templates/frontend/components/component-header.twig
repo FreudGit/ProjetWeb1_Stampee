@@ -5,17 +5,16 @@
 		<div class="menu-deroulant" aria-haspopup="true">
 			<a class="" href="catalogue?t=enchere">Enchères</a>
 			<div>
-				<a href="catalogue?t=active">Actives</a>
-				<a href="catalogue?t=archive">Archivées</a>
-				<a href="catalogue?t=choix">Choix du Lord</a>
-				<a href="catalogue?t=sugg">Nos suggestions pour vous</a>
+				<a href="catalogue?status=1">Actives</a>
+				<a href="catalogue?status=0">Archivées</a>
+				<a href="catalogue?favoris=FavorisLord">Choix du Lord</a>
+				<a href="catalogue?favoris=FavorisUsager">Vos Préférés</a>
 			</div>
 		</div>
 		<a href="#aPropos">A propos du Lord</a>
 		<a class="cote-droit secondaire" href="admin">Espace Membre</a>
 		<div class="cote-droit">
 			<form name="frmRechercheTop" action="catalogue#sectionGrille" method="get" class="formulaire-enchere recherche-form" aria-label="Rechercher items">
-
 				<input type="text" name="search" class="recherche-input formulaire-enchere " placeholder="Rechercher..." aria-label="Champ de recherche">
 				<button type="submit" class="recherche-boutton formulaire-enchere" aria-label="Bouton de recherche">
 					<i class="fas fa-search"></i>
@@ -28,7 +27,6 @@
 		<div>
 			<div class="h1">Nous sommes LA plateforme #1 de transaction de timbres</div>
 			<p>Trouvez et achetez votre timbre en quelques click</p>
-
 			<a class="bouton gros" href="catalogue" alt="Découvrez en plus..." aria-label="Découvrez en plus">
 				<span class="h4">Découvrez les nouveaux items et améliorez votre collections</span>
 			</a>

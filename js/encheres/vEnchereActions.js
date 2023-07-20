@@ -9,8 +9,4 @@ btnAjouterFavoris.addEventListener("click", (element) => {
   element.preventDefault();
   let appl = new EncheresApp();
   appl.toggleFavoris(element);
-  
 });
-
-
-

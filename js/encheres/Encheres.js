@@ -1,16 +1,15 @@
 export default class EncheresApp {
-  #data;
   #dataItems;
   #displayTarget;
   #resultsEL;
-  #countEL;
   searchString;
   #originalData;
   favorisType;
   categorieType;
   certificatType;
- statusType;
-
+  statusType;
+  #countEL;
+  #data
 
   /**
    *
@@ -24,7 +23,7 @@ export default class EncheresApp {
     // this.#currentpage = 1;
     this.#resultsEL = resultsEL;
     this.#countEL = countEL;
-    this.searchString = "";
+    //this.searchString = "";
   }
 
   /**
@@ -34,8 +33,8 @@ export default class EncheresApp {
    * @returns {Array} - Tableau contenant les objects à afficher.
    */
   filterItems(searchString = this.searchString, items = this.#dataItems) {
-    searchString = "";
-    console.log(searchString);
+    //searchString = "";
+    //console.log(searchString);
 
     //filter array items. Item.DateFin should indlude searchString
     const filteredItems = items.filter((item) => {
@@ -51,6 +50,13 @@ export default class EncheresApp {
     return filteredItems;
   }
 
+  /**
+   * Filtre le titre des items selon un string.
+   * @param {string} searchString - Chaîne de caractères à rechercher.
+   * @param {Array} items - Tableau contenant les objects à afficher.
+   * @returns {Array} - Tableau contenant les objects à afficher.
+   *
+   **/
   filterAndDisplay(searchString = this.searchString) {
     console.log("filterAndDisplay: searchString", searchString);
     this.searchString = searchString;
@@ -59,11 +65,12 @@ export default class EncheresApp {
     let filteredItems = this.filterBySearch();
     filteredItems = this.filterByFavoris(this.favorisType, filteredItems);
     filteredItems = this.filterByCategories(this.categorieType, filteredItems);
-    filteredItems = this.filterByCertificats(this.certificatType, filteredItems);
+    filteredItems = this.filterByCertificats(
+      this.certificatType,
+      filteredItems
+    );
     filteredItems = this.filterByStatus(this.statusType, filteredItems);
-
-    this.#dataItems=filteredItems;
-
+    this.#dataItems = filteredItems;
     this.displayItems(filteredItems);
     this.displayResults();
   }
@@ -79,20 +86,30 @@ export default class EncheresApp {
       carteItem.classList.remove("hidden");
     }
     console.log("displayItems: carteItems(array)", items);
-
   }
 
+  /**
+   * Met à jour un paramètre dans l'url
+   * @param {string} paramName nom du paramètre
+   * @param {string} paramValue valeur du paramètre
+   * @returns null
+  **/
   updateUrlParam(paramName, paramValue) {
     var url = new URL(window.location.href);
     url.searchParams.set(paramName, paramValue);
     window.history.pushState({ path: url.href }, "", url.href);
   }
 
+  /**
+   * Filtre le titre des items selon un string.
+   * @param {string} searchString - Chaîne de caractères à rechercher.
+   * @param {Array} items - Tableau contenant les objects à afficher.
+   * @returns {Array} - Tableau contenant les objects à afficher.
+   **/
   filterBySearch(searchString = this.searchString, items = this.#dataItems) {
+    //console.log("filterBySearch searchString", searchString);
     const url = new URL(window.location.href);
     this.updateUrlParam("search", searchString);
-    console.log("filterBySearch searchString", searchString);
-    //filter array items. Item.DateFin should indlude searchString
     const filteredItems = items.filter((item) => {
       if (searchString === "") return true;
       if (item.TimbreNom === null) return false;
@@ -106,8 +123,7 @@ export default class EncheresApp {
       }
       return bFound;
     });
-    console.log("filterBySearch filteredItems", filteredItems);
-
+    //console.log("filterBySearch filteredItems", filteredItems);
     return filteredItems;
   }
 
@@ -119,8 +135,7 @@ export default class EncheresApp {
    */
   filterByFavoris(sType = this.favorisType, items = this.#dataItems) {
     this.updateUrlParam("favoris", sType);
-    console.log("filterByFav items avant recherche", sType, items);
-
+    //console.log("filterByFav items avant recherche", sType, items);
     const filteredItems = items.filter((item) => {
       let favItem = "";
       if (sType === "FavorisLord") {
@@ -136,12 +151,11 @@ export default class EncheresApp {
       }
       return false;
     });
-    console.log("filterByFav filteredItems", filteredItems);
+    //console.log("filterByFav filteredItems", filteredItems);
     return filteredItems;
   }
 
-
- /**
+  /**
    * filtre les items selon le type de favoris
    * @param {*} sType type de favoris
    * @param {*} items items à filtrer
@@ -149,8 +163,6 @@ export default class EncheresApp {
    */
   filterByCategories(sType = this.categorieType, items = this.#dataItems) {
     this.updateUrlParam("categorie", sType);
-    console.log("filterByCategories sType", sType);
-    console.log("filterByCategories items avant recherche", items);
     if (sType === "Toutes") {
       return items;
     }
@@ -164,8 +176,6 @@ export default class EncheresApp {
     return filteredItems;
   }
 
-
-
   /**
    * filtre les items selon le type de certificat
    * @param {*} sType type de certificat
@@ -174,7 +184,6 @@ export default class EncheresApp {
    */
   filterByCertificats(sType = this.certificatType, items = this.#dataItems) {
     this.updateUrlParam("certificat", sType);
-    console.log("filterByCertificats items avant recherche", sType, items);
     if (sType === "Toutes") {
       return items;
     }
@@ -187,10 +196,8 @@ export default class EncheresApp {
       }
       return false;
     });
-    console.log("filterByCertificats filteredItems", filteredItems);
     return filteredItems;
   }
-
 
   /**
    * filtre les items selon le type de certificat
@@ -200,7 +207,6 @@ export default class EncheresApp {
    */
   filterByStatus(sType = this.statusType, items = this.#dataItems) {
     this.updateUrlParam("status", sType);
-    console.log("filterByStatus items avant recherche", sType, items);
     if (sType === "Toutes") {
       return items;
     }
@@ -208,9 +214,9 @@ export default class EncheresApp {
       if (item.DateFin == null) {
         return true;
       }
-//dateFin > date du jour
+      //dateFin > date du jour
       const dateFin = new Date(item.DateFin);
-      const bIsActive= dateFin > new Date();
+      const bIsActive = dateFin > new Date();
       if (bIsActive == parseInt(sType)) {
         return true;
       }
@@ -239,6 +245,7 @@ export default class EncheresApp {
         window.history.replaceState(null, null, urlCourant);
         document.body.style.cursor = "auto";
         console.log("fin fetch");
+        this.filterAndDisplay();
       })
       .catch((e) => {
         console.log("Erreur: " + e.message);
@@ -249,7 +256,13 @@ export default class EncheresApp {
    * Affiche le nombre de résultats et le numéro de page
    */
   displayResults() {
-    this.#resultsEL.textContent = this.#dataItems.length + ' items trouvés(filtrés). Voici les résultats 1 à ' + this.#dataItems.length;
+    if (this.#dataItems.length === 0) {
+      this.#resultsEL.textContent = "Aucun résultat trouvé";
+    }else{
+      this.#dataItems.length +
+      " items trouvés(filtrés). Voici les résultats 1 à " +
+      this.#dataItems.length;
+    }
   }
 
   /**
@@ -272,7 +285,7 @@ export default class EncheresApp {
     );
 
     let $action;
-    const bIsFav=(element.currentTarget.classList.contains("selected"))
+    const bIsFav = element.currentTarget.classList.contains("selected");
     if (bIsFav) {
       $action = "retirerEnchereAFavorisFromPost";
     } else {
@@ -293,7 +306,6 @@ export default class EncheresApp {
       })
       .then(function (data) {
         console.log("Response " + $action, data);
-       
       })
       .catch(function (error) {
         console.error("Error " + $action, error);
