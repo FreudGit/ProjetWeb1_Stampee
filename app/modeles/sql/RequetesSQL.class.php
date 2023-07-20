@@ -469,9 +469,9 @@ class RequetesSQL extends RequetesPDO
     $this->sql = "SELECT * from timbre ";
     if ($userID != null) {
       $params = ['ID' => $userID];
-      $this->sql .= "INNER JOIN Enchere ON Timbre.EnchereID = Enchere.ID WHERE Enchere.utilisateurID = :ID ";
+      $this->sql .= "INNER JOIN enchere ON Timbre.EnchereID = enchere.ID WHERE enchere.utilisateurID = :ID ";
     }
-    $this->sql .= " ORDER BY Timbre.ID desc";
+    $this->sql .= " ORDER BY timbre.ID desc";
     return $this->getLignes($params);
   }
 
