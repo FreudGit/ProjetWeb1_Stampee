@@ -34,26 +34,15 @@ class Frontend extends Routeur
     }
     echo json_encode($utilisateur);
   }
-  public function console_log2($output, $with_script_tags = true) {
-    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
-');';
-    if ($with_script_tags) {
-        $js_code = '<script>' . $js_code . '</script>';
-    }
-    echo $js_code;
-}
+
+
   /**
    * Créer un compte utilisateur
    */
   public function creerCompte()
   {
-    $this->console_log2('creerCompte');
     $oUtilisateur = new Utilisateur($_POST);
-    $this->console_log2(__LINE__);
-
     $erreurs = $oUtilisateur->erreurs;
-    $this->console_log2(__LINE__);
-
     if (count($erreurs) > 0) {
       $retour = $erreurs;
     } else {
@@ -66,10 +55,8 @@ class Frontend extends Routeur
         exit;
       }
     }
-    $this->console_log2(__LINE__);
 
-    
-    $view = 'vModaleCreerCompte' ;
+    $view = 'vModaleCreerCompte';
     (new Vue)->generer(
       $view,
       [
