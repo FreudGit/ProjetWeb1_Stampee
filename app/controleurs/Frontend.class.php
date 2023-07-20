@@ -155,10 +155,13 @@ class Frontend extends Routeur
     $encheres = $this->oRequetesSQL->getEncheres(null, null);
     $aCategories = $this->oRequetesSQL->getCategories();
 
+    //keep only 2 element
+    $encheres = array_slice($encheres, 0, 2);
+    //$encheres = $encheres[0];
     //filter to keep only wlement with element.IsFavorisLord = true
-    $encheres = array_filter($encheres, function ($element) {
-      return $element['bFavorisLord'] == true;
-    });
+    // $encheres = array_filter($encheres, function ($element) {
+    //   return $element['bFavorisLord'] == true;
+    // });
 
     (new Vue)->generer(
       "vWelcomeContent",
