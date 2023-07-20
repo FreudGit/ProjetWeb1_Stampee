@@ -4,7 +4,8 @@
  * Classe Contrôleur des requêtes de l'application admin
  */
 
-class Admin extends Routeur {
+class Admin extends Routeur
+{
   protected $id;
   protected $utilisateur_id;
   protected $methodes;
@@ -18,7 +19,8 @@ class Admin extends Routeur {
    * Constructeur qui initialise des propriétés à partir du query string
    * 
    */
-  public function __construct() {
+  public function __construct()
+  {
     self::$entite = $_GET['entite'] ?? 'utilisateur';
     self::$action = $_GET['action'] ?? 'w';
     $this->id = $_GET['id'] ?? null;
@@ -26,8 +28,9 @@ class Admin extends Routeur {
 
   /**
    * Gérer l'interface d'administration 
-   */  
-  public function gererEntite() {
+   */
+  public function gererEntite()
+  {
     if (isset($_SESSION['oUtilConn'])) {
       self::$oUtilConn = $_SESSION['oUtilConn'];
       $entite = ucwords(self::$entite);
@@ -35,22 +38,23 @@ class Admin extends Routeur {
       if (class_exists($classe)) {
         (new $classe())->gererAction();
       } else {
-        throw new Exception("L'entité ".self::$entite." n'existe pas.");
+        throw new Exception("L'entité " . self::$entite . " n'existe pas.");
       }
     } else {
       (new AdminUtilisateur)->connecter();
-    }    
+    }
   }
 
   /**
    * Gérer l'interface d'administration d'une entité
-   */  
-  public function gererAction() {
+   */
+  public function gererAction()
+  {
     if (isset($this->methodes[self::$action])) {
       $methode = $this->methodes[self::$action]['nom'];
       if (isset($this->methodes[self::$action]['droits'])) {
         $droits = $this->methodes[self::$action]['droits'];
-        foreach ( $droits as $droit) {
+        foreach ($droits as $droit) {
           if ($droit === self::$oUtilConn->utilisateur_profil) {
             $this->$methode();
             exit;
@@ -61,7 +65,7 @@ class Admin extends Routeur {
         $this->$methode();
       }
     } else {
-      throw new Exception("L'action ".self::$action." de l'entité ".self::$entite." n'existe pas.");
+      throw new Exception("L'action " . self::$action . " de l'entité " . self::$entite . " n'existe pas.");
     }
   }
 }

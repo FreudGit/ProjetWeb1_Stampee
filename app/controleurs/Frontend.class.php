@@ -112,6 +112,10 @@ class Frontend extends Routeur
     echo json_encode(true);
   }
 
+  /**
+   * Afficher page Login
+   * 
+   */
 
   public function afficherLogin()
   {
@@ -126,6 +130,10 @@ class Frontend extends Routeur
   }
 
 
+  /**
+   * Afficher page Login avec Create
+   * 
+   */
   public function afficherLoginCreate()
   {
     (new Vue)->generer(
@@ -144,11 +152,21 @@ class Frontend extends Routeur
    */
   public function afficherWelcome()
   {
+    $encheres = $this->oRequetesSQL->getEncheres(null, null);
+    $aCategories = $this->oRequetesSQL->getCategories();
+
+    //filter to keep only wlement with element.IsFavorisLord = true
+    $encheres = array_filter($encheres, function ($element) {
+      return $element['bFavorisLord'] == true;
+    });
+
     (new Vue)->generer(
       "vWelcomeContent",
       [
         'oUtilConn' => $this->oUtilConn,
         'titre' => "Welcome",
+        'encheres' => $encheres,
+        'aCategories' => $aCategories,
       ],
       "gabarit-frontendS"
     );
@@ -207,9 +225,12 @@ class Frontend extends Routeur
     );
   }
 
+  /**
+   * Récupérer les enchere a partir de JS
+   * 
+   */
   public function recupererEncheresFromJS()
   {
-
     $userIDFav = null;
     if ($this->oUtilConn) {
       $userIDFav = $this->oUtilConn->utilisateur_id;
