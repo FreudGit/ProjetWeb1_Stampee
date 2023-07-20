@@ -8,7 +8,7 @@
 <body>
 	<div class="enchere-container">
 		<div class="left-section img-magnifier-container">
-			<img id='imgTimbre' src="{{ oEnchere.PremiereImage }}" alt="Timbre" style="max-height: 350px;height: 350px; width: auto;min-width:350px">
+			<img id='imgTimbre' src="{{ oEnchere.PremiereImage }}" alt="Timbre" style="mawx-height: 350px;heiwght: 350px; width: auto;min-width:350px">
 			<p>{{ oEnchere.PremiereImageDescription }}</p>
 		</div>
 
@@ -29,8 +29,6 @@
 					<td>Catégorie:
 					</td>
 					<td>{{ oEnchere.CategorieID ? aCategories|filter(category => category.ID == oEnchere.CategorieID)|first.Nom : 'Inconnue' }}</td>
-
-
 				</tr>
 				<tr>
 					<td>Etat/Condition:</td>
@@ -111,7 +109,3 @@
 
 	</div>
 </body></div>
-<script>
-	
-	/* démarrer le magnify! */
-</script>
