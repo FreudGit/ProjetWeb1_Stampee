@@ -1,6 +1,20 @@
 <script src="js/encheres/vEnchereActions.js" type="module"></script>
+<style>
+.img-magnifier-container {
+    position: relative;
+}
 
-
+.img-magnifier-glass {
+    position: absolute;
+    border: 3px solid var(--couleur_primaire);
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 20%;
+    cursor: none;
+    /*Set the size of the magnifier glass:*/
+    width: 140px;
+    height: 100px;
+}
+</style>
 <head>
 	<title>Enchère Timbre
 		{{ oEnchere.TimbreNom }}</title>
