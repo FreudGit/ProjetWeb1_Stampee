@@ -61,9 +61,6 @@ class Frontend extends Routeur
       $view,
       [
         'titre' => 'Connexion',
-        //'renouvelerMdp' => $renouvelerMdp,
-        //'messageErreurConnexion' => $messageErreurConnexion,
-        //'utilisateur' => $utilisateur,
         'erreurs' => $erreurs
       ],
       'gabarit-admin-min'
@@ -154,11 +151,6 @@ class Frontend extends Routeur
   {
     $encheres = $this->oRequetesSQL->getEncheres(null, null);
     $aCategories = $this->oRequetesSQL->getCategories();
-
-    //keep only 2 element
-    
-    //$encheres = $encheres[0];
-    //filter to keep only wlement with element.IsFavorisLord = true
     $encheres = array_filter($encheres, function ($element) {
       return $element['bFavorisLord'] == true;
     });

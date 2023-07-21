@@ -302,7 +302,7 @@ class RequetesSQL extends RequetesPDO
 
 
 
-  public function getEnchere($id, $userID=null)
+  public function getEnchere($id, $userID = null)
   {
     $this->sql = "SELECT
       e.ID,
@@ -351,10 +351,10 @@ class RequetesSQL extends RequetesPDO
         image
     ) i ON t.ID = i.TimbreID
     WHERE e.ID = :ID;";
-  
+
     return $this->getLignes(['ID' => $id, 'userID' => $userID], RequetesPDO::UNE_SEULE_LIGNE);
   }
-  
+
 
 
   /**
@@ -387,7 +387,7 @@ class RequetesSQL extends RequetesPDO
 
   //     //TODO: faire cette fonction
 
-// public function effacerEnchere($plChamps)
+  // public function effacerEnchere($plChamps)
 //   {
 //     //TODO: faire cette fonction
 //     //DELETE e FROM enchere e
@@ -395,7 +395,7 @@ class RequetesSQL extends RequetesPDO
 // // WHERE t.EnchereID IS NULL;'
 
 
-// //return $this->CUDLigne($plChamps);
+  // //return $this->CUDLigne($plChamps);
 //   }
 
 
@@ -528,27 +528,10 @@ class RequetesSQL extends RequetesPDO
     $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
     return $this->getLignes($params);
   }
-  public function getOffresOLD($userID = null)
-  {
-    $params = [];
-    $this->sql = "SELECT * from offre ";
-    if ($userID != null) {
-      $params = ['ID' => $userID];
-      $this->sql .= " WHERE EnchereID IN (
-        SELECT ID FROM enchere
-        WHERE UtilisateurID = :ID 
-    ) ";
-    }
-
-
-    $this->sql .= " ORDER BY EnchereID ASC, ID DESC;  ";
-    return $this->getLignes($params);
-  }
-
 
 
   /**
-   * Ajout d'un Timbre
+   * Ajout d'une Offre
    * @param  array $champs champs à ajouter
    * @return array|bool tableau des lignes produites par la select   
    */
@@ -582,6 +565,40 @@ class RequetesSQL extends RequetesPDO
   }
 
 
+
+  /* GESTION DES FAVORIE 
+   ================= */
+
+
+  /**
+   * Ajouter une enchere a favoris
+   * @param  array $champs champs à ajouter
+   * @return array|bool tableau des lignes produites par la select   
+   */
+  public function ajouterEnchereAFavoris($champs)
+  {
+    $this->sql = ' INSERT INTO favoris
+    (EnchereID, UtilisateurID)
+    VALUES 
+    (:EnchereID, :UtilisateurID)
+    ';
+    return $this->CUDLigne($champs);
+  }
+
+  public function retirerEnchereAFavoris($champs)
+  {
+
+    $this->sql = ' DELETE FROM favoris
+    WHERE EnchereID = :EnchereID AND UtilisateurID = :UtilisateurID
+    ';
+    return $this->CUDLigne($champs);
+  }
+
+
+
+
+  /* UTILS
+   ================= */
 
   /**
    * Methode  generique pour modifier une table
@@ -617,27 +634,5 @@ class RequetesSQL extends RequetesPDO
     $param = $champs + $plWhereClause;
 
     return $this->CUDLigne($param);
-  }
-
-
-
-
-  public function ajouterEnchereAFavoris($champs)
-  {
-    $this->sql = ' INSERT INTO favoris
-    (EnchereID, UtilisateurID)
-    VALUES 
-    (:EnchereID, :UtilisateurID)
-    ';
-    return $this->CUDLigne($champs);
-  }
-
-  public function retirerEnchereAFavoris($champs)
-  {
-
-    $this->sql = ' DELETE FROM favoris
-    WHERE EnchereID = :EnchereID AND UtilisateurID = :UtilisateurID
-    ';
-    return $this->CUDLigne($champs);
   }
 }
